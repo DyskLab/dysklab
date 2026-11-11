@@ -1,0 +1,660 @@
+---
+/*
+  DyskLab home, products first. The four open-source products lead (hero dock, then one
+  showcase panel each in the product's own colour); custom software for companies is a
+  secondary section further down. Bilingual through `lang`; logo palette (ink #14161a,
+  off-white #f7f7f4, blue #4d7cff) with a saved light/dark toggle.
+*/
+import Base from "../layouts/Base.astro";
+import Logo from "../components/Logo.astro";
+import Faq from "../components/Faq.astro";
+import content from "../data/content";
+import { mask, waNumber } from "../lib/mask";
+import { download } from "../lib/releases";
+import { stars, totalStars } from "../lib/github";
+import { BMC, alternate, href, pick, ui, type Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = ui[lang];
+const other: Lang = lang === "id" ? "en" : "id";
+const L = <T,>(v: { id: T; en: T }) => pick(lang, v);
+const showDrafts = !import.meta.env.PROD;
+const year = new Date().getFullYear();
+const github = "https://github.com/DyskLab";
+const wa = waNumber(content.whatsapp);
+
+/* ---------- products ---------- */
+const meta = {
+  dyskfiles: {
+    repo: "DyskLab/dyskfiles", match: /\.dmg$/i, color: "#3b82f6", shot: "/images/products/dyskfiles/01-grid.jpg",
+    tag: { id: "Semua aset Anda, di folder yang bisa dibaca.", en: "All your assets, in folders you can read." },
+    text: { id: "Pengelola koleksi gambar, video, audio, dan teks. Setiap item disimpan sebagai file asli plus JSON, tanpa database.", en: "A library for images, video, audio and text. Every item is kept as the original file plus JSON, with no database." },
+    points: { id: ["Tag, folder, smart folder, dan filter", "Palet warna, rating, catatan, dan URL", "Impor dari Eagle, untuk Mac dan Windows"], en: ["Tags, folders, smart folders and filters", "Colour palettes, ratings, notes and URLs", "Imports Eagle libraries, on Mac and Windows"] },
+    platforms: ["macOS", "Windows"],
+  },
+  dyskfocus: {
+    repo: "DyskLab/dyskfocus", match: /\.dmg$/i, color: "#6d5dfc", shot: "/images/products/dyskfocus/01-today.jpg",
+    tag: { id: "Kosongkan kepala. Biar DyskFocus yang ingat.", en: "Empty your head. Let DyskFocus remember." },
+    text: { id: "Pengelola tugas bergaya OmniFocus yang Anda host sendiri: inbox, project, tag, perspektif, review, dan forecast.", en: "An OmniFocus-style task manager you host yourself: inbox, projects, tags, perspectives, review and forecast." },
+    points: { id: ["Tambah tugas dengan satu kalimat", "Web, PWA, dan aplikasi Mac tanpa server", "Sinkron real-time dan web push"], en: ["Add tasks in one plain sentence", "Web, PWA, and a serverless Mac app", "Real-time sync and web push"] },
+    platforms: ["Web", "PWA", "macOS"],
+  },
+  dyskflow: {
+    repo: "DyskLab/dyskflow", match: /./, color: "#e8412c", shot: "/images/products/dyskflow/04-editor.jpg",
+    tag: { id: "CMS Laravel. Tanpa build step.", en: "A Laravel CMS. No build step." },
+    text: { id: "Page builder visual dengan 65 widget, pasang lewat wizard tanpa terminal, dan update satu tombol dari GitHub.", en: "A visual page builder with 65 widgets, a no-terminal install wizard, and one-click updates from GitHub." },
+    points: { id: ["Page builder ala Elementor", "SEO bawaan dan dua bahasa", "Jalan di shared hosting"], en: ["Elementor-style page builder", "Built-in SEO and two languages", "Runs on shared hosting"] },
+    platforms: ["Web", "PHP 8.3+"],
+  },
+  dysklink: {
+    repo: "DyskLab/dysklink-mac", match: /mac.*\.zip$/i, color: "#2dd4a7", shot: "/images/products/dysklink/mac-02-notifications.jpg",
+    tag: { id: "Mac dan Android, satu jaringan.", en: "Mac and Android, one network." },
+    text: { id: "File, clipboard, notifikasi, SMS, layar HP, dan remote control lewat Wi-Fi lokal, tanpa cloud dan tanpa akun. Plus alat ekstra untuk Mac.", en: "Files, clipboard, notifications, SMS, phone screen and remote control over local Wi-Fi, with no cloud and no account. Plus extra Mac tools." },
+    points: { id: ["Terenkripsi, langsung antar perangkat", "Notch, Clipboard History, Launcher", "Mac care dan kontrol baterai"], en: ["Encrypted, straight between devices", "Notch, Clipboard History, Launcher", "Mac care and battery control"] },
+    platforms: ["macOS", "Android"],
+  },
+} as const;
+
+const products = await Promise.all(
+  content.apps.map(async (a) => {
+    const m = meta[a.slug as keyof typeof meta];
+    const [dl, star] = await Promise.all([download(m.repo, m.match), stars(m.repo)]);
+    return { ...a, ...m, version: dl.version, star, url: href(lang, a.page), kindL: lang === "id" ? a.kind : a.kind_en };
+  })
+);
+const allRepos = ["DyskLab/dyskfiles", "DyskLab/dyskfocus", "DyskLab/dyskflow", "DyskLab/dysklink-mac", "DyskLab/dysklink-android"];
+const starTotal = await totalStars(allRepos);
+const showStars = starTotal !== null && starTotal >= 25;
+
+/* ---------- copy ---------- */
+const T = L({
+  id: {
+    title: "DyskLab: software open source untuk Mac, Android, dan web",
+    description: "DyskLab membuat software gratis dan open source: DyskFiles, DyskFocus, DyskFlow, dan DyskLink. Juga menerima pembuatan sistem untuk perusahaan.",
+    nav: [["#produk", "Produk"], ["#kenapa", "Open source"], ["#layanan", "Untuk perusahaan"], ["#faq", "FAQ"]],
+    cta: "Lihat produk",
+    badge: "Gratis · MIT License · tanpa akun",
+    h1a: "Software open source", h1b: "untuk kerja sehari-hari.",
+    lede: "DyskLab membuat aplikasi gratis untuk Mac, Android, dan web. Kelola aset, tugas, dan situs, lalu hubungkan HP ke Mac. Tanpa iklan, tanpa akun, dan kodenya terbuka untuk siapa saja.",
+    explore: "Jelajahi produk", gh: "DyskLab di GitHub",
+    strip: ["4 produk", "macOS · Android · Web", "Data tetap milik Anda", "Dibuat di Gresik, Indonesia"],
+    starsLabel: (n: number) => `${n} star di GitHub`,
+    prodK: "Produk", prodH: "Empat aplikasi, satu cara kerja:", prodH2: "sederhana, jujur, dan terbuka.",
+    latest: "Versi terbaru", see: (n: string) => `Lihat ${n}`, code: "Kode",
+    whyK: "Kenapa open source",
+    whyH: "Software yang bisa Anda periksa, ubah, dan simpan sendiri.",
+    why: [
+      ["Gratis, sungguhan", "Tanpa versi berbayar, langganan, atau fitur yang dikunci. Lisensi MIT."],
+      ["Tanpa akun dan pelacakan", "Tidak ada login ke server DyskLab. Data Anda tidak pernah kami lihat."],
+      ["Data dalam format terbuka", "Folder biasa, JSON, SQLite, atau database Anda sendiri. Mudah dicadangkan dan dipindahkan."],
+      ["Kode terbuka", "Semua kode ada di GitHub. Siapa pun bisa memeriksa, melaporkan bug, atau ikut memperbaiki."],
+    ],
+    supK: "Dukung DyskLab",
+    supH: "Dibuat oleh satu orang, dibiayai oleh orang yang terbantu.",
+    supP: "Kalau salah satu aplikasi ini berguna, star di GitHub membantu orang lain menemukannya, dan kopi membiayai waktu untuk fitur berikutnya.",
+    starEach: "Beri star:",
+    svcK: "Untuk perusahaan",
+    svcH: "Butuh sistem yang dibuat khusus?",
+    svcP: "Selain produk sendiri, DyskLab juga membangun dan merawat website, aplikasi web, dan aplikasi Android untuk perusahaan, dengan cara kerja yang sama: bertahap, terdokumentasi, dan tanpa tebak-tebakan.",
+    build: "Membangun sistem baru", care: "Merawat sistem yang sudah berjalan",
+    casesH: "Beberapa sistem yang sudah berjalan",
+    visit: "Kunjungi",
+    quotesH: "Kata klien",
+    quoteNote: "",
+    contactH: "Ceritakan kebutuhan Anda.",
+    contactP: "Konsultasi awal gratis. Balasan biasanya di hari yang sama.",
+    waText: "Halo DyskLab, saya ingin konsultasi pembuatan sistem.",
+    mailSubject: "Konsultasi DyskLab",
+    faq: [
+      { q: "Apakah produk DyskLab benar-benar gratis?", a: "<p>Ya. Semua produk gratis dan open source dengan lisensi MIT. Tidak ada versi berbayar atau fitur yang dikunci. Kalau mau mendukung, Anda bisa memberi star di GitHub atau traktir kopi.</p>" },
+      { q: "Siapa di balik DyskLab?", a: "<p>DyskLab dijalankan oleh Fanny, developer di Gresik, Jawa Timur. Produknya dibangun di waktu luang dan dari kebutuhan sehari-hari sendiri.</p>" },
+      { q: "Bagaimana cara melaporkan bug atau meminta fitur?", a: "<p>Buka <em>issue</em> di repository GitHub produk yang bersangkutan. Laporan yang menyertakan versi, sistem operasi, dan langkah untuk mengulang masalahnya paling cepat ditangani.</p>" },
+      { q: "Apakah bisa dipakai untuk usaha atau dimodifikasi?", a: "<p>Bisa. Lisensi MIT mengizinkan pemakaian komersial, modifikasi, dan distribusi ulang, selama pemberitahuan lisensinya tetap disertakan.</p>" },
+      { q: "Apakah situs ini melacak saya?", a: "<p>Tidak ada analytics atau cookie pelacak. Situs ini hanya menyimpan pilihan tema di browser Anda, cookie <code>dl-lang</code> kalau Anda memilih bahasa sendiri, dan memuat font dari Google Fonts. Bahasa awal ditentukan dari negara alamat IP Anda oleh Vercel, tanpa disimpan.</p>" },
+      { q: "Bisakah saya memesan sistem khusus?", a: "<p>Bisa. Lihat bagian <a href=\"#layanan\">Untuk perusahaan</a>, lalu hubungi lewat WhatsApp atau email. Konsultasi awal gratis.</p>" },
+    ],
+    footP: "Software open source dari Gresik, Indonesia.",
+    themeLabel: "Ganti tema terang atau gelap",
+  },
+  en: {
+    title: "DyskLab: open-source software for Mac, Android and the web",
+    description: "DyskLab makes free, open-source software: DyskFiles, DyskFocus, DyskFlow and DyskLink. Custom systems for companies, too.",
+    nav: [["#produk", "Products"], ["#kenapa", "Open source"], ["#layanan", "For companies"], ["#faq", "FAQ"]],
+    cta: "See products",
+    badge: "Free · MIT License · no account",
+    h1a: "Open-source software", h1b: "for everyday work.",
+    lede: "DyskLab makes free apps for Mac, Android and the web. Manage assets, tasks and websites, then link your phone to your Mac. No ads, no accounts, and the code is open to everyone.",
+    explore: "Explore the products", gh: "DyskLab on GitHub",
+    strip: ["4 products", "macOS · Android · Web", "Your data stays yours", "Made in Gresik, Indonesia"],
+    starsLabel: (n: number) => `${n} stars on GitHub`,
+    prodK: "Products", prodH: "Four apps, one way of working:", prodH2: "simple, honest and open.",
+    latest: "Latest version", see: (n: string) => `See ${n}`, code: "Code",
+    whyK: "Why open source",
+    whyH: "Software you can inspect, change and keep.",
+    why: [
+      ["Actually free", "No paid tier, subscription or locked features. MIT licensed."],
+      ["No accounts, no tracking", "Nothing logs in to a DyskLab server. We never see your data."],
+      ["Open data formats", "Plain folders, JSON, SQLite or your own database. Easy to back up and move."],
+      ["Open code", "All the code is on GitHub. Anyone can read it, report bugs or help fix them."],
+    ],
+    supK: "Support DyskLab",
+    supH: "Made by one person, funded by the people it helps.",
+    supP: "If one of these apps is useful to you, a GitHub star helps others find it, and a coffee pays for the time behind the next feature.",
+    starEach: "Star:",
+    svcK: "For companies",
+    svcH: "Need a system built for you?",
+    svcP: "Besides its own products, DyskLab builds and maintains websites, web apps and Android apps for companies, the same way: step by step, documented, and with no guesswork.",
+    build: "Building new systems", care: "Looking after running systems",
+    casesH: "Some systems already in use",
+    visit: "Visit",
+    quotesH: "What clients say",
+    quoteNote: "Translated from Indonesian.",
+    contactH: "Tell us what you need.",
+    contactP: "The first consultation is free. Replies usually come the same day.",
+    waText: "Hello DyskLab, I'd like to talk about a custom system.",
+    mailSubject: "DyskLab consultation",
+    faq: [
+      { q: "Are DyskLab's products really free?", a: "<p>Yes. Every product is free and open source under the MIT License, with no paid tier or locked features. To support the work, star it on GitHub or buy a coffee.</p>" },
+      { q: "Who is behind DyskLab?", a: "<p>DyskLab is run by Fanny, a developer in Gresik, East Java, Indonesia. The products are built in spare time, out of day-to-day needs.</p>" },
+      { q: "How do I report a bug or ask for a feature?", a: "<p>Open an issue on the product's GitHub repository. Reports with the version, operating system and steps to reproduce get fixed fastest.</p>" },
+      { q: "Can I use it at work or modify it?", a: "<p>Yes. The MIT License allows commercial use, modification and redistribution, as long as the license notice stays included.</p>" },
+      { q: "Does this site track me?", a: "<p>There are no analytics or tracking cookies. The site only stores your theme choice in your browser, a <code>dl-lang</code> cookie if you pick a language yourself, and loads fonts from Google Fonts. Your starting language comes from your IP address's country, read by Vercel and not stored.</p>" },
+      { q: "Can I order a custom system?", a: "<p>Yes. See <a href=\"#layanan\">For companies</a> and get in touch by WhatsApp or email. The first consultation is free.</p>" },
+    ],
+    footP: "Open-source software from Gresik, Indonesia.",
+    themeLabel: "Switch light or dark theme",
+  },
+});
+
+/* ---------- client work (secondary) ---------- */
+const svcEn: Record<string, [string, string]> = {
+  "Pembuatan website": ["Websites", "Company profiles, landing pages, catalogues and online shops, with an admin panel and per-page SEO."],
+  "Aplikasi web dan sistem internal": ["Web apps and internal systems", "Dashboards, sales, stock, attendance, billing and reports, with roles, Excel/PDF export and change history."],
+  "Aplikasi mobile Android": ["Android apps", "Flutter apps on the same backend as the web dashboard, such as attendance with selfie and location."],
+  "Integrasi dan otomasi": ["Integrations and automation", "WhatsApp, Telegram, payment gateways, WHMCS or third-party APIs, and automating manual routines."],
+  "Maintenance berkala": ["Regular maintenance", "Security and dependency updates, scheduled backups, server monitoring and small fixes every month."],
+  "Bug fix dan perbaikan sistem lama": ["Bug fixing and legacy rescue", "Tracking errors and cleaning up Laravel or PHP code left by previous developers, without a rewrite."],
+  "Setup server dan deployment": ["Servers and deployment", "Linux VPS, Docker, Proxmox, domains, SSL and a deploy flow that's easy to update."],
+  "Migrasi data dan hosting": ["Data and hosting migration", "From Excel or old systems to a new database, and between hosts or from shared hosting to a VPS."],
+};
+const short = (s: string) => s.split(/(?<=\.)\s/)[0];
+const groups = content.service_groups.map((g, gi) => ({
+  title: gi === 0 ? T.build : T.care,
+  items: g.items.map((i) => (lang === "id" ? [i.name, short(i.text)] : svcEn[i.name] ?? [i.name, short(i.text)])),
+}));
+const caseEn: Record<string, { sector: string; title: string }> = {
+  easytradegroup: { sector: "Finance and trading", title: "Bilingual website and trading education portal on a custom CMS" },
+  "umrah-travel-partner-system": { sector: "Umrah and Hajj travel", title: "Pilgrim payments and an agent network in one system" },
+  karirku: { sector: "HR and attendance", title: "Selfie-and-location attendance through to payslips" },
+  "chat-app-multiapps": { sector: "Customer service", title: "Every customer chat in one dashboard" },
+  "kos-management-app": { sector: "Property", title: "Running several boarding houses from one dashboard" },
+};
+const cases = content.cases.filter((c) => !c.draft || showDrafts).slice(0, 6).map((c) => ({
+  ...c,
+  sectorL: lang === "id" ? c.sector : caseEn[c.slug]?.sector ?? c.sector_en ?? c.sector,
+  titleL: lang === "id" ? c.title : caseEn[c.slug]?.title ?? c.title_en ?? c.title,
+  host: c.demo ? new URL(c.demo).host.replace(/^www\./, "") : "",
+}));
+const quoteEn = [
+  "We only asked for a company profile, but after talking it through, what we really needed was a system for distributor sales. Monthly reports no longer have to be rebuilt from lots of Excel files.",
+  "What I liked is that every stage was shown before moving on. If something didn't fit how our office works, it was fixed right then, not after everything was finished.",
+  "Our old website was built by another developer and broke with every update. The bugs were tracked down one by one until it was stable, without rebuilding from scratch.",
+];
+const roleEn: Record<string, string> = { "Manajer Pemasaran": "Marketing Manager", Pemilik: "Owner", "Kepala IT": "Head of IT" };
+const testimonials = content.testimonials.filter((q) => !q.draft || showDrafts).slice(0, 3).map((q, i) => ({
+  ...q,
+  quoteL: lang === "id" ? q.quote : quoteEn[i] ?? q.quote,
+  roleL: lang === "id" ? q.role : roleEn[q.role] ?? q.role,
+}));
+const waHello = `https://wa.me/${wa}?text=${encodeURIComponent(T.waText)}`;
+const mail = `mailto:${content.email}?subject=${encodeURIComponent(T.mailSubject)}`;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "DyskLab",
+  url: new URL(href(lang, "/"), Astro.site!).href,
+  logo: new URL("/images/dysklab-logo.png", Astro.site!).href,
+  sameAs: [github],
+  address: { "@type": "PostalAddress", addressLocality: "Gresik", addressRegion: "Jawa Timur", addressCountry: "ID" },
+  email: content.email,
+};
+---
+
+<Base
+  title={T.title}
+  description={T.description}
+  path={Astro.url.pathname}
+  ogTitle="DyskLab"
+  fonts="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap"
+  toggle
+  jsonLd={jsonLd}
+>
+  <div class="dl" id="top">
+    <header class="nav" data-nav>
+      <div class="wrap nav-in">
+        <a class="brand" href={href(lang, "/")}><Logo size={30} /><span>DyskLab</span></a>
+        <nav class="nav-links" aria-label="DyskLab">
+          {T.nav.map(([h, l]) => <a href={h}>{l}</a>)}
+        </nav>
+        <div class="nav-act">
+          <a class="chip" href={github} target="_blank" rel="noopener" aria-label={`GitHub${t.newTab}`}>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .2a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.3 1.9.9 2.4.7 0-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8a7.4 7.4 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.1 0 3.1-1.9 3.8-3.6 4 .3.3.5.7.5 1.4v2.2c0 .2.1.5.6.4A8 8 0 0 0 8 .2Z" /></svg>
+            {showStars && <b>★ {starTotal}</b>}
+          </a>
+          <a class="chip" href={alternate(Astro.url.pathname, other)} data-lang={other} hreflang={other} lang={other} aria-label={t.switchLabel}>{other.toUpperCase()}</a>
+          <button class="chip theme" type="button" data-theme-toggle aria-label={T.themeLabel}>
+            <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+            <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5Z" /></svg>
+          </button>
+          <a class="btn btn-ink nav-cta" href="#produk">{T.cta}</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- hero -->
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <p class="badge"><span class="dot"></span>{T.badge}</p>
+            <h1>{T.h1a}<br /><span class="blue">{T.h1b}</span></h1>
+            <p class="lede">{T.lede}</p>
+            <div class="cta">
+              <a class="btn btn-blue" href="#produk">{T.explore} <span aria-hidden="true">↓</span></a>
+              <a class="btn btn-line" href={github} target="_blank" rel="noopener">{T.gh} ↗<span class="sr">{t.newTab}</span></a>
+            </div>
+          </div>
+          <ul class="dock" aria-label={T.prodK}>
+            {products.map((p) => (
+              <li style={`--c:${p.color}`}>
+                <a href={p.url}>
+                  <img class="dock-ic" src={p.icon} width="56" height="56" alt="" />
+                  <span class="dock-n">{p.name}</span>
+                  <span class="dock-k">{p.kindL}</span>
+                  <span class="dock-p">{p.platforms.join(" · ")}</span>
+                  <span class="dock-go" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="wrap">
+          <ul class="strip">
+            {T.strip.map((s) => <li>{s}</li>)}
+            {showStars && <li>★ {T.starsLabel(starTotal!)}</li>}
+          </ul>
+        </div>
+      </section>
+
+      <!-- products -->
+      <section id="produk" class="sec">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <p class="kick">{T.prodK}</p>
+            <h2>{T.prodH}<br /><span class="muted">{T.prodH2}</span></h2>
+          </div>
+          <div class="panels">
+            {products.map((p, i) => (
+              <article class={`panel dl-reveal${i % 2 ? " flip" : ""}`} style={`--c:${p.color}`}>
+                <div class="panel-copy">
+                  <div class="panel-id">
+                    <img src={p.icon} width="48" height="48" alt="" loading="lazy" />
+                    <div><h3>{p.name}</h3><span>{p.kindL}</span></div>
+                  </div>
+                  <p class="panel-tag">{L(p.tag)}</p>
+                  <p class="panel-text">{L(p.text)}</p>
+                  <ul class="panel-pts">{L(p.points).map((x) => <li>{x}</li>)}</ul>
+                  <div class="panel-meta">
+                    {p.platforms.map((x) => <span>{x}</span>)}
+                    {p.version && <span class="ver">{T.latest} v{p.version}</span>}
+                  </div>
+                  <div class="panel-cta">
+                    <a class="btn btn-c" href={p.url}>{T.see(p.name)} →</a>
+                    <a class="btn btn-line" href={`https://github.com/${p.repo}`} target="_blank" rel="noopener">
+                      ★ {t.star}{p.star !== null && p.star >= 10 && ` · ${p.star}`}<span class="sr">{t.newTab}</span>
+                    </a>
+                  </div>
+                </div>
+                <a class="panel-shot" href={p.url} tabindex="-1" aria-hidden="true">
+                  <span class="bar"><i></i><i></i><i></i></span>
+                  <img src={p.shot} alt="" loading="lazy" decoding="async" />
+                </a>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- why open source -->
+      <section id="kenapa" class="sec sec-ink">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <p class="kick">{T.whyK}</p>
+            <h2>{T.whyH}</h2>
+          </div>
+          <ul class="why">
+            {T.why.map(([h, d], i) => (
+              <li class="dl-reveal"><span class="why-n">0{i + 1}</span><h3>{h}</h3><p>{d}</p></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <!-- support -->
+      <section id="dukung" class="sec">
+        <div class="wrap">
+          <div class="support dl-reveal">
+            <div>
+              <p class="kick">{T.supK}</p>
+              <h2>{T.supH}</h2>
+              <p class="support-p">{T.supP}</p>
+            </div>
+            <div class="support-act">
+              <a class="btn btn-coffee" href={BMC} target="_blank" rel="noopener"><span aria-hidden="true">☕</span> {t.coffee}<span class="sr">{t.newTab}</span></a>
+              <p class="support-k">{T.starEach}</p>
+              <ul class="star-list">
+                {products.map((p) => (
+                  <li><a href={`https://github.com/${p.repo}`} target="_blank" rel="noopener" style={`--c:${p.color}`}>
+                    <img src={p.icon} width="22" height="22" alt="" />{p.name}<span class="s">★</span><span class="sr">{t.newTab}</span>
+                  </a></li>
+                ))}
+                <li><a href="https://github.com/DyskLab/dysklink-android" target="_blank" rel="noopener" style="--c:#2dd4a7">
+                  <img src="/images/apps/dysklink.png" width="22" height="22" alt="" />DyskLink Android<span class="s">★</span><span class="sr">{t.newTab}</span>
+                </a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- client work (secondary) -->
+      <section id="layanan" class="sec sec-soft">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <p class="kick">{T.svcK}</p>
+            <h2>{T.svcH}</h2>
+            <p class="head-p">{T.svcP}</p>
+          </div>
+          <div class="svc dl-reveal">
+            {groups.map((g) => (
+              <div class="svc-g">
+                <h3>{g.title}</h3>
+                <ul>{g.items.map(([n, d]) => <li><b>{n}</b><span>{d}</span></li>)}</ul>
+              </div>
+            ))}
+          </div>
+
+          <h3 class="sub dl-reveal">{T.casesH}</h3>
+          <ul class="cases">
+            {cases.map((c) => (
+              <li class="case dl-reveal">
+                {c.image && <img src={c.image} width="1200" height="750" alt="" loading="lazy" decoding="async" />}
+                <div class="case-b">
+                  <p class="case-k">{c.client} · {c.sectorL}</p>
+                  <h4>{c.titleL}</h4>
+                  <p class="case-s">{c.stack.join(" · ")}</p>
+                  {c.demo && <a href={c.demo} target="_blank" rel="noopener">{T.visit} {c.host} ↗<span class="sr">{t.newTab}</span></a>}
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <h3 class="sub dl-reveal">{T.quotesH}</h3>
+          <ul class="quotes">
+            {testimonials.map((q) => (
+              <li class="dl-reveal">
+                <blockquote>“{q.quoteL}”</blockquote>
+                <p><b>{mask(q.name)}</b>{q.roleL}</p>
+              </li>
+            ))}
+          </ul>
+          {T.quoteNote && <p class="note">{T.quoteNote}</p>}
+
+          <div class="contact dl-reveal" id="mulai">
+            <div>
+              <h3>{T.contactH}</h3>
+              <p>{T.contactP}</p>
+            </div>
+            <div class="contact-act">
+              <a class="btn btn-wa" href={waHello} target="_blank" rel="noopener">WhatsApp<span class="sr">{t.newTab}</span></a>
+              <a class="btn btn-line" href={mail}>{content.email}</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Faq lang={lang} items={T.faq} />
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot-in">
+        <div class="foot-brand">
+          <a class="brand" href={href(lang, "/")}><Logo size={28} /><span>DyskLab</span></a>
+          <p>{T.footP}</p>
+        </div>
+        <div>
+          <p class="foot-h">{T.prodK}</p>
+          <ul>{products.map((p) => <li><a href={p.url}>{p.name}</a></li>)}</ul>
+        </div>
+        <div>
+          <p class="foot-h">DyskLab</p>
+          <ul>
+            <li><a href={github} target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href={BMC} target="_blank" rel="noopener">Buy Me a Coffee</a></li>
+            <li><a href="#layanan">{T.svcK}</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="foot-h">{lang === "id" ? "Kontak" : "Contact"}</p>
+          <ul>
+            <li><a href={mail}>{content.email}</a></li>
+            <li><a href={waHello} target="_blank" rel="noopener">WhatsApp</a></li>
+            <li><a href={alternate(Astro.url.pathname, other)} data-lang={other} hreflang={other} lang={other}>{t.switchTo}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wrap foot-bottom">© {year} DyskLab · MIT License</div>
+    </footer>
+  </div>
+  <script src="../scripts/reveal.js"></script>
+  <script>
+    // Theme toggle (light by default; the choice is saved) and the sticky nav shadow.
+    const root = document.documentElement;
+    document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+      const next = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      try { localStorage.setItem("dysklab-theme", next); } catch {}
+    });
+    const nav = document.querySelector<HTMLElement>("[data-nav]");
+    const onScroll = () => nav?.classList.toggle("is-stuck", scrollY > 8);
+    addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  </script>
+</Base>
+
+<style>
+  :global(html) { background: #fbfbf9; }
+  :global(html[data-theme="dark"]) { background: #14161a; }
+  :global(body) { margin: 0; }
+  .dl {
+    --bg: #fbfbf9; --bg-2: #f2f2ee; --card: #fff; --fg: #14161a; --muted: #5c6068; --line: #e6e5df; --blue: #4d7cff; --blue-2: #3b63e6; --ink: #14161a; --paper: #f7f7f4;
+    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--fg); --pf-card: var(--card); --pf-radius: 16px;
+    --pb-btn-bg: var(--blue); --pb-btn-fg: #fff; --pb-radius: 12px;
+    background: var(--bg); color: var(--fg); font: 400 16px/1.6 Geist, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  :global([data-theme="dark"]) .dl { --bg: #14161a; --bg-2: #191c21; --card: #1b1e23; --fg: #f7f7f4; --muted: #a2a6ad; --line: #2a2e35; }
+  .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  h1, h2, h3, h4 { margin: 0; letter-spacing: -0.035em; line-height: 1.05; }
+  a { color: inherit; }
+  .muted { color: var(--muted); }
+  .blue { color: var(--blue); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 20px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; transition: transform 0.15s, background 0.2s, box-shadow 0.2s; white-space: nowrap; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-ink { background: var(--fg); color: var(--bg); height: 38px; padding: 0 14px; font-size: 14px; }
+  .btn-blue { background: var(--blue); color: #fff; box-shadow: 0 10px 24px -12px rgba(77, 124, 255, 0.8); }
+  .btn-line { border: 1px solid var(--line); background: var(--card); color: var(--fg); }
+  .btn-line:hover { border-color: var(--muted); }
+  .btn-c { background: var(--c); color: #fff; }
+  .btn-coffee { background: #ffdd00; color: #1a1a1a; height: 54px; font-size: 16px; }
+  .btn-wa { background: #25d366; color: #052e16; }
+
+  /* nav */
+  .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 82%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+  .nav:global(.is-stuck) { border-color: var(--line); }
+  .nav-in { height: 66px; display: flex; align-items: center; gap: 22px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: -0.02em; text-decoration: none; }
+  .brand :global(svg) { border-radius: 9px; box-shadow: 0 0 0 1px var(--line); }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a { padding: 7px 11px; border-radius: 8px; font-size: 14.5px; color: var(--muted); text-decoration: none; }
+  .nav-links a:hover { color: var(--fg); background: var(--bg-2); }
+  .nav-act { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; height: 38px; min-width: 38px; justify-content: center; padding: 0 10px; box-sizing: border-box; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--fg); font: 600 13px Geist, sans-serif; text-decoration: none; cursor: pointer; }
+  .chip:hover { border-color: var(--muted); }
+  .chip svg { width: 16px; height: 16px; fill: currentColor; }
+  .theme svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+  .theme .moon { display: none; }
+  :global([data-theme="dark"]) .theme .sun { display: none; }
+  :global([data-theme="dark"]) .theme .moon { display: block; }
+
+  /* hero */
+  .hero { position: relative; padding: 72px 0 40px; }
+  .hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(50% 60% at 80% 20%, rgba(77, 124, 255, 0.14), transparent 70%), linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 44px; mask: linear-gradient(#000, transparent 85%); opacity: 0.6; pointer-events: none; }
+  .hero-grid { position: relative; display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
+  .badge { display: inline-flex; align-items: center; gap: 9px; margin: 0; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-size: 13.5px; font-weight: 500; color: var(--muted); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 4px rgba(77, 124, 255, 0.18); }
+  h1 { margin-top: 22px; font-size: clamp(44px, 6.4vw, 82px); font-weight: 800; }
+  .lede { margin: 22px 0 0; max-width: 560px; font-size: 18.5px; color: var(--muted); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .dock { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .dock a { position: relative; display: grid; gap: 2px; padding: 22px; border-radius: 22px; background: var(--card); border: 1px solid var(--line); text-decoration: none; overflow: hidden; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; }
+  .dock a::before { content: ""; position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; border-radius: 50%; background: var(--c); opacity: 0.14; transition: transform 0.3s; }
+  .dock a:hover { transform: translateY(-3px); border-color: var(--c); box-shadow: 0 24px 50px -30px var(--c); }
+  .dock a:hover::before { transform: scale(1.3); }
+  .dock-ic { border-radius: 14px; margin-bottom: 14px; box-shadow: 0 10px 24px -12px var(--c); }
+  .dock-n { font-weight: 700; font-size: 19px; letter-spacing: -0.02em; }
+  .dock-k { font-size: 14px; color: var(--muted); }
+  .dock-p { margin-top: 10px; font: 500 12px "Geist Mono", monospace; color: var(--c); filter: brightness(0.85); }
+  :global([data-theme="dark"]) .dock-p { filter: none; }
+  .dock-go { position: absolute; right: 20px; bottom: 18px; font-size: 18px; color: var(--muted); transition: transform 0.2s, color 0.2s; }
+  .dock a:hover .dock-go { transform: translateX(3px); color: var(--c); }
+  .strip { list-style: none; margin: 56px 0 0; padding: 18px 0 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; border-top: 1px solid var(--line); font: 500 13.5px "Geist Mono", monospace; color: var(--muted); }
+
+  /* sections */
+  .sec { padding: 104px 0; }
+  .head { max-width: 760px; }
+  .kick { margin: 0 0 14px; font: 500 13px "Geist Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; color: var(--blue); }
+  h2 { font-size: clamp(32px, 4.4vw, 54px); font-weight: 800; }
+  .head-p { margin: 18px 0 0; font-size: 17.5px; color: var(--muted); }
+
+  .panels { margin-top: 56px; display: grid; gap: 28px; }
+  .panel { display: grid; grid-template-columns: 1fr 1.15fr; gap: 44px; align-items: center; padding: 40px; border-radius: 30px; border: 1px solid var(--line); background: linear-gradient(135deg, color-mix(in srgb, var(--c) 9%, var(--card)), var(--card) 60%); overflow: hidden; }
+  .panel.flip { grid-template-columns: 1.15fr 1fr; }
+  .panel.flip .panel-copy { order: 2; }
+  .panel-id { display: flex; align-items: center; gap: 14px; }
+  .panel-id img { border-radius: 13px; box-shadow: 0 10px 24px -12px var(--c); }
+  .panel-id h3 { font-size: 28px; }
+  .panel-id span { font-size: 14px; color: var(--muted); }
+  .panel-tag { margin: 22px 0 0; font-size: clamp(22px, 2.4vw, 28px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; }
+  .panel-text { margin: 12px 0 0; color: var(--muted); }
+  .panel-pts { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 8px; }
+  .panel-pts li { position: relative; padding-left: 26px; font-weight: 500; font-size: 15px; }
+  .panel-pts li::before { content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: color-mix(in srgb, var(--c) 22%, transparent); box-shadow: inset 0 0 0 5px var(--c); }
+  .panel-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
+  .panel-meta span { padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font: 500 12.5px "Geist Mono", monospace; color: var(--muted); }
+  .panel-meta .ver { border-color: color-mix(in srgb, var(--c) 45%, transparent); color: var(--fg); }
+  .panel-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+  .panel-shot { display: block; border-radius: 16px; overflow: hidden; background: #0f1115; border: 1px solid rgba(0, 0, 0, 0.12); box-shadow: 0 40px 80px -40px rgba(20, 22, 26, 0.55); transform: rotate(0.6deg); transition: transform 0.3s; }
+  .panel.flip .panel-shot { transform: rotate(-0.6deg); }
+  .panel:hover .panel-shot { transform: none; }
+  .bar { display: flex; gap: 6px; padding: 10px 12px; background: #1b1e23; }
+  .bar i { width: 10px; height: 10px; border-radius: 50%; background: #3a3f47; }
+  .panel-shot img { width: 100%; height: auto; display: block; aspect-ratio: 16 / 9.4; object-fit: cover; object-position: top left; }
+
+  .sec-ink { background: var(--ink); color: var(--paper); }
+  .sec-ink .kick { color: #8aa6ff; }
+  .why { list-style: none; margin: 52px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .why li { padding: 26px; border-radius: 20px; border: 1px solid #2a2e35; background: #1b1e23; }
+  .why-n { font: 500 13px "Geist Mono", monospace; color: var(--blue); }
+  .why h3 { margin-top: 18px; font-size: 20px; letter-spacing: -0.02em; }
+  .why p { margin: 10px 0 0; color: #a2a6ad; font-size: 15px; }
+
+  .support { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; padding: 48px; border-radius: 30px; border: 1px solid var(--line); background: radial-gradient(60% 80% at 100% 0%, rgba(255, 221, 0, 0.16), transparent 70%), var(--card); }
+  .support h2 { font-size: clamp(28px, 3.4vw, 42px); }
+  .support-p { margin: 16px 0 0; color: var(--muted); font-size: 17px; }
+  .support-act { display: grid; gap: 14px; }
+  .support-k { margin: 6px 0 0; font: 500 13px "Geist Mono", monospace; color: var(--muted); }
+  .star-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .star-list a { display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); font-weight: 600; font-size: 14px; text-decoration: none; transition: border-color 0.2s; }
+  .star-list a:hover { border-color: var(--c); }
+  .star-list img { border-radius: 6px; }
+  .star-list .s { margin-left: auto; color: #f5a524; }
+
+  .sec-soft { background: var(--bg-2); border-top: 1px solid var(--line); }
+  .svc { margin-top: 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .svc-g { padding: 28px; border-radius: 22px; background: var(--card); border: 1px solid var(--line); }
+  .svc-g h3 { font-size: 19px; letter-spacing: -0.02em; }
+  .svc-g ul { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 14px; }
+  .svc-g b { display: block; font-size: 15.5px; }
+  .svc-g span { display: block; margin-top: 2px; font-size: 14.5px; color: var(--muted); }
+  .sub { margin: 64px 0 0; font-size: 24px; letter-spacing: -0.03em; }
+  .cases { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .case { border-radius: 20px; overflow: hidden; background: var(--card); border: 1px solid var(--line); display: flex; flex-direction: column; }
+  .case img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; display: block; border-bottom: 1px solid var(--line); }
+  .case-b { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+  .case-k { margin: 0; font: 500 12.5px "Geist Mono", monospace; color: var(--muted); }
+  .case h4 { margin-top: 8px; font-size: 17px; letter-spacing: -0.02em; line-height: 1.25; }
+  .case-s { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
+  .case a { margin-top: auto; padding-top: 14px; font-size: 14px; font-weight: 600; color: var(--blue); text-decoration: none; }
+  .quotes { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .quotes li { padding: 24px; border-radius: 20px; background: var(--card); border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: space-between; gap: 18px; }
+  blockquote { margin: 0; font-size: 15.5px; line-height: 1.6; }
+  .quotes p { margin: 0; font-size: 13.5px; color: var(--muted); }
+  .quotes p b { display: block; color: var(--fg); font-size: 14.5px; }
+  .note { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+  .contact { margin-top: 64px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; padding: 36px 40px; border-radius: 26px; background: var(--ink); color: var(--paper); }
+  .contact h3 { font-size: clamp(24px, 2.8vw, 32px); }
+  .contact p { margin: 8px 0 0; color: #a2a6ad; }
+  .contact-act { display: flex; flex-wrap: wrap; gap: 10px; }
+  .contact .btn-line { background: transparent; color: var(--paper); border-color: #3a3f47; }
+
+  .foot { border-top: 1px solid var(--line); padding: 56px 0 28px; font-size: 14.5px; color: var(--muted); }
+  .foot-in { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 32px; }
+  .foot-brand p { margin: 14px 0 0; max-width: 280px; }
+  .foot-h { margin: 0 0 12px; font-weight: 600; color: var(--fg); }
+  .foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .foot a { text-decoration: none; }
+  .foot a:hover { color: var(--fg); }
+  .foot .brand { color: var(--fg); }
+  .foot-bottom { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13.5px; }
+
+  :global(.dl-motion) .dl-reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.2,.8,.2,1); }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
+
+  @media (max-width: 1060px) {
+    .nav-links { display: none; }
+    .hero-grid, .panel, .panel.flip, .support { grid-template-columns: 1fr; }
+    .panel.flip .panel-copy { order: 0; }
+    .why { grid-template-columns: 1fr 1fr; }
+    .cases, .quotes { grid-template-columns: 1fr 1fr; }
+    .foot-in { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .sec { padding: 72px 0; }
+    .hero { padding-top: 44px; }
+    .nav-cta { display: none; }
+    .dock a { padding: 16px; }
+    .dock-ic { width: 44px; height: 44px; margin-bottom: 10px; }
+    .dock-n { font-size: 16.5px; }
+    .dock-go { display: none; }
+    .panel { padding: 22px; border-radius: 22px; gap: 26px; }
+    .why, .svc, .cases, .quotes, .star-list { grid-template-columns: 1fr; }
+    .support { padding: 26px; }
+    .contact { padding: 26px; }
+    .strip { justify-content: flex-start; }
+  }
+</style>

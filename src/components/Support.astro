@@ -1,0 +1,69 @@
+---
+/*
+  "Free and open source" block near the end of every product page: Star on GitHub and
+  Buy me a coffee, side by side, each with one honest line on why it helps. No popups,
+  no nagging. Themed by the page's --pf-* and --pb-btn-* variables.
+  Star counts only show from 10 up; a 0 or 1 next to the button discourages more than it helps.
+*/
+import { BMC, ui, type Lang } from "../i18n";
+import { stars } from "../lib/github";
+interface Props { lang: Lang; product: string; repos: { label?: string; repo: string }[]; id?: string }
+const { lang, product, repos, id = "dukung" } = Astro.props;
+const t = ui[lang];
+const counts = await Promise.all(repos.map((r) => stars(r.repo)));
+---
+<section class="sp" id={id} aria-labelledby={`${id}-title`}>
+  <div class="sp-in">
+    <div class="sp-copy">
+      <h2 id={`${id}-title`}>{t.supportTitle(product)}</h2>
+      <p>{t.supportText}</p>
+    </div>
+    <div class="sp-actions">
+      <div class="sp-card">
+        <p class="sp-why">{t.starWhy}</p>
+        <div class="sp-stars">
+          {repos.map((r, i) => (
+            <a class="sp-btn sp-star" href={`https://github.com/${r.repo}`} target="_blank" rel="noopener">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L8 12.6l-4.8 2.6.9-5.4L.2 6l5.4-.8L8 .3Z" /></svg>
+              {t.star}{r.label && ` · ${r.label}`}
+              {counts[i] !== null && counts[i]! >= 10 && <span class="sp-count">{counts[i]}</span>}
+              <span class="sp-sr">{t.newTab}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+      <div class="sp-card">
+        <p class="sp-why">{t.coffeeWhy}</p>
+        <a class="sp-btn sp-coffee" href={BMC} target="_blank" rel="noopener">
+          <span aria-hidden="true">☕</span>{t.coffee}<span class="sp-sr">{t.newTab}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sp { padding: 72px 0; }
+  .sp-in {
+    box-sizing: border-box; width: min(1160px, calc(100% - 32px)); margin: 0 auto; display: grid; grid-template-columns: 1fr 1.15fr; gap: 36px; align-items: center;
+    padding: 36px; border-radius: calc(var(--pf-radius, 14px) + 8px); border: 1px solid var(--pf-line); background: var(--pf-card);
+  }
+  .sp h2 { margin: 0; font-size: clamp(26px, 3vw, 36px); line-height: 1.1; letter-spacing: -0.03em; color: var(--pf-fg); }
+  .sp-copy p { margin: 12px 0 0; color: var(--pf-muted); font-size: 16px; }
+  .sp-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .sp-card { display: flex; flex-direction: column; justify-content: space-between; gap: 14px; padding: 18px; border-radius: var(--pf-radius, 14px); border: 1px solid var(--pf-line); }
+  .sp-why { margin: 0; font-size: 14px; color: var(--pf-muted); }
+  .sp-stars { display: grid; gap: 8px; }
+  .sp-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 16px;
+    border-radius: var(--pb-radius, 12px); font-weight: 700; font-size: 15px; text-decoration: none; transition: transform 0.15s, filter 0.15s;
+  }
+  .sp-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+  .sp-star { background: var(--pb-btn-bg); color: var(--pb-btn-fg); }
+  .sp-star svg { width: 16px; height: 16px; fill: currentColor; }
+  .sp-count { padding: 1px 7px; border-radius: 999px; background: rgba(0, 0, 0, 0.15); font-size: 13px; }
+  .sp-coffee { background: #ffdd00; color: #1a1a1a; }
+  .sp-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 900px) { .sp-in { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .sp-actions { grid-template-columns: 1fr; } .sp-in { padding: 24px; } }
+</style>

@@ -1,0 +1,9 @@
+dist/
+.astro/
+node_modules/
+.vercel/
+.env
+.env.*
+.DS_Store
+src/data/*.local.json
+public/images/cases/drafts/

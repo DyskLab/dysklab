@@ -1,0 +1,448 @@
+---
+/*
+  DyskFiles product page. Look: dark creative tool — charcoal canvas, electric blue,
+  Space Grotesk, a gallery of real screenshots and the on-disk tree as the hero idea.
+  Copy lives in T (Indonesian / English), chosen by `lang`.
+*/
+import Base from "../layouts/Base.astro";
+import ProductBar from "../components/ProductBar.astro";
+import ProductFooter from "../components/ProductFooter.astro";
+import Privacy from "../components/Privacy.astro";
+import Faq from "../components/Faq.astro";
+import Support from "../components/Support.astro";
+import { pick, ui, type Lang } from "../i18n";
+import { download } from "../lib/releases";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const nt = ui[lang].newTab;
+
+const repo = "https://github.com/DyskLab/dyskfiles";
+const issues = `${repo}/issues`;
+const releases = `${repo}/releases`;
+// Direct links to the newest installers (resolved at build time).
+const [mac, win] = await Promise.all([download("DyskLab/dyskfiles", /\.dmg$/i), download("DyskLab/dyskfiles", /\.exe$/i)]);
+const img = (n: string) => `/images/products/dyskfiles/${n}.jpg`;
+
+const T = pick(lang, {
+  id: {
+    title: "DyskFiles: pengelola aset desktop tanpa database | DyskLab",
+    description: "DyskFiles adalah pengelola aset desktop: koleksi gambar, video, audio, dan teks tersimpan di folder biasa yang bisa dibaca dari Finder atau Explorer, tanpa database. Untuk macOS dan Windows. Gratis dan open source.",
+    nav: { galeri: "Galeri", tree: "Tanpa database", fitur: "Fitur", unduh: "Unduh", faq: "FAQ" },
+    cta: "Unduh gratis",
+    chip: "Aplikasi desktop · macOS & Windows · Gratis",
+    h1a: "Semua aset Anda,", h1b: "di folder yang ", h1hl: "bisa dibaca.",
+    lede: "DyskFiles mengelola koleksi gambar, video, audio, dan teks. Setiap item disimpan sebagai file asli, thumbnail, dan JSON di folder biasa yang bisa dibuka dari Finder atau Explorer. Tanpa database, tanpa folder bernama acak.",
+    dlMac: "Unduh untuk Mac",
+    dlWin: "Unduh untuk Windows",
+    macSub: "Apple Silicon · DMG",
+    winSub: "64-bit · installer",
+    allReleases: "Semua rilis",
+    code: "Kode di GitHub",
+    meta: ["MIT License", "Electron · Svelte 5", "Intel: jalankan dari source"],
+    heroAlt: "Tampilan grid DyskFiles dengan sidebar perpustakaan",
+    palette: "Palet warna",
+    galleryK: "01 / Galeri",
+    galleryH: "Dibuat untuk orang yang mengoleksi banyak hal.",
+    gallery: [
+      { title: "Inspector dan palet warna", text: "Rating, tag, folder, catatan, URL, dan palet warna dengan persentase." },
+      { title: "Pratinjau", text: "Putar, balik, potong, ukuran asli, dan navigasi berikutnya/sebelumnya." },
+      { title: "Impor dari mana saja", text: "Seret file, pilih folder, URL, atau perpustakaan Eagle." },
+    ],
+    treeK: "02 / Tanpa database",
+    treeH1: "Folder di disk ", treeHl: "adalah", treeH2: " indeksnya.",
+    treeBody: "Eagle menyimpan item di folder bernama acak. DyskFiles mengelompokkan setiap item ke folder sesuai tiga huruf pertama nama filenya, lalu menaruh file asli, thumbnail WebP, dan metadata JSON berdampingan.",
+    ticks: ["Tetap terbaca walau aplikasinya tidak ada.", "Mudah dicadangkan, disinkronkan, dan dipindah.", "Ekspor tampilan mana pun ke folder baru, lengkap dengan <code>metadata.csv</code>."],
+    treeLabel: "Contoh struktur perpustakaan di disk",
+    tree: { lib: "nama, versi, jumlah item", tags: "daftar tag", filters: "smart folder", folders: "folder", pre: "nama diawali \"pre\"", orig: "file asli", thumb: "thumbnail" },
+    featK: "03 / Fitur",
+    featH: "Semua yang diharapkan dari perpustakaan media modern.",
+    features: [
+      { t: "Beberapa perpustakaan", d: "Simpan beberapa perpustakaan .dyskfiles dan pindah dari sidebar. Yang terakhir dibuka lagi saat aplikasi jalan." },
+      { t: "Impor tertaut", d: "Rujuk file di tempatnya tanpa menyalin. Perpustakaan hanya menyimpan metadata dan thumbnail." },
+      { t: "Impor dari Eagle", d: "Bawa folder .library lengkap dengan tag, folder, rating, catatan, dan URL. Eagle hanya dibaca." },
+      { t: "Auto Import", d: "Pantau folder dan salin setiap file baru, termasuk yang masuk saat aplikasi tertutup." },
+      { t: "Semua jenis media", d: "Gambar, video, audio, teks dan kode dengan CodeMirror, PDF, sampai font TTF, OTF, dan WOFF." },
+      { t: "Folder, tag, smart folder", d: "Satu item bisa di banyak folder. Smart folder menyimpan filter yang sering dipakai." },
+      { t: "Filter lengkap", d: "Jenis, warna, bentuk, rating, dimensi, durasi, ukuran, tanggal, catatan, dan URL." },
+      { t: "Cari duplikat", d: "Temukan file kembar berdasarkan hash isinya, bukan sekadar nama." },
+      { t: "Check Library", d: "Memperbaiki thumbnail hilang dan file nyasar. Tidak ada yang dihapus: semua dipindah ke lost-found/." },
+    ],
+    secNote: "<b>Aman sejak arsitekturnya.</b> Renderer Electron terisolasi penuh, dan media disajikan lewat protokol <code>asset://</code> dengan dukungan HTTP Range, tanpa mematikan <code>webSecurity</code>.",
+    dlK: "04 / Unduh",
+    dlH: "Gratis. Open source. Milik Anda.",
+    dlBody: "<b>Mac:</b> buka DMG, lalu seret DyskFiles ke Applications. Aplikasi belum ter-notarize, jadi izinkan peluncuran pertama di <b>System Settings › Privacy &amp; Security › Open Anyway</b>.<br><b>Windows:</b> jalankan installer-nya. Installer belum ditandatangani, jadi kalau SmartScreen muncul, pilih <b>More info › Run anyway</b>.",
+    notes: "Catatan project",
+    termLabel: "Menjalankan dari source",
+    termBar: "Jalankan dari source (Intel / dev)",
+    pvSummary: "Perpustakaan Anda tetap di komputer Anda, dalam folder biasa.",
+    pv: [
+      { t: "Semua tersimpan lokal", d: "Perpustakaan <code>.dyskfiles</code> dibuat di folder yang Anda pilih: file asli, thumbnail, dan JSON. Tidak ada server DyskLab dan tidak ada cloud." },
+      { t: "Tanpa akun, tanpa telemetri", d: "Tidak perlu daftar atau login. Kode aplikasinya tidak memuat analytics, pelacak, maupun pelaporan crash." },
+      { t: "Pengaturan juga lokal", d: "Daftar perpustakaan dan preferensi tampilan disimpan di <code>rak-config.json</code> di folder data aplikasi di komputer Anda." },
+      { t: "Antarmuka terkunci", d: "Renderer berjalan dalam sandbox dengan context isolation, dan aturan CSP-nya tidak mengizinkan memuat apa pun dari internet. Media dibaca lewat protokol <code>asset://</code> milik aplikasi." },
+      { t: "Cek pembaruan ke GitHub", d: "Sekali sehari saat aplikasi dibuka, DyskFiles meminta info rilis terbaru ke <code>api.github.com</code>. Tidak ada data perpustakaan yang dikirim, tetapi GitHub melihat alamat IP Anda. Installer baru hanya diunduh jika Anda memilihnya. Cek otomatis bisa dimatikan di dialog Check for Updates.", ok: false },
+      { t: "Impor dari URL", d: "Saat Anda mengimpor dari URL, aplikasi mengunduh file itu langsung dari server tersebut, dan server itu melihat permintaannya. Selain ini dan cek pembaruan, aplikasi tidak menghubungi internet.", ok: false },
+    ],
+    pvNote: `Kode sumbernya terbuka, jadi semua ini bisa Anda periksa sendiri di <a href="${repo}" target="_blank" rel="noopener">GitHub<span class="sr">${ui.id.newTab}</span></a>.`,
+    faq: [
+      { q: "Apakah DyskFiles bisa dipakai di Windows atau Linux?", a: "<p>Windows bisa: sejak versi 1.0 tersedia installer untuk Windows 64-bit. Installer-nya belum ditandatangani, jadi kalau SmartScreen memperingatkan, pilih <b>More info › Run anyway</b>. Versi Linux belum ada.</p>" },
+      { q: "Bagaimana dengan Mac Intel?", a: `<p>Belum ada DMG untuk Intel. Anda bisa menjalankannya dari source: pasang Node.js, lalu <code>git clone</code>, <code>npm install</code>, dan <code>npm run dev</code> (lihat bagian <a href="#unduh">Unduh</a>).</p>` },
+      { q: "macOS menolak membuka aplikasinya. Apa yang harus dilakukan?", a: "<p>DyskFiles belum ter-notarize oleh Apple, jadi macOS memblokir peluncuran pertama. Buka <b>System Settings › Privacy &amp; Security</b> dan pilih <b>Open Anyway</b>, atau jalankan:</p><p><code>xattr -dr com.apple.quarantine /Applications/DyskFiles.app</code></p>" },
+      { q: "Apakah DyskFiles gratis?", a: "<p>Ya. DyskFiles gratis dan open source dengan lisensi MIT. Tidak ada akun, iklan, atau versi berbayar.</p>" },
+      { q: "Di mana perpustakaan saya disimpan, dan bagaimana mencadangkannya?", a: "<p>Di folder yang Anda pilih saat membuat perpustakaan, dengan nama <code>&lt;nama&gt;.dyskfiles</code>. Anda bisa membukanya di Finder atau Explorer dari sidebar. Karena isinya file biasa, mencadangkannya cukup dengan menyalin folder itu.</p><p>Untuk item dari impor tertaut, file aslinya tidak ada di dalam perpustakaan, jadi cadangkan juga folder aslinya.</p>" },
+      { q: "Bisakah saya pindah dari Eagle?", a: "<p>Bisa. Pilih <b>Import Eagle Library…</b> di menu tambah, lalu arahkan ke folder <code>.library</code>. Tag, folder, rating, catatan, dan URL ikut terbawa. Perpustakaan Eagle hanya dibaca, dan menjalankan impor lagi akan melewati item yang sudah diimpor.</p>" },
+      { q: "Bagaimana cara memperbarui aplikasinya?", a: "<p>DyskFiles memeriksa rilis baru di GitHub sekali sehari, atau lewat <b>DyskFiles › Check for Updates…</b>. Jika ada, aplikasi mengunduh dan membuka installer-nya: di Mac, tutup aplikasi lalu seret versi baru ke Applications; di Windows, tutup aplikasi lalu selesaikan installer-nya.</p>" },
+      { q: "Saya menemukan bug. Ke mana melaporkannya?", a: `<p>Buka issue di <a href="${issues}" target="_blank" rel="noopener">GitHub<span class="sr">${ui.id.newTab}</span></a>, sertakan sistem operasi (macOS atau Windows) dan versi DyskFiles. Untuk masalah isi perpustakaan, coba <b>Check Library</b> lebih dulu.</p>` },
+    ],
+  },
+  en: {
+    title: "DyskFiles: a desktop asset manager with no database | DyskLab",
+    description: "DyskFiles is a desktop asset manager: your images, videos, audio, and text live in plain folders you can read in Finder or Explorer, with no database. For macOS and Windows. Free and open source.",
+    nav: { galeri: "Gallery", tree: "No database", fitur: "Features", unduh: "Download", faq: "FAQ" },
+    cta: "Free download",
+    chip: "Desktop app · macOS & Windows · Free",
+    h1a: "All your assets,", h1b: "in folders you ", h1hl: "can read.",
+    lede: "DyskFiles organizes collections of images, videos, audio, and text. Each item is stored as the original file, a thumbnail, and JSON in plain folders you can open in Finder or Explorer. No database, no randomly named folders.",
+    dlMac: "Download for Mac",
+    dlWin: "Download for Windows",
+    macSub: "Apple Silicon · DMG",
+    winSub: "64-bit · installer",
+    allReleases: "All releases",
+    code: "Code on GitHub",
+    meta: ["MIT License", "Electron · Svelte 5", "Intel: run from source"],
+    heroAlt: "DyskFiles grid view with the library sidebar",
+    palette: "Color palette",
+    galleryK: "01 / Gallery",
+    galleryH: "Made for people who collect a lot of things.",
+    gallery: [
+      { title: "Inspector and color palette", text: "Rating, tags, folders, notes, URL, and a color palette with percentages." },
+      { title: "Preview", text: "Rotate, flip, crop, actual size, and next/previous navigation." },
+      { title: "Import from anywhere", text: "Drag in files, pick a folder, paste a URL, or bring an Eagle library." },
+    ],
+    treeK: "02 / No database",
+    treeH1: "The folders on disk ", treeHl: "are", treeH2: " the index.",
+    treeBody: "Eagle stores items in randomly named folders. DyskFiles groups each item into a folder named after the first three letters of its file name, and keeps the original, a WebP thumbnail, and JSON metadata side by side.",
+    ticks: ["Still readable even without the app.", "Easy to back up, sync, and move.", "Export any view to a new folder, with a <code>metadata.csv</code>."],
+    treeLabel: "Example library layout on disk",
+    tree: { lib: "name, version, item count", tags: "tag list", filters: "smart folders", folders: "folders", pre: "names starting with \"pre\"", orig: "the original", thumb: "thumbnail" },
+    featK: "03 / Features",
+    featH: "Everything you expect from a modern media library.",
+    features: [
+      { t: "Multiple libraries", d: "Keep several .dyskfiles libraries and switch between them from the sidebar. The last one reopens on launch." },
+      { t: "Linked imports", d: "Reference files where they are, without copying. The library holds only metadata and a thumbnail." },
+      { t: "Import from Eagle", d: "Bring in a .library folder with its tags, folders, ratings, notes, and URLs. Eagle is only read." },
+      { t: "Auto Import", d: "Watch folders and copy in every new file, including ones that land while the app is closed." },
+      { t: "Every kind of media", d: "Images, video, audio, text and code in CodeMirror, PDF, and even TTF, OTF, and WOFF fonts." },
+      { t: "Folders, tags, smart folders", d: "One item can live in many folders. Smart folders save the filters you use most." },
+      { t: "Detailed filters", d: "Type, color, shape, rating, dimensions, duration, size, dates, notes, and URL." },
+      { t: "Find duplicates", d: "Spot identical files by their content hash, not just their name." },
+      { t: "Check Library", d: "Repairs missing thumbnails and stray files. Nothing is deleted: everything goes to lost-found/." },
+    ],
+    secNote: "<b>Secure by design.</b> The Electron renderer is fully isolated, and media is served through an <code>asset://</code> protocol with HTTP Range support, without turning off <code>webSecurity</code>.",
+    dlK: "04 / Download",
+    dlH: "Free. Open source. Yours.",
+    dlBody: "<b>Mac:</b> open the DMG and drag DyskFiles into Applications. The app isn't notarized yet, so allow the first launch in <b>System Settings › Privacy &amp; Security › Open Anyway</b>.<br><b>Windows:</b> run the installer. It isn't code-signed yet, so if SmartScreen appears, choose <b>More info › Run anyway</b>.",
+    notes: "Project notes",
+    termLabel: "Running from source",
+    termBar: "Run from source (Intel / dev)",
+    pvSummary: "Your library stays on your computer, in plain folders.",
+    pv: [
+      { t: "Everything stays local", d: "A <code>.dyskfiles</code> library is created in a folder you choose: originals, thumbnails, and JSON. There is no DyskLab server and no cloud." },
+      { t: "No account, no telemetry", d: "Nothing to sign up for or log into. The app's code has no analytics, trackers, or crash reporting." },
+      { t: "Settings are local too", d: "Your library list and view preferences are saved in <code>rak-config.json</code> in the app's data folder on your computer." },
+      { t: "A locked-down interface", d: "The renderer runs sandboxed with context isolation, and its CSP doesn't allow loading anything from the internet. Media is read through the app's own <code>asset://</code> protocol." },
+      { t: "Update check with GitHub", d: "Once a day at launch, DyskFiles asks <code>api.github.com</code> for the latest release. No library data is sent, but GitHub sees your IP address. A new installer is only downloaded when you choose to. Turn the daily check off in the Check for Updates dialog.", ok: false },
+      { t: "Importing from a URL", d: "When you import from a URL, the app downloads that file directly from its server, which sees the request. Apart from this and the update check, the app doesn't go online.", ok: false },
+    ],
+    pvNote: `The source is open, so you can check all of this yourself on <a href="${repo}" target="_blank" rel="noopener">GitHub<span class="sr">${ui.en.newTab}</span></a>.`,
+    faq: [
+      { q: "Does DyskFiles run on Windows or Linux?", a: "<p>Windows, yes: since 1.0 there is an installer for 64-bit Windows. It isn't code-signed yet, so if SmartScreen warns you, choose <b>More info › Run anyway</b>. There is no Linux version yet.</p>" },
+      { q: "What about Intel Macs?", a: `<p>There's no Intel DMG yet. You can run it from source: install Node.js, then <code>git clone</code>, <code>npm install</code>, and <code>npm run dev</code> (see <a href="#unduh">Download</a>).</p>` },
+      { q: "macOS won't open the app. What do I do?", a: "<p>DyskFiles isn't notarized by Apple yet, so macOS blocks the first launch. Open <b>System Settings › Privacy &amp; Security</b> and choose <b>Open Anyway</b>, or run:</p><p><code>xattr -dr com.apple.quarantine /Applications/DyskFiles.app</code></p>" },
+      { q: "Is DyskFiles free?", a: "<p>Yes. DyskFiles is free and open source under the MIT license. No account, no ads, no paid tier.</p>" },
+      { q: "Where is my library stored, and how do I back it up?", a: "<p>In the folder you chose when you created the library, named <code>&lt;name&gt;.dyskfiles</code>. You can reveal it in Finder or Explorer from the sidebar. It's all plain files, so backing it up is just copying that folder.</p><p>For linked imports the originals aren't inside the library, so back up their folders too.</p>" },
+      { q: "Can I move over from Eagle?", a: "<p>Yes. Choose <b>Import Eagle Library…</b> in the add menu and point it at your <code>.library</code> folder. Tags, folders, ratings, notes, and URLs come along. The Eagle library is only read, and running the import again skips what was already imported.</p>" },
+      { q: "How do I update the app?", a: "<p>DyskFiles checks GitHub for a new release once a day, or from <b>DyskFiles › Check for Updates…</b>. When one is out, it downloads and opens the installer: on a Mac, quit the app and drag the new version onto Applications; on Windows, quit the app and finish the setup.</p>" },
+      { q: "I found a bug. Where do I report it?", a: `<p>Open an issue on <a href="${issues}" target="_blank" rel="noopener">GitHub<span class="sr">${ui.en.newTab}</span></a> with your operating system (macOS or Windows) and DyskFiles version. For problems with a library's contents, try <b>Check Library</b> first.</p>` },
+    ],
+  },
+});
+
+const shots = ["02-inspector", "03-lightbox", "04-add-menu"];
+const gallery = T.gallery.map((g, i) => ({ ...g, src: img(shots[i]) }));
+
+const swatches = [
+  { c: "#e8a0a0", p: "31%" }, { c: "#b9705f", p: "22%" }, { c: "#5d4a4f", p: "18%" },
+  { c: "#f1d6bf", p: "15%" }, { c: "#2e2a30", p: "9%" }, { c: "#7aa2d6", p: "5%" },
+];
+---
+
+<Base
+  title={T.title}
+  description={T.description}
+  path={Astro.url.pathname}
+  ogImage="/images/products/dyskfiles/og.jpg"
+  ogTitle="DyskFiles"
+  fonts="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+  theme="dark"
+  themeColor="#0d0e12"
+>
+  <div class="df" id="top">
+    <ProductBar
+      lang={lang}
+      repo="DyskLab/dyskfiles"
+      name="DyskFiles"
+      icon="/images/apps/dyskfiles.png"
+      links={[
+        { href: "#galeri", label: T.nav.galeri },
+        { href: "#tanpa-database", label: T.nav.tree },
+        { href: "#fitur", label: T.nav.fitur },
+        { href: "#faq", label: T.nav.faq },
+        { href: "#unduh", label: T.nav.unduh },
+      ]}
+      cta={{ href: "#unduh", label: T.cta }}
+    />
+
+    <main>
+      <header class="hero">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <p class="chip"><span class="dot"></span>{T.chip}</p>
+            <h1>{T.h1a}<br />{T.h1b}<span class="hl">{T.h1hl}</span></h1>
+            <p class="lede">{T.lede}</p>
+            <div class="cta">
+              <a class="btn btn-blue" href={mac.url} download>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16" /></svg>
+                {T.dlMac}
+              </a>
+              <a class="btn btn-blue btn-win" href={win.url} download>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16" /></svg>
+                {T.dlWin}
+              </a>
+              <a class="btn btn-line" href={repo} target="_blank" rel="noopener">{T.code}<span class="sr">{nt}</span></a>
+            </div>
+            <ul class="meta">
+              {T.meta.map((m) => <li>{m}</li>)}
+            </ul>
+          </div>
+          <div class="hero-shot dl-reveal">
+            <img src={img("01-grid")} width="1800" height="1116" alt={T.heroAlt} fetchpriority="high" />
+            <div class="palette" aria-hidden="true">
+              <span class="palette-t">{T.palette}</span>
+              <div class="palette-row">
+                {swatches.map((s) => <i style={`--c:${s.c};flex:${parseInt(s.p)}`}><b>{s.p}</b></i>)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section id="galeri" class="sec">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <p class="kicker">{T.galleryK}</p>
+            <h2>{T.galleryH}</h2>
+          </div>
+          <div class="gallery">
+            {gallery.map((g, i) => (
+              <figure class={`shot shot-${i + 1} dl-reveal`}>
+                <img src={g.src} width="1800" height="1116" alt={g.title} loading="lazy" decoding="async" />
+                <figcaption><b>{g.title}</b><span>{g.text}</span></figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="tanpa-database" class="sec sec-tree">
+        <div class="wrap tree-grid">
+          <div class="dl-reveal">
+            <p class="kicker">{T.treeK}</p>
+            <h2>{T.treeH1}<span class="hl">{T.treeHl}</span>{T.treeH2}</h2>
+            <p class="body">{T.treeBody}</p>
+            <ul class="ticks">
+              {T.ticks.map((t) => <li set:html={t} />)}
+            </ul>
+          </div>
+          <pre class="tree dl-reveal" aria-label={T.treeLabel}><code><span class="d">MyLibrary.dyskfiles/</span>
+├── library.json        <span class="c"># {T.tree.lib}</span>
+├── tags.json           <span class="c"># {T.tree.tags}</span>
+├── filters.json        <span class="c"># {T.tree.filters}</span>
+├── folders.json        <span class="c"># {T.tree.folders}</span>
+├── <span class="d">pre/</span>                <span class="c"># {T.tree.pre}</span>
+│   ├── preview-l9x2ka.json
+│   ├── preview-l9x2ka.png  <span class="c"># {T.tree.orig}</span>
+│   └── preview-l9x2ka.webp <span class="c"># {T.tree.thumb}</span>
+└── <span class="d">mov/</span>
+    ├── movie-k1p8.json
+    ├── movie-k1p8.mov
+    └── movie-k1p8.webp</code></pre>
+        </div>
+      </section>
+
+      <section id="fitur" class="sec">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <p class="kicker">{T.featK}</p>
+            <h2>{T.featH}</h2>
+          </div>
+          <ul class="feats">
+            {T.features.map((f, i) => (
+              <li class="feat dl-reveal">
+                <span class="n">{String(i + 1).padStart(2, "0")}</span>
+                <h3>{f.t}</h3>
+                <p>{f.d}</p>
+              </li>
+            ))}
+          </ul>
+          <div class="sec-note dl-reveal">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6l-8-3Z" /></svg>
+            <p set:html={T.secNote} />
+          </div>
+        </div>
+      </section>
+
+      <section id="unduh" class="sec sec-dl">
+        <div class="wrap dl-grid">
+          <div class="dl-reveal">
+            <p class="kicker">{T.dlK}</p>
+            <h2>{T.dlH}</h2>
+            <p class="body" set:html={T.dlBody} />
+            <div class="cta">
+              <a class="btn btn-blue dl-file" href={mac.url} download>
+                <span>{T.dlMac}</span><small>{T.macSub}{mac.version && ` · v${mac.version}`}</small>
+              </a>
+              <a class="btn btn-blue btn-win dl-file" href={win.url} download>
+                <span>{T.dlWin}</span><small>{T.winSub}{win.version && ` · v${win.version}`}</small>
+              </a>
+            </div>
+            <div class="cta cta-sub">
+              <a class="btn btn-line" href={releases} target="_blank" rel="noopener">{T.allReleases}<span class="sr">{nt}</span></a>
+              <a class="btn btn-line" href="https://www.fanny.dev/projects/dyskfiles/">{T.notes}</a>
+            </div>
+          </div>
+          <div class="term dl-reveal" role="group" aria-label={T.termLabel}>
+            <div class="term-bar"><i></i><i></i><i></i><span>{T.termBar}</span></div>
+            <pre><code><span class="p">$</span> git clone {repo}.git
+<span class="p">$</span> cd dyskfiles
+<span class="p">$</span> npm install
+<span class="p">$</span> npm run dev</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <Privacy lang={lang} id="privasi" summary={T.pvSummary} items={T.pv} note={T.pvNote} />
+      <Faq lang={lang} id="faq" items={T.faq} />
+      <Support lang={lang} product="DyskFiles" repos={[{ repo: "DyskLab/dyskfiles" }]} />
+    </main>
+
+    <ProductFooter lang={lang} current="dyskfiles" />
+  </div>
+  <script src="../scripts/reveal.js"></script>
+</Base>
+
+<style>
+  :global(body) { margin: 0; background: #0d0e12; }
+  .df {
+    --bg: #0d0e12; --panel: #14161c; --line: #23262f; --fg: #f4f5f7; --muted: #9aa0ad; --blue: #3b82f6; --cyan: #22d3ee;
+    --pb-bg: var(--bg); --pb-fg: var(--fg); --pb-muted: var(--muted); --pb-line: var(--line); --pb-hover: #1b1e26;
+    --pb-btn-bg: var(--blue); --pb-btn-fg: #fff; --pb-font: "Space Grotesk", sans-serif;
+    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--fg); --pf-card: var(--panel); --pf-hover: #3a3f4c;
+    background: var(--bg); color: var(--fg); font: 400 16px/1.6 "Space Grotesk", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .wrap { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  :global(.df .sr) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  h1, h2, h3 { margin: 0; letter-spacing: -0.03em; line-height: 1.05; }
+  .hl { background: linear-gradient(90deg, var(--blue), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  code { font: 500 0.88em "JetBrains Mono", monospace; color: #c9d6ff; }
+
+  .btn { display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; transition: transform 0.2s, background 0.2s, border-color 0.2s; }
+  .btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-blue { background: var(--blue); color: #fff; box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.7); }
+  .btn-win { background: #1f2937; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
+  .dl-file { flex-direction: column; align-items: flex-start; gap: 0; height: auto; min-height: 58px; padding: 10px 20px; line-height: 1.25; }
+  .dl-file small { font-size: 12.5px; font-weight: 500; opacity: 0.75; }
+  .cta-sub { margin-top: 12px; }
+  .btn-line { border: 1px solid var(--line); color: var(--fg); background: var(--panel); }
+  .btn-line:hover { border-color: #3a3f4c; }
+
+  .hero { position: relative; padding: 80px 0 40px; }
+  .hero::before { content: ""; position: absolute; inset: -20% -10% auto; height: 700px; background: radial-gradient(50% 50% at 70% 30%, rgba(59, 130, 246, 0.28), transparent 70%), radial-gradient(40% 40% at 20% 10%, rgba(34, 211, 238, 0.12), transparent 70%); pointer-events: none; }
+  .hero-grid { position: relative; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: 9px; margin: 0; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: 13px; color: var(--muted); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+  h1 { margin-top: 22px; font-size: clamp(40px, 5.4vw, 68px); font-weight: 700; }
+  .lede { margin: 20px 0 0; font-size: 18px; color: var(--muted); max-width: 520px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .meta { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .meta li { font: 500 12.5px "JetBrains Mono", monospace; color: var(--muted); padding: 5px 9px; border: 1px dashed var(--line); border-radius: 7px; }
+  .hero-shot { position: relative; }
+  .hero-shot img { width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--line); box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8), 0 0 0 6px rgba(255, 255, 255, 0.03); }
+  .palette { position: absolute; left: -28px; bottom: -28px; width: 300px; padding: 14px; border-radius: 14px; background: rgba(20, 22, 28, 0.92); border: 1px solid var(--line); box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.8); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .palette-t { font-size: 12px; color: var(--muted); }
+  .palette-row { margin-top: 8px; display: flex; gap: 3px; height: 34px; }
+  .palette-row i { position: relative; background: var(--c); border-radius: 5px; }
+  .palette-row b { position: absolute; left: 0; right: 0; bottom: -18px; text-align: center; font: 500 10px "JetBrains Mono", monospace; color: var(--muted); }
+  .palette { padding-bottom: 28px; }
+
+  .sec { padding: 110px 0; }
+  .head { max-width: 680px; }
+  .kicker { margin: 0 0 14px; font: 500 13px "JetBrains Mono", monospace; color: var(--blue); }
+  h2 { font-size: clamp(30px, 4vw, 48px); font-weight: 700; }
+  .body { margin: 18px 0 0; font-size: 17px; color: var(--muted); }
+
+  .gallery { margin-top: 44px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .shot { margin: 0; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
+  .shot img { width: 100%; height: auto; display: block; transition: transform 0.6s cubic-bezier(.2,.8,.2,1); }
+  .shot:hover img { transform: scale(1.02); }
+  .shot figcaption { padding: 14px 18px 16px; display: grid; gap: 2px; border-top: 1px solid var(--line); }
+  .shot figcaption b { font-size: 15.5px; }
+  .shot figcaption span { font-size: 14px; color: var(--muted); }
+
+  .sec-tree { background: linear-gradient(180deg, transparent, #0a0b0e 30%, #0a0b0e 70%, transparent); }
+  .tree-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .ticks { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 10px; }
+  .ticks li { position: relative; padding-left: 28px; color: var(--fg); }
+  .ticks li::before { content: ""; position: absolute; left: 0; top: 7px; width: 14px; height: 8px; border-left: 2px solid var(--cyan); border-bottom: 2px solid var(--cyan); transform: rotate(-45deg); }
+  .tree { margin: 0; padding: 26px 28px; border-radius: 16px; border: 1px solid var(--line); background: #08090c; overflow-x: auto; font: 400 14px/1.75 "JetBrains Mono", monospace; color: #b8bfcc; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04); }
+  .tree code { font: inherit; color: inherit; }
+  .tree .d { color: #8ab4ff; font-weight: 500; }
+  .tree .c { color: #5c6373; }
+
+  .feats { list-style: none; margin: 44px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .feat { padding: 28px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: background 0.25s; }
+  .feat:hover { background: var(--panel); }
+  .feat .n { font: 500 12px "JetBrains Mono", monospace; color: var(--blue); }
+  .feat h3 { margin-top: 14px; font-size: 19px; }
+  .feat p { margin: 8px 0 0; font-size: 15px; color: var(--muted); }
+  .sec-note { margin-top: 24px; display: flex; gap: 14px; align-items: flex-start; padding: 20px 22px; border-radius: 14px; border: 1px solid rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.07); }
+  .sec-note svg { flex: none; width: 22px; height: 22px; fill: none; stroke: var(--blue); stroke-width: 1.8; stroke-linejoin: round; }
+  .sec-note p { margin: 0; color: var(--muted); font-size: 15px; }
+  .sec-note b { color: var(--fg); }
+
+  .sec-dl { border-top: 1px solid var(--line); }
+  .dl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .term { border-radius: 14px; border: 1px solid var(--line); background: #08090c; overflow: hidden; }
+  .term-bar { display: flex; align-items: center; gap: 7px; padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
+  .term-bar i { width: 10px; height: 10px; border-radius: 50%; background: #2a2e38; }
+  .term-bar span { margin-left: 8px; }
+  .term pre { margin: 0; padding: 20px; overflow-x: auto; font: 400 14px/1.8 "JetBrains Mono", monospace; color: #d6dbe5; }
+  .term code { font: inherit; color: inherit; }
+  .term .p { color: var(--cyan); }
+
+  :global(.dl-motion) .dl-reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(.2,.8,.2,1); }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .hero-grid, .tree-grid, .dl-grid { grid-template-columns: 1fr; }
+    .palette { left: 12px; bottom: -24px; width: 240px; }
+    .gallery { grid-template-columns: 1fr; }
+    .feats { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 620px) {
+    .sec { padding: 76px 0; }
+    .hero { padding-top: 52px; }
+    .feats { grid-template-columns: 1fr; }
+  }
+</style>

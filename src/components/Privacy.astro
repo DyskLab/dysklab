@@ -1,0 +1,51 @@
+---
+/*
+  Per-product privacy section: a one-line summary, then what the app keeps, where it
+  goes and what (if anything) leaves the device. Items may contain simple HTML.
+  Themed by the page's --pf-* and --pb-btn-* variables.
+*/
+import { ui, type Lang } from "../i18n";
+interface Props {
+  lang: Lang;
+  summary: string;
+  items: { t: string; d: string; ok?: boolean }[];
+  note?: string;
+  id?: string;
+}
+const { lang, summary, items, note, id = "privasi" } = Astro.props;
+---
+<section class="pv" id={id} aria-labelledby={`${id}-title`}>
+  <div class="pv-in">
+    <div class="pv-head">
+      <p class="pv-k">{ui[lang].privacy}</p>
+      <h2 id={`${id}-title`}>{summary}</h2>
+    </div>
+    <ul class="pv-list">
+      {items.map((i) => (
+        <li class={i.ok === false ? "pv-warn" : ""}>
+          <span class="pv-dot" aria-hidden="true">{i.ok === false ? "!" : "✓"}</span>
+          <div><b>{i.t}</b><p set:html={i.d} /></div>
+        </li>
+      ))}
+    </ul>
+    {note && <p class="pv-note" set:html={note} />}
+  </div>
+</section>
+
+<style>
+  .pv { padding: 80px 0; border-top: 1px solid var(--pf-line); }
+  .pv-in { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  .pv-head { max-width: 760px; }
+  .pv-k { margin: 0 0 12px; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-muted); }
+  .pv h2 { margin: 0; font-size: clamp(28px, 3.4vw, 44px); line-height: 1.08; letter-spacing: -0.03em; color: var(--pf-fg); }
+  .pv-list { list-style: none; margin: 36px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .pv-list li { display: flex; gap: 14px; padding: 20px; border-radius: var(--pf-radius, 14px); border: 1px solid var(--pf-line); background: var(--pf-card); }
+  .pv-dot { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; background: var(--pb-btn-bg); color: var(--pb-btn-fg); }
+  .pv-warn .pv-dot { background: #f59e0b; color: #1a1200; }
+  .pv-list b { display: block; color: var(--pf-fg); font-size: 16px; }
+  .pv-list p { margin: 4px 0 0; color: var(--pf-muted); font-size: 14.5px; line-height: 1.6; }
+  .pv-list :global(code) { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; }
+  .pv-list :global(a), .pv-note :global(a) { color: var(--pf-fg); }
+  .pv-note { margin: 18px 0 0; font-size: 14px; color: var(--pf-muted); }
+  @media (max-width: 760px) { .pv-list { grid-template-columns: 1fr; } }
+</style>

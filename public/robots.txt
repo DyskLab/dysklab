@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dysklab.fanny.dev/sitemap.xml

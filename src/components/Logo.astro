@@ -1,0 +1,10 @@
+---
+/* DyskLab mark: off-white ring with a blue dot on ink (from the brand icon). */
+interface Props { size?: number; class?: string; tile?: boolean }
+const { size = 30, class: cls = "", tile = true } = Astro.props;
+---
+<svg class={cls} width={size} height={size} viewBox="0 0 1024 1024" aria-hidden="true" focusable="false">
+  {tile && <rect width="1024" height="1024" rx="236" fill="#14161a" />}
+  <circle cx="512" cy="512" r="240.5" fill="none" stroke={tile ? "#f7f7f4" : "currentColor"} stroke-width="75" />
+  <circle cx="512" cy="512" r="66" fill="#4d7cff" />
+</svg>

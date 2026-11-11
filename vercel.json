@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "cookie", "key": "dl-lang", "value": "en" }],
+      "destination": "/en/",
+      "permanent": false
+    },
+    {
+      "source": "/produk/:slug/",
+      "has": [{ "type": "cookie", "key": "dl-lang", "value": "en" }],
+      "destination": "/en/products/:slug/",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "header", "key": "x-vercel-ip-country", "value": { "neq": "ID" } }],
+      "missing": [
+        { "type": "cookie", "key": "dl-lang" },
+        { "type": "header", "key": "user-agent", "value": { "re": "[Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Telegram|Lighthouse" } }
+      ],
+      "destination": "/en/",
+      "permanent": false
+    },
+    {
+      "source": "/produk/:slug/",
+      "has": [{ "type": "header", "key": "x-vercel-ip-country", "value": { "neq": "ID" } }],
+      "missing": [
+        { "type": "cookie", "key": "dl-lang" },
+        { "type": "header", "key": "user-agent", "value": { "re": "[Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Telegram|Lighthouse" } }
+      ],
+      "destination": "/en/products/:slug/",
+      "permanent": false
+    }
+  ]
+}

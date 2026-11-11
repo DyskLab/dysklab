@@ -1,0 +1,674 @@
+---
+/*
+  DyskLink product page. Look: device-ecosystem keynote — near-black navy, teal signal
+  glow, Sora headlines, a Mac and a phone joined by pulsing rings. Two downloads
+  (Mac + Android) because the phone features need both apps.
+  Every feature has a picture: a real screenshot (rendered by the Mac app's --snapshot
+  mode, in /images/products/dysklink/f/) or a small HTML/CSS scene from LinkIllo.
+*/
+import Base from "../layouts/Base.astro";
+import ProductBar from "../components/ProductBar.astro";
+import ProductFooter from "../components/ProductFooter.astro";
+import Privacy from "../components/Privacy.astro";
+import Faq from "../components/Faq.astro";
+import Support from "../components/Support.astro";
+import LinkIllo from "../components/LinkIllo.astro";
+import { ui, type Lang } from "../i18n";
+import { download } from "../lib/releases";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = (id: string, en: string) => (lang === "id" ? id : en);
+const nt = ui[lang].newTab;
+
+const mac = "https://github.com/DyskLab/dysklink-mac";
+const android = "https://github.com/DyskLab/dysklink-android";
+const macDl = await download("DyskLab/dysklink-mac", /mac.*\.zip$/i);
+const androidDl = await download("DyskLab/dysklink-android", /\.apk$/i);
+const img = (n: string) => `/images/products/dysklink/${n}.jpg`;
+const f = (n: string) => `/images/products/dysklink/f/${n}.jpg`;
+const shot = t("Tangkapan layar DyskLink", "DyskLink screenshot");
+
+type Item = { t: string; d: string; src?: string; fit?: string; il?: string; i?: string; k?: string[] };
+const icon = (d: string) => `<path d="${d}"/>`;
+
+/* ---------- With your phone, in four groups ---------- */
+const groups: { id?: string; t: string; s: string; items: Item[] }[] = [
+  {
+    t: t("Terhubung", "Connected"),
+    s: t("Sekali dipasangkan, tersambung sendiri.", "Pair once, then it just connects."),
+    items: [
+      { t: t("Koneksi terenkripsi", "Encrypted connection"), src: f("pair"), fit: "cover", i: icon("M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6l-8-3Z"),
+        d: t("Pairing dengan kode 6 digit, banyak perangkat, tersambung lagi otomatis, plus status HP: baterai, penyimpanan, dan sinyal.", "Pair with a 6-digit code, several devices, automatic reconnection, plus phone status: battery, storage, and signal.") },
+      { t: t("Lewat kabel USB", "Over a USB cable"), il: "usb", i: icon("M12 3v13M9 6l3-3 3 3M8 11h8v3a4 4 0 0 1-8 0v-3ZM12 18v3"),
+        d: t("Nyalakan USB debugging dan colokkan HP: koneksi pindah ke kabel dalam beberapa detik. Perlu adb, yang bisa diunduh dari pengaturan HP di Mac.", "Turn on USB debugging and plug the phone in: the connection moves to the cable within seconds. Needs adb, which the phone's settings on the Mac can download.") },
+      { t: t("Bangunkan Mac", "Wake your Mac"), il: "wake", i: icon("M12 3v8M6.3 7.3a8 8 0 1 0 11.4 0"),
+        d: t("Mac sedang tidur? Wake Mac di HP mengirim Wake-on-LAN. Mac harus tidur (bukan mati), dicas, dan di jaringan yang sama.", "Mac asleep? Wake Mac on the phone sends Wake-on-LAN. The Mac has to be asleep (not shut down), on power, and on the same network.") },
+      { t: t("Kunci saat HP menjauh", "Lock when your phone leaves"), il: "lockaway", i: icon("M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4"),
+        d: t("Mac terkunci kalau HP pilihan Anda terputus selama waktu yang Anda tentukan, 30 detik sampai 5 menit. Tidak mengunci kalau Mac sendiri yang offline.", "The Mac locks when your chosen phone stays disconnected for the time you pick, 30 seconds to 5 minutes. It won't lock when the Mac itself is offline.") },
+      { t: t("Cari perangkat", "Find each other"), il: "ring", i: icon("M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"),
+        d: t("Bunyikan HP dari Mac dengan volume penuh walau sedang senyap, atau bunyikan Mac dari HP.", "Ring the phone from the Mac at full volume, even on silent, or ring the Mac from the phone.") },
+      { t: t("Mac lain dan HP lain", "Other Macs and phones"), il: "devices", i: icon("M3 5h12v9H3zM1 17h16M17 8h4v12h-4z"),
+        d: t("Pasangkan beberapa Mac: clipboard dan riwayatnya ikut sinkron, kirim file, saling bunyikan. HP lain juga bisa terhubung.", "Pair several Macs: copies and their history sync, files go across, and each can ring the other. Other phones can connect too.") },
+    ],
+  },
+  {
+    t: t("Berbagi", "Sharing"),
+    s: t("File, salinan, foto, dan suara pindah tanpa repot.", "Files, copies, photos, and sound move without fuss."),
+    items: [
+      { t: t("Kirim file dua arah", "Files both ways"), src: f("history"), fit: "cover", i: icon("M12 3v12m0 0-4-4m4 4 4-4M4 19h16"),
+        d: t("Dari HP masuk ke Downloads/DyskLink di Mac, dari Mac masuk ke Download/DyskLink di HP. Semua tercatat di Riwayat file.", "From the phone to Downloads/DyskLink on the Mac, from the Mac to Download/DyskLink on the phone. Everything is listed in File history.") },
+      { t: t("Clipboard bersama", "Shared clipboard"), src: f("notch-clipboard"), fit: "notch", i: icon("M9 4h6v3H9zM7 5H5v15h14V5h-2"),
+        d: t("Salin di Mac, tempel di HP. HP juga bisa mengirim balik salinannya, manual atau otomatis.", "Copy on the Mac, paste on the phone. The phone can send its copies back too, by hand or automatically.") },
+      { t: t("Sinkron foto", "Photo sync"), il: "photosync", i: icon("M4 7h3l2-3h6l2 3h3v12H4zM12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"),
+        d: t("Foto dan screenshot baru dari HP otomatis masuk ke Pictures › DyskLink di Mac setiap kali tersambung. Foto lama tidak ikut.", "New photos and screenshots from the phone land in Pictures › DyskLink on the Mac whenever it's connected. Older photos stay put.") },
+      { t: t("Galeri HP", "Phone gallery"), il: "gallery", i: icon("M4 4h16v16H4zM4 16l5-5 4 4 3-3 4 4"),
+        d: t("Jelajahi foto dan video HP dari Mac, terbaru dulu. Klik untuk membuka, klik kanan untuk menyimpan ke Downloads.", "Browse the phone's photos and videos from the Mac, newest first. Click to open, right-click to save to Downloads.") },
+      { t: t("Berbagi suara", "Sound both ways"), il: "sound", i: icon("M4 9h4l5-4v14l-5-4H4zM17 9a4 4 0 0 1 0 6"),
+        d: t("Dengarkan suara Mac lewat earphone di HP, atau putar suara HP di Mac (Android 10+). Jendela layar HP ikut membawa suaranya. Jedanya sekitar 0,1–0,5 detik.", "Hear the Mac through earphones on your phone, or play the phone's sound on the Mac (Android 10+). The phone screen window carries its sound too. About 0.1–0.5 s behind.") },
+      { t: t("Catatan cepat bersama", "Shared quick note"), src: f("notch-note"), fit: "notch", i: icon("M6 3h9l4 4v14H6zM9 12h7M9 16h5"),
+        d: t("Satu catatan pendek untuk alamat, nomor, atau daftar belanja. Halaman Note di notch dan Quick note di HP berisi teks yang sama.", "One short note for an address, a number, or a shopping list. The notch's Note page and Quick note on the phone hold the same text.") },
+    ],
+  },
+  {
+    t: t("Kabar dari HP", "From your phone"),
+    s: t("Yang terjadi di HP, terlihat di Mac.", "What happens on the phone, seen on the Mac."),
+    items: [
+      { t: t("Notifikasi, SMS, panggilan", "Notifications, SMS, calls"), src: f("sms"), fit: "cover", i: icon("M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 0 0 4 0"),
+        d: t("Notifikasi HP, baca dan kirim SMS, panggilan masuk, kontak dengan ekspor vCard, dan file HP (baca saja).", "Phone notifications, reading and sending SMS, incoming calls, contacts with vCard export, and phone files (read-only).") },
+      { t: t("Cari kontak dan SMS", "Search contacts and SMS"), il: "search", i: icon("M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM21 21l-5-5"),
+        d: t("Pencarian mengabaikan huruf besar dan aksen, dan menganggap 0812…, 62812…, dan +62 812-… sebagai nomor yang sama.", "Search ignores case and accents, and treats 0812…, 62812… and +62 812-… as the same number.") },
+      { t: t("Screen time HP", "Phone screen time"), src: f("screen-time"), fit: "cover", i: icon("M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"),
+        d: t("Total pemakaian HP hari ini, berapa kali dibuka, dan aplikasi yang paling sering dipakai, langsung di Mac.", "Today's total phone use, the number of unlocks, and the most used apps, right on the Mac.") },
+      { t: t("Kode OTP di notch", "Codes in the notch"), src: f("notch-code"), fit: "notch", i: icon("M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4"),
+        d: t("Kode sekali pakai dari SMS dan notifikasi muncul di bawah notch dengan tombol Copy selama 30 detik, tanpa disimpan.", "One-time codes from SMS and notifications show under the notch with a Copy button for 30 seconds, and aren't kept.") },
+      { t: t("Jeda saat ditelepon", "Pause on calls"), src: f("notch-music"), fit: "notch", i: icon("M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"),
+        d: t("Musik atau video di Mac berhenti saat HP berdering, lalu jalan lagi setelah panggilan selesai.", "Music or video on the Mac pauses when the phone rings and plays again when the call ends.") },
+      { t: t("Baterai HP di notch", "Phone battery in the notch"), src: f("notch-phone-low"), fit: "notch", i: icon("M3 8h15v8H3zM21 11v2M6 11h4"),
+        d: t("Peringatan singkat di notch saat baterai HP turun ke 10–30% (20% secara default) dan saat penuh ketika dicas.", "A short warning in the notch when the phone falls to 10–30% (20% by default) and when it's full while charging.") },
+    ],
+  },
+  {
+    id: "layar",
+    t: t("Layar dan kamera", "Screens and camera"),
+    s: t("Saling pinjam layar dan kamera.", "Borrow each other's screen and camera."),
+    items: [
+      { t: t("Layar HP di Mac", "Phone screen on the Mac"), src: f("screen"), fit: "cover", i: icon("M7 3h10v18H7zM11 18h2"),
+        d: t("Lihat layar HP di Mac dan kendalikan langsung dengan mouse dan keyboard.", "See the phone's screen on the Mac and control it with your mouse and keyboard.") },
+      { t: t("Tombol game", "Game keys"), il: "gamekeys", i: icon("M6 9h12a4 4 0 0 1 0 8l-2-2H8l-2 2a4 4 0 0 1 0-8ZM8 12v2M7 13h2M16 13h.01"),
+        d: t("Di jendela layar HP, petakan tombol keyboard ke titik di layar, plus joystick WASD. Beberapa tombol bisa ditahan bersamaan, dan mouse juga bisa mengetuk.", "In the phone screen window, map keyboard keys to spots on the screen, plus a WASD joystick. Hold several keys at once; the mouse taps too.") },
+      { t: t("Layar Mac di HP", "Mac screen on the phone"), il: "macscreen", i: icon("M3 4h18v12H3zM8 20h8M12 16v4"),
+        d: t("Lihat layar Mac dari HP: ketuk untuk klik, dua jari untuk scroll, cubit untuk zoom, dan ketik dengan keyboard HP.", "View the Mac's screen from the phone: tap to click, two fingers to scroll, pinch to zoom, and type with the phone keyboard.") },
+      { t: t("HP jadi layar kedua", "Phone as a second display"), il: "display2", i: icon("M2 5h13v9H2zM18 9h4v11h-4zM6 18h5"),
+        d: t("HP menjadi layar tambahan Mac dalam posisi miring. Seret jendela ke sana dan atur di System Settings › Displays.", "The phone becomes an extra display of the Mac, turned sideways. Drag windows onto it and arrange it in System Settings › Displays.") },
+      { t: t("Kamera HP ke Mac", "Phone camera on the Mac"), il: "camera", i: icon("M3 7h12v10H3zM15 10l6-3v10l-6-3"),
+        d: t("Kamera depan atau belakang HP tampil di jendela Mac, dengan ganti lensa, lampu, mirror, putar, dan selalu di atas. Pakai OBS Virtual Camera untuk Zoom atau Meet.", "The phone's front or back camera in a Mac window, with lens switch, light, mirror, rotate, and keep on top. Use OBS Virtual Camera to bring it into Zoom or Meet.") },
+      { t: t("Siap untuk OBS", "Ready for OBS"), il: "obs", i: icon("M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 12h.01"),
+        d: t("Jendela layar HP dan kamera punya tampilan bersih tanpa tombol (⌘B memunculkannya lagi). Tinggal tambahkan dengan Window Capture.", "The phone screen and camera windows have a clean view without the button bar (⌘B brings it back). Add them with Window Capture.") },
+    ],
+  },
+];
+
+const workTools: Item[] = [
+  { t: "Remote control", il: "remote", d: t("HP jadi touchpad, keyboard, remote media, atau remote presentasi, dan bisa menjalankan perintah Mac yang sudah didaftarkan.", "The phone becomes a touchpad, keyboard, media remote, or presentation remote, and can run Mac commands you've listed.") },
+  { t: "Air mouse", il: "airmouse", d: t("Di mode presentasi, tahan pad ungu lalu arahkan HP untuk menggerakkan pointer Mac seperti laser. Ketuk sekali untuk klik.", "In Presentation, hold the purple pad and turn the phone to move the Mac's pointer like a laser. A quick tap clicks.") },
+  { t: "Stream Deck", il: "deck", d: t("Tombol besar untuk shortcut, tombol media, teks, atau perintah Mac. Tombol OBS langsung bicara ke WebSocket OBS: scene, streaming, rekam, mute.", "Big buttons for shortcuts, media keys, text, or Mac commands. OBS buttons talk to OBS's WebSocket directly: scenes, streaming, recording, mute.") },
+  { t: t("Ketik dengan suara", "Voice typing"), il: "voice", d: t("Bicara dalam bahasa Indonesia atau Inggris, teksnya diketik di Mac, lengkap dengan tanda baca lisan seperti \"titik\" dan \"koma\".", "Speak Indonesian or English and the words are typed on the Mac, with spoken punctuation like \"comma\" and \"new line\".") },
+  { t: t("Scan barcode ke Mac", "Scan barcodes to Mac"), il: "barcode", d: t("Pindai barcode atau QR code, teksnya diketik di posisi kursor Mac, lalu Enter, Tab, atau tidak sama sekali.", "Scan a barcode or QR code and its text is typed where the Mac's cursor is, then Enter, Tab, or nothing.") },
+  { t: t("Scan dokumen ke Mac", "Scan documents to Mac"), il: "scan", d: t("Tepi kertas ditemukan otomatis, teks dibaca ML Kit, dan PDF-nya dikirim ke Mac, yang menambahkan lapisan teks supaya bisa dicari di Spotlight dan Preview.", "Paper edges are found automatically, ML Kit reads the text, and the PDF goes to the Mac, which adds a text layer so Spotlight and Preview can search it.") },
+  { t: t("Terminal Mac", "Mac terminal"), il: "terminal", d: t("Shell Mac sungguhan di HP, termasuk vim dan htop. Mac harus mengizinkan dulu, dan HP meminta sidik jari setiap kali.", "A real Mac shell on the phone, vim and htop included. The Mac has to allow it first, and the phone asks for your fingerprint every time.") },
+  { t: t("Notch di HP", "The notch on your phone"), il: "notchphone", d: t("Todo, hitungan minum, dan Pomodoro dari notch Mac bisa diubah dari HP. HP bisa masuk Jangan Ganggu saat fokus.", "The Mac notch's todo list, water count, and Pomodoro can be changed from the phone, which can go into Do Not Disturb during focus.") },
+];
+
+const widgets = [
+  t("Catatan cepat", "Quick note"), "Todo", t("Pomodoro & air", "Pomodoro & water"), t("Media Mac", "Mac media"),
+  t("Baterai", "Battery"), t("Tombol", "Buttons"), "Mac", t("Waktu salat", "Prayer times"),
+];
+
+const solo: Item[] = [
+  { t: t("Alat jaringan", "Network tools"), il: "network", d: t("Detail koneksi, speed test, cari perangkat di Wi-Fi yang sama, dan ping.", "Connection details, a speed test, devices on the same Wi-Fi, and ping.") },
+  { t: t("Alat HP", "Phone tools"), il: "phonetools", d: t("Bersihkan penyimpanan, lihat ukuran dan pemakaian aplikasi, serta aplikasi yang memegang izin sensitif.", "Clean up storage, see app sizes and usage, and which apps hold sensitive permissions.") },
+  { t: t("File HP di browser", "Phone files in a browser"), il: "browser", d: t("Server web baca-saja: laptop di Wi-Fi yang sama bisa membuka file HP setelah memasukkan PIN. Mati sendiri setelah 30 menit tidak dipakai.", "A read-only web server: a laptop on the same Wi-Fi can open the phone's files after entering a PIN. It stops by itself after 30 minutes without use.") },
+  { t: t("Waktu salat dan cuaca", "Prayer times and weather"), il: "prayer", d: t("Jadwal salat dari equran.id dengan pengingat, cuaca 3 hari dari Open-Meteo, widget, dan tetap jalan offline.", "Prayer times from equran.id with reminders, a 3-day forecast from Open-Meteo, a widget, and it keeps working offline.") },
+  { t: t("Pengingat cas", "Charge reminder"), il: "charge", d: t("Notifikasi saat baterai mencapai batas pilihan Anda (80% secara default), plus riwayat pengisian.", "A notification when the battery reaches the limit you choose (80% by default), plus a charging history.") },
+];
+
+/* ---------- Mac ---------- */
+const tools = [
+  { t: "Clipboard History", k: ["⌃", "⌘", "V"], src: img("mac-03-clipboard-history"), w: 810, h: 690,
+    d: t("Riwayat salinan hingga 5000 item atau tanpa batas, tempel langsung dengan Control + Option + 1 sampai 9, salin teks dari bagian layar dengan Control + Command + O, impor dari Ditto dan CopyQ. Password diabaikan.", "Keeps up to 5000 copies or everything, pastes the newest directly with Control + Option + 1 to 9, copies text from part of the screen with Control + Command + O, and imports from Ditto and CopyQ. Passwords are skipped.") },
+  { t: "Notch", k: [], src: img("mac-04-notch"), w: 876, h: 285,
+    d: t("Kontrol musik dengan lirik opsional, Pomodoro, todo, pengingat minum, waktu salat, cuaca, baterai Mac dan HP, rak file, salinan terbaru, catatan cepat, dan notifikasi HP.", "Music controls with optional lyrics, Pomodoro, todo, a water reminder, prayer times, weather, Mac and phone batteries, a file shelf, recent copies, a quick note, and phone notifications.") },
+  { t: "Window Previews", k: ["⌥", "Tab"], src: img("mac-05-window-previews"), w: 843, h: 402,
+    d: t("Arahkan ke ikon Dock untuk melihat, memfokuskan, meminimalkan, atau menutup jendelanya. Option + Tab berpindah antarjendela, dengan tampilan Liquid Glass.", "Point at a Dock icon to see, focus, minimize, or close its windows. Option + Tab switches between windows, with an optional Liquid Glass look.") },
+];
+const notch = [
+  { n: "notch-music", t: t("Musik", "Music") }, { n: "notch-pomodoro", t: "Pomodoro" }, { n: "notch-todo", t: "Todo" }, { n: "notch-water", t: t("Air minum", "Water") },
+  { n: "notch-prayer", t: t("Waktu salat", "Prayer times") }, { n: "notch-weather", t: t("Cuaca", "Weather") }, { n: "notch-clipboard", t: t("Rak dan salinan", "Shelf and copies") }, { n: "notch-note", t: t("Catatan", "Note") },
+];
+const moreTools: Item[] = [
+  { t: "Launcher", il: "launcher", k: ["⌥", "Space"], d: t("Cari aplikasi, file, jendela, salinan, hitungan, konversi satuan seperti 10 km to mi, dan emoji.", "Search apps, files, windows, copies, sums, unit conversions such as 10 km to mi, and emoji.") },
+  { t: "Window Layout", il: "layout", k: ["⌃", "⌥", "←"], d: t("Taruh jendela di setengah, sepertiga, seperempat, tengah, atau layar penuh, pindah layar, atau rapikan semua jadi grid. Layout bisa disimpan.", "Put windows in a half, third, quarter, the center, or full screen, move them to another screen, or tile them all into a grid. Layouts can be saved.") },
+  { t: t("Teks dari layar", "Text from the screen"), il: "textcap", k: ["⌃", "⌘", "O"], d: t("Seret di bagian layar mana pun dan teksnya langsung tersalin. Pengenalan teks berjalan di Mac ini saja.", "Drag over any part of the screen and its text is copied. Recognition runs on this Mac only.") },
+  { t: "System Monitor", il: "monitor", d: t("CPU, memori, disk, jaringan, baterai, dan aplikasi tersibuk. Hanya mengukur saat halamannya terbuka.", "CPU, memory, disk, network, battery, and the busiest apps. It only samples while its page is on screen.") },
+  { t: "Keep Awake", src: f("keep-awake"), fit: "contain", d: t("Jaga Mac atau layarnya tetap menyala untuk waktu tertentu, hanya saat dicas, sampai baterai turun, atau sampai tidak ada aktivitas.", "Keep the Mac or its screen awake for a set time, only while plugged in, until the battery drops, or until there's no activity.") },
+  { t: t("Brightness dan Volume", "Brightness and Volume"), il: "brightness", d: t("Slider untuk layar bawaan, monitor eksternal lewat DDC/CI, dan output suara. Tombol kecerahan bisa mengatur semua layar.", "Sliders for the built-in screen, external monitors over DDC/CI, and the sound output. The brightness keys can control every screen.") },
+  { t: "Mouse", il: "mouse", d: t("Matikan akselerasi, atur kecepatan, balik arah scroll untuk mouse eksternal, dan pakai modifier + wheel untuk geser samping, zoom, atau volume.", "Turn off acceleration, set the speed, reverse the wheel for external mice, and use a modifier + wheel to scroll sideways, zoom, or change volume.") },
+  { t: t("Lirik dan YouTube", "Lyrics and YouTube"), il: "lyrics", d: t("Notch mengenali YouTube di Safari, Chrome, Firefox, dan browser lain dari judul jendela, plus ekstensi Firefox. Lirik dari LRCLIB bisa tampil di samping player, mati secara default.", "The notch picks up YouTube in Safari, Chrome, Firefox, and other browsers from window titles, plus a Firefox extension. Lyrics from LRCLIB can show beside the player; off by default.") },
+  { t: t("Menu bar sesuai selera", "Your menu bar, your way"), src: f("menubar"), fit: "low", d: t("Pilih isi menu DyskLink dan urutannya: perangkat, kecerahan dan volume, Keep Awake, layout jendela, salinan terbaru, bunyikan HP, kunci layar, Pomodoro, cuaca, catatan cepat, dan baterai.", "Choose what the DyskLink menu shows and in what order: devices, brightness and volume, Keep Awake, window layouts, recent copies, ring phone, lock screen, Pomodoro, weather, quick note, and battery.") },
+];
+const care: Item[] = [
+  { t: "Cleaner", src: f("cleaner"), d: t("Cache aplikasi, log, file developer (Xcode, Gradle, npm), installer lama, dan file 500 MB ke atas.", "App caches, logs, developer files (Xcode, Gradle, npm), old installers, and files of 500 MB or more.") },
+  { t: t("Duplikat", "Duplicates"), src: f("duplicates"), d: t("File yang tersimpan lebih dari sekali, harus sama persis byte demi byte, dan satu salinan selalu disisakan.", "Files saved more than once, matched byte for byte, and one copy of each is always kept.") },
+  { t: "Uninstall", src: f("uninstall"), d: t("Hapus aplikasi beserta pengaturan, cache, dan data yang tertinggal di Library.", "Remove an app along with the settings, caches, and data it left in your Library.") },
+  { t: "Startup", src: f("startup"), d: t("Matikan, nyalakan, atau hapus background agent milik akun Anda.", "Turn your account's background agents off and on, or remove them.") },
+  { t: t("Baterai", "Battery"), src: f("battery"), d: t("Kesehatan baterai seperti di System Settings, kapasitas penuh dibanding desain, siklus, suhu, daya, dan riwayat harian.", "Battery health as in System Settings, full charge against design, cycles, temperature, power, and a daily history.") },
+  { t: t("Kontrol pengisian", "Charging control"), src: f("charge-control"), d: t("Batas cas dengan sailing, pakai baterai walau charger tercolok, perlindungan panas, dan kalibrasi.", "A charge limit with sailing, discharge on power, heat protection, and calibration.") },
+  { t: "Low Power Mode", src: f("low-power"), fit: "contain", d: t("Atur kapan Low Power Mode macOS menyala: tidak pernah, saat pakai baterai, saat dicas, atau selalu.", "Choose when macOS Low Power Mode is on: never, on battery, on power, or always.") },
+  { t: t("Riwayat baterai", "Battery history"), src: f("battery-history"), fit: "contain", d: t("Kapasitas dan jumlah siklus per hari, jadi terlihat seberapa cepat baterai menua.", "Capacity and cycles day by day, so you can see how fast the battery ages.") },
+];
+
+/* ---------- Privacy & FAQ (facts from the two READMEs and the source) ---------- */
+const a = (u: string, label: string) => `<a href="${u}" target="_blank" rel="noopener">${label}<span class="sr-only">${nt}</span></a>`;
+const privacy = {
+  summary: t("Tidak ada server di tengah.", "No server in the middle."),
+  items: [
+    { t: t("Langsung, terenkripsi", "Direct and encrypted"), d: t("Mac dan HP bicara langsung lewat jaringan lokal atau kabel USB, dienkripsi TLS dan dipasangkan dengan kode 6 digit. Tanpa akun, tanpa cloud.", "The Mac and phone talk directly over the local network or a USB cable, encrypted with TLS and paired with a 6-digit code. No account, no cloud.") },
+    { t: t("Data HP hanya di memori", "Phone data stays in memory"), d: t("Notifikasi, SMS, kontak, layar, dan kontrol mati sampai Anda nyalakan satu per satu di HP. Mac menyimpannya di memori saja dan menghapusnya saat fitur dimatikan atau perangkat dilepas.", "Notifications, SMS, contacts, screen, and control are off until you turn them on one by one on the phone. The Mac keeps that data in memory only and clears it when a feature is turned off or the devices unpair.") },
+    { t: t("Ke disk hanya yang perlu", "Only what's needed reaches the disk"), d: t("Kontak tersimpan hanya saat Anda menekan Export vCard. File masuk ke Downloads/DyskLink, foto ke Pictures › DyskLink. Clipboard History tinggal di Mac ini dan hanya bisa dibaca akun Anda; isi bertanda privat selalu dilewati.", "Contacts are saved only when you press Export vCard. Files go to Downloads/DyskLink, photos to Pictures › DyskLink. Clipboard History stays on this Mac, readable only by your account, and content marked private is always skipped.") },
+    { t: t("Cek update yang sopan", "A polite update check"), d: t("Sekali sehari membaca daftar rilis publik di GitHub. Tidak mengirim data tentang perangkat dan tidak memasang apa pun tanpa Anda minta.", "Once a day it reads the public release list on GitHub. It sends nothing about your devices and installs nothing unless you ask.") },
+    { t: t("Teks dibaca di Mac", "Text is read on the Mac"), d: t("Pengenalan teks dari layar berjalan di Mac ini. Option + Tab hanya memeriksa tombol yang ditekan, tanpa menyimpan atau mengirimnya.", "Reading text from the screen runs on this Mac. Option + Tab only checks which key is pressed, without storing or sending it.") },
+    { t: t("Layanan luar, hanya kalau dipakai", "Outside services, only when used"), ok: false, d: t("Lirik mengirim judul dan artis lagu ke LRCLIB (mati secara default). Waktu salat mengirim nama kota ke equran.id, cuaca mengirim koordinat kota ke Open-Meteo. Speed test memakai speed.cloudflare.com.", "Lyrics send the song's title and artist to LRCLIB (off by default). Prayer times send the city name to equran.id, weather sends the city's coordinates to Open-Meteo. The speed test uses speed.cloudflare.com.") },
+    { t: t("Layanan Google di Android", "Google services on Android"), ok: false, d: t("Scan barcode dan scan dokumen memakai pemindai Google lewat Play Services, dan ketik dengan suara memakai pengenal suara bawaan HP.", "Barcode and document scanning use Google's scanners through Play Services, and voice typing uses the phone's own speech recognizer.") },
+    { t: t("File HP di browser tidak terenkripsi", "Phone files in a browser aren't encrypted"), ok: false, d: t("Server web di HP memakai HTTP biasa dengan PIN. Pakai hanya di Wi-Fi yang Anda percaya; mati sendiri setelah 30 menit tidak dipakai.", "The phone's web server uses plain HTTP with a PIN. Use it only on a Wi-Fi you trust; it stops after 30 minutes without use.") },
+    { t: t("Notifikasi dikirim apa adanya", "Notifications are sent as they are"), ok: false, d: t("Kecuali yang ditandai rahasia oleh aplikasinya, jadi kode verifikasi bank atau SMS bisa muncul di Mac. Kirim salinan HP otomatis juga bisa ikut mengirim password yang disalin.", "Except those their app marks as secret, so verification codes from banks or SMS can show on the Mac. Sending phone copies automatically can also send a copied password.") },
+    { t: t("Batas keamanan saat ini", "Current security limits"), ok: false, d: t("Kunci privat disimpan sebagai file berizin terbatas, belum di Keychain atau Android Keystore. APK masih build debug, jadi datanya bisa dibaca lewat <code>adb run-as</code>.", "Private keys are stored as files with restricted permissions, not yet in the Keychain or Android Keystore. The APK is a debug build, so its data can be read through <code>adb run-as</code>.") },
+  ],
+  note: t(`Semua kode terbuka: ${a(mac, "DyskLink untuk Mac")} dan ${a(android, "DyskLink untuk Android")}.`, `All the code is open: ${a(mac, "DyskLink for Mac")} and ${a(android, "DyskLink for Android")}.`),
+};
+const xattr = "<code>xattr -dr com.apple.quarantine /Applications/DyskLink.app</code>";
+const faq = [
+  { q: t("Apakah DyskLink gratis?", "Is DyskLink free?"),
+    a: t(`<p>Ya. Gratis dan open source dengan MIT License: tanpa iklan, akun, atau versi berbayar. Kodenya ada di GitHub untuk ${a(mac, "Mac")} dan ${a(android, "Android")}.</p>`, `<p>Yes. It's free and open source under the MIT License: no ads, no account, no paid tier. The code is on GitHub for ${a(mac, "Mac")} and ${a(android, "Android")}.</p>`) },
+  { q: t("Perangkat apa saja yang didukung?", "Which devices does it support?"),
+    a: t("<p>Mac dengan macOS 15 atau lebih baru di Apple Silicon, dan HP Android 8 atau lebih baru. Untuk Mac Intel, bangun dari source. Beberapa fitur butuh versi lebih baru, misalnya suara HP ke Mac butuh Android 10.</p>", "<p>A Mac with macOS 15 or later on Apple Silicon, and an Android phone with Android 8 or later. For Intel Macs, build it from source. A few features need more, for example the phone's sound on the Mac needs Android 10.</p>") },
+  { q: t("Bisa dipakai dengan iPhone?", "Does it work with an iPhone?"),
+    a: t("<p>Tidak. Fitur HP hanya untuk Android. Alat Advanced dan Mac care tetap bisa dipakai di Mac tanpa HP sama sekali.</p>", "<p>No. The phone features are for Android only. The Advanced tools and Mac care still work on a Mac with no phone at all.</p>") },
+  { q: t("macOS menolak membuka aplikasinya. Apa yang harus dilakukan?", "macOS won't open the app. What do I do?"),
+    a: t(`<p>Aplikasinya belum dinotarisasi Apple dan memakai sertifikat self-signed, jadi macOS memblokir peluncuran pertama. Buka <b>System Settings › Privacy &amp; Security</b> dan pilih <b>Open Anyway</b>, atau jalankan ${xattr}.</p>`, `<p>The app isn't notarized by Apple and uses a self-signed certificate, so macOS blocks the first launch. Open <b>System Settings › Privacy &amp; Security</b> and choose <b>Open Anyway</b>, or run ${xattr}.</p>`) },
+  { q: t("Kenapa tidak ada di Google Play?", "Why isn't it on Google Play?"),
+    a: t("<p>Izin SMS, log panggilan, dan akses semua file membuat aplikasi ini tidak bisa masuk Google Play tanpa pengajuan khusus, jadi APK-nya dipasang langsung dari GitHub. Android akan meminta izin memasang dari sumber itu.</p>", "<p>The SMS, call log, and all-files permissions keep it off Google Play without a special application, so the APK is installed directly from GitHub. Android asks you to allow installing from that source.</p>") },
+  { q: t("Perlu internet atau cloud?", "Does it need the internet or a cloud?"),
+    a: t("<p>Tidak. Mac dan HP cukup berada di Wi-Fi yang sama, atau tersambung kabel USB. Internet hanya dipakai fitur yang memang membutuhkannya: cek update, cuaca, waktu salat, lirik, dan speed test.</p>", "<p>No. The Mac and phone only need to be on the same Wi-Fi, or joined by a USB cable. The internet is only used by features that need it: the update check, weather, prayer times, lyrics, and the speed test.</p>") },
+  { q: t("Koneksi sering putus di vivo, Oppo, atau Xiaomi?", "It keeps disconnecting on vivo, Oppo, or Xiaomi?"),
+    a: t("<p>Izinkan DyskLink berjalan di latar belakang lewat kartu di aplikasinya, lalu nyalakan <b>autostart</b> di HP vivo, Oppo, dan Xiaomi. DyskLink memakai foreground service dengan heartbeat 25 detik, tersambung lagi saat jaringan berubah, dan jalan lagi setelah HP dinyalakan ulang.</p>", "<p>Allow DyskLink to run in the background from the card in the app, and on vivo, Oppo, and Xiaomi also turn on <b>autostart</b>. DyskLink uses a foreground service with a 25-second heartbeat, reconnects when the network changes, and starts again after the phone reboots.</p>") },
+  { q: t("Saya masih pakai versi 0.1. Bagaimana pindah ke 1.0?", "I'm still on version 0.1. How do I move to 1.0?"),
+    a: t("<p>Di Mac, pairing, kunci, dan Clipboard History tetap ada, tapi izinkan lagi Accessibility, Screen Recording, dan notifikasi, lalu matikan dan nyalakan <b>Open at login</b>. Di Android, sejak 0.2.0 aplikasinya terpisah: hapus versi lama, pasang versi terbaru, lalu pasangkan lagi.</p>", "<p>On the Mac, pairings, keys, and Clipboard History stay, but allow Accessibility, Screen Recording, and notifications again, and turn <b>Open at login</b> off and on. On Android, it has been a separate app since 0.2.0: uninstall the old one, install the latest, and pair again.</p>") },
+  { q: t("Menemukan bug atau punya ide?", "Found a bug or have an idea?"),
+    a: t(`<p>Laporkan lewat GitHub Issues di repo ${a(`${mac}/issues`, "Mac")} atau ${a(`${android}/issues`, "Android")}. Sertakan versi aplikasi, model HP dan versi Android, serta langkah untuk memunculkannya.</p>`, `<p>Open an issue on GitHub for the ${a(`${mac}/issues`, "Mac app")} or the ${a(`${android}/issues`, "Android app")}. Include the app version, the phone model and Android version, and the steps that cause it.</p>`) },
+];
+---
+
+<Base
+  title={t("DyskLink: hubungkan Mac dan HP Android tanpa cloud | DyskLab", "DyskLink: connect your Mac and Android phone without a cloud | DyskLab")}
+  description={t(
+    "DyskLink menghubungkan Mac dan HP Android lewat Wi-Fi lokal, tanpa cloud dan tanpa akun: kirim file, clipboard, notifikasi, SMS, layar HP, kamera, dan remote control, plus alat tambahan dan perawatan baterai untuk Mac.",
+    "DyskLink connects your Mac and Android phone over local Wi-Fi, with no cloud and no account: files, clipboard, notifications, SMS, the phone's screen and camera, and remote control, plus extra tools and battery care for the Mac.",
+  )}
+  path={Astro.url.pathname}
+  ogImage="/images/products/dysklink/og.jpg"
+  ogTitle={t("DyskLink: Mac dan Android, satu jaringan", "DyskLink: Mac and Android, one network")}
+  fonts="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+  theme="dark"
+  themeColor="#05080c"
+>
+  <div class="lk" id="top">
+    <ProductBar
+      lang={lang}
+      repo="DyskLab/dysklink-mac"
+      name="DyskLink"
+      icon="/images/apps/dysklink.png"
+      links={[
+        { href: "#hp", label: t("Bersama HP", "With your phone") },
+        { href: "#tanpa-mac", label: t("Tanpa Mac", "No Mac needed") },
+        { href: "#mac", label: t("Alat Mac", "Mac tools") },
+        { href: "#privasi", label: ui[lang].privacy },
+        { href: "#faq", label: "FAQ" },
+      ]}
+      cta={{ href: "#unduh", label: t("Unduh gratis", "Free download") }}
+    />
+
+    <main>
+      <header class="hero">
+        <div class="wrap">
+          <p class="early"><span></span>{t("Tahap awal pengembangan", "Early development")}</p>
+          <h1>{t("Mac dan Android,", "Mac and Android,")}<br /><span class="glow">{t("satu jaringan.", "one network.")}</span></h1>
+          <p class="lede">
+            {t(
+              "DyskLink menghubungkan Mac dan HP Android lewat Wi-Fi lokal. Tanpa cloud, tanpa akun. File, clipboard, notifikasi, sampai layar HP, langsung dari satu perangkat ke perangkat lain.",
+              "DyskLink connects your Mac and Android phone over local Wi-Fi. No cloud, no account. Files, clipboard, notifications, even the phone's screen, straight from one device to the other.",
+            )}
+          </p>
+          <div class="cta">
+            <a class="btn btn-teal" href={macDl.url} download={macDl.file ?? undefined}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5a4.3 4.3 0 0 0-3.4-1.8c-1.4-.2-2.8.8-3.5.8s-1.8-.8-3-.8a4.5 4.5 0 0 0-3.8 2.3c-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3s1.6-.7 3-.7 1.8.7 3 .7 2-1.1 2.8-2.3a9.8 9.8 0 0 0 1.3-2.6 4 4 0 0 1-2.5-3.7ZM14.2 5.8A4 4 0 0 0 15.1 3a4.1 4.1 0 0 0-2.7 1.4 3.8 3.8 0 0 0-1 2.7 3.4 3.4 0 0 0 2.8-1.3Z" /></svg>
+              {t("Unduh untuk Mac", "Download for Mac")}
+            </a>
+            <a class="btn btn-dim" href={androidDl.url} download={androidDl.file ?? undefined}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9h10v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V9Zm0-1a5 5 0 0 1 10 0H7Zm3-2.5h.01M14 5.5h.01M4.5 10v5M19.5 10v5M9.5 18v3M14.5 18v3M8 3l1.2 2M16 3l-1.2 2" /></svg>
+              {t("Unduh untuk Android", "Download for Android")}
+            </a>
+          </div>
+          <p class="req">
+            {macDl.version && <>Mac {macDl.version} · </>}{androidDl.version && <>Android {androidDl.version} · </>}macOS 15+ Apple Silicon · Android 8+ · {t("Gratis, MIT License", "Free, MIT License")} ·
+            <a href={`${mac}/releases`} target="_blank" rel="noopener">{t("semua rilis", "all releases")}<span class="sr">{nt}</span></a>
+          </p>
+
+          <div class="devices dl-reveal" aria-hidden="true">
+            <div class="rings"><i></i><i></i><i></i></div>
+            <div class="laptop">
+              <div class="laptop-screen"><img src={img("mac-02-notifications")} width="1470" height="1200" alt="" fetchpriority="high" /></div>
+              <div class="laptop-base"></div>
+            </div>
+            <div class="phone"><img src={img("android-01-home")} width="1080" height="2400" alt="" /></div>
+          </div>
+        </div>
+      </header>
+
+      <section id="hp" class="sec">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <p class="kick">{t("Bersama HP", "With your phone")}</p>
+            <h2>{t("Semua yang ada di HP,", "Everything on your phone,")}<br />{t("terasa dekat di Mac.", "close at hand on the Mac.")}</h2>
+            <p class="body">{t(
+              "Butuh dua aplikasi: DyskLink untuk Mac dan DyskLink untuk Android. Data, layar, dan kontrol HP mati sampai Anda menyalakannya dari HP.",
+              "You need two apps: DyskLink for Mac and DyskLink for Android. Phone data, screen, and control stay off until you turn them on from the phone.",
+            )}</p>
+          </div>
+
+          {groups.map((g, gi) => (
+            <div class="grp" id={g.id}>
+              <div class="grp-head dl-reveal">
+                <span class="grp-n">0{gi + 1}</span>
+                <h3>{g.t}</h3>
+                <p>{g.s}</p>
+              </div>
+              <ul class="grid">
+                {g.items.map((p) => (
+                  <li class="card card-art dl-reveal">
+                    <div class={`art art-${p.fit ?? "il"}`}>{p.src ? <img src={p.src} alt="" loading="lazy" decoding="async" /> : <LinkIllo kind={p.il!} lang={lang} />}</div>
+                    <h3><span class="ic ic-sm"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={p.i} /></span>{p.t}</h3>
+                    <p>{p.d}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          <div class="work dl-reveal">
+            <div class="work-head">
+              <p class="kick">{t("HP jadi alat kerja", "Your phone as a work tool")}</p>
+              <h3>{t("Delapan cara HP membantu Anda di depan Mac.", "Eight ways your phone helps at the Mac.")}</h3>
+            </div>
+            <ul class="work-list">
+              {workTools.map((w) => (
+                <li class="card card-art"><div class="art art-il"><LinkIllo kind={w.il!} lang={lang} /></div><h4>{w.t}</h4><p>{w.d}</p></li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="wid dl-reveal" id="widget">
+            <div class="wid-art"><LinkIllo kind="widgets" lang={lang} /></div>
+            <div class="wid-copy">
+              <p class="kick">{t("Di layar utama HP", "On your home screen")}</p>
+              <h3>{t("Widget dan tile, satu ketukan dari Mac.", "Widgets and tiles, one tap from the Mac.")}</h3>
+              <p>{t(
+                "Todo bisa dicentang langsung, Pomodoro menghitung mundur di layar utama, dan widget Tombol memuat hingga empat aksi: kirim clipboard, kunci Mac, Keep Awake, bunyikan Mac, play/pause, touchpad, terminal, perintah, atau Stream Deck. Mengikuti mode terang dan gelap, dan warna wallpaper di Android 12+.",
+                "Tick todos right there, watch the Pomodoro count down on the home screen, and put up to four actions on the Buttons widget: send clipboard, lock Mac, Keep Awake, ring Mac, play/pause, touchpad, terminal, commands, or Stream Deck. They follow light and dark mode, and the wallpaper colors on Android 12+.",
+              )}</p>
+              <ul class="chips">{widgets.map((w) => <li>{w}</li>)}</ul>
+              <div class="wid-tiles"><LinkIllo kind="tiles" lang={lang} /><p>{t("Tile Quick Settings: kirim clipboard, kunci Mac, dan Keep Awake.", "Quick Settings tiles: send clipboard, lock Mac, and Keep Awake.")}</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tanpa-mac" class="sec sec-solo">
+        <div class="wrap solo">
+          <div class="solo-copy dl-reveal">
+            <p class="kick">{t("Di HP, tanpa Mac", "On the phone, no Mac needed")}</p>
+            <h2>{t("Tetap berguna", "Still useful")}<br />{t("walau Mac jauh.", "when the Mac is away.")}</h2>
+            <p class="body" set:html={t("Tab <b>Tools</b> di aplikasi Android berisi alat yang berjalan sendiri di HP.", "The <b>Tools</b> tab in the Android app holds tools that run on the phone alone.")} />
+            <div class="solo-phone" aria-hidden="true"><img src={img("android-02-pairing")} width="1080" height="2400" alt="" loading="lazy" /></div>
+          </div>
+          <ul class="solo-list">
+            {solo.map((s) => (
+              <li class="card solo-item dl-reveal"><div class="art art-il"><LinkIllo kind={s.il!} lang={lang} /></div><div><h3>{s.t}</h3><p>{s.d}</p></div></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="mac" class="sec sec-mac">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <p class="kick">{t("Alat tambahan untuk Mac", "Extra tools for the Mac")}</p>
+            <h2>{t("Bonus untuk Mac Anda,", "A bonus for your Mac,")}<br />{t("bahkan tanpa HP.", "even without a phone.")}</h2>
+            <p class="body" set:html={t("Buka <b>Advanced</b> di bawah sidebar. Setiap alat mati sampai Anda menyalakannya.", "Open <b>Advanced</b> at the bottom of the sidebar. Every tool stays off until you turn it on.")} />
+          </div>
+          <div class="tools">
+            {tools.map((x, i) => (
+              <article class={`tool tool-${i + 1} dl-reveal`}>
+                <div class="tool-shot"><img src={x.src} width={x.w} height={x.h} alt={`${shot}: ${x.t}`} loading="lazy" decoding="async" /></div>
+                <h3>{x.t}{x.k.length > 0 && <span class="keys">{x.k.map((k) => <kbd>{k}</kbd>)}</span>}</h3>
+                <p>{x.d}</p>
+              </article>
+            ))}
+          </div>
+          <div class="notch-gal dl-reveal">
+            <p class="kick">{t("Isi Notch", "Inside the notch")}</p>
+            <ul>
+              {notch.map((n) => (
+                <li><img src={f(n.n)} width="899" height="339" alt={`Notch: ${n.t}`} loading="lazy" decoding="async" /><span>{n.t}</span></li>
+              ))}
+            </ul>
+          </div>
+          <ul class="tgrid">
+            {moreTools.map((x) => (
+              <li class="card card-art dl-reveal">
+                <div class={`art art-${x.fit ?? "il"}`}>{x.src ? <img src={x.src} alt={`${shot}: ${x.t}`} loading="lazy" decoding="async" /> : <LinkIllo kind={x.il!} lang={lang} />}</div>
+                <h3>{x.t}</h3>
+                {x.k && <span class="keys">{x.k.map((k) => <kbd>{k}</kbd>)}</span>}
+                <p>{x.d}</p>
+              </li>
+            ))}
+          </ul>
+
+          <div class="care dl-reveal">
+            <div class="care-head">
+              <div>
+                <p class="kick">Mac care</p>
+                <h3>{t("Rapikan Mac dan rawat baterainya.", "Tidy your Mac and look after its battery.")}</h3>
+              </div>
+              <p>{t(
+                "Tidak ada yang dihapus tanpa ditanya, dan semuanya masuk Trash, jadi bisa dikembalikan. Baterai dibaca tanpa izin admin.",
+                "Nothing is removed without asking, and everything goes to the Trash, so it can be put back. The battery is read without admin rights.",
+              )}</p>
+            </div>
+            <ul class="care-grid">
+              {care.map((c) => (
+                <li>
+                  <div class={`care-shot ${c.fit ? "care-fit" : ""}`}><img src={c.src} alt={`${shot}: Mac care, ${c.t}`} loading="lazy" decoding="async" /></div>
+                  <b>{c.t}</b><span>{c.d}</span>
+                </li>
+              ))}
+            </ul>
+            <p class="care-note" set:html={t(
+              "<b>Cara kerja kontrol pengisian:</b> lewat helper root kecil, <code>dysklink-power</code>, yang hanya bisa membaca beberapa data baterai dan memutus atau menyambung input charger. Penjaga launchd-nya menyalakan charger lagi kalau DyskLink tidak berjalan atau baterai di bawah 10%. <b>Remove helper</b> membatalkan pemasangannya.",
+              "<b>How charging control works:</b> through a tiny root helper, <code>dysklink-power</code>, that can only read a few battery values and switch the charger input off and on. Its launchd guard turns the charger back on if DyskLink isn't running or the battery is below 10%. <b>Remove helper</b> undoes the install.",
+            )} />
+          </div>
+
+          <div class="card upd dl-reveal">
+            <div class="art art-il"><LinkIllo kind="update" lang={lang} /></div>
+            <div>
+              <h3>{t("Update sekali klik", "One-click updates")}</h3>
+              <p set:html={t(
+                "Sekali sehari DyskLink mengecek rilis baru di GitHub. <b>Install and restart</b> mengunduh, memastikan sertifikatnya sama, lalu mengganti aplikasinya, hanya kalau Anda memintanya. HP dengan DyskLink lama juga diberi tahu.",
+                "Once a day DyskLink checks GitHub for a new release. <b>Install and restart</b> downloads it, checks that the certificate matches, and swaps the app, only when you ask. A phone with an older DyskLink gets a note too.",
+              )} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="unduh" class="sec sec-dl">
+        <div class="wrap">
+          <div class="head center dl-reveal">
+            <p class="kick">{t("Unduh", "Download")}</p>
+            <h2>{t("Siap dalam tiga langkah.", "Ready in three steps.")}</h2>
+          </div>
+          <ol class="steps">
+            <li class="card dl-reveal">
+              <span class="num">1</span>
+              <h3>{t("Pasang di Mac", "Install on the Mac")}</h3>
+              <p set:html={t(
+                "Unduh <code>DyskLink-mac-arm64.zip</code>, ekstrak, pindahkan ke Applications. Izinkan lewat <b>Privacy &amp; Security › Open Anyway</b>.",
+                "Download <code>DyskLink-mac-arm64.zip</code>, unzip it, and move it to Applications. Allow it under <b>Privacy &amp; Security › Open Anyway</b>.",
+              )} />
+              <a href={macDl.url} download={macDl.file ?? undefined}>{t("Unduh", "Download")} {macDl.file ?? t("untuk Mac", "for Mac")} →</a>
+            </li>
+            <li class="card dl-reveal">
+              <span class="num">2</span>
+              <h3>{t("Pasang di Android", "Install on Android")}</h3>
+              <p>{t("Unduh APK dari rilis terbaru, buka di HP, lalu izinkan pemasangan dari sumber itu.", "Download the APK from the latest release, open it on the phone, and allow installing from that source.")}</p>
+              <a href={androidDl.url} download={androidDl.file ?? undefined}>{t("Unduh", "Download")} {androidDl.file ?? "APK"} →</a>
+            </li>
+            <li class="card dl-reveal">
+              <span class="num">3</span>
+              <h3>{t("Pasangkan", "Pair them")}</h3>
+              <p>{t("Buka keduanya di jaringan yang sama dan ketik kode 6 digit dari Mac di HP. Setelah itu tersambung sendiri.", "Open both on the same network and type the 6-digit code from the Mac into the phone. After that they connect by themselves.")}</p>
+              <span class="pair" aria-hidden="true">4 8 2 · 9 1 6</span>
+            </li>
+          </ol>
+          <p class="note dl-reveal">{t(
+            "DyskLink masih tahap awal, jadi mungkin ada yang belum mulus. Build Mac memakai sertifikat self-signed dan APK Android masih build debug. Untuk Mac Intel, bangun dari source.",
+            "DyskLink is in early development, so expect rough edges. The Mac build uses a self-signed certificate and the Android APK is still a debug build. For Intel Macs, build from source.",
+          )}</p>
+        </div>
+      </section>
+
+      <Privacy lang={lang} id="privasi" summary={privacy.summary} items={privacy.items} note={privacy.note} />
+      <Faq lang={lang} id="faq" items={faq} />
+      <Support lang={lang} product="DyskLink" repos={[{ label: "Mac", repo: "DyskLab/dysklink-mac" }, { label: "Android", repo: "DyskLab/dysklink-android" }]} />
+    </main>
+
+    <ProductFooter lang={lang} current="dysklink" />
+  </div>
+  <script src="../scripts/reveal.js"></script>
+</Base>
+
+<style>
+  :global(body) { margin: 0; background: #05080c; }
+  .lk {
+    --bg: #05080c; --bg-2: #09111a; --card: rgba(255, 255, 255, 0.035); --line: rgba(255, 255, 255, 0.09); --fg: #eef7f4; --muted: #8fa3a0; --teal: #2dd4a7; --teal-2: #5eead4;
+    --pb-bg: var(--bg); --pb-fg: var(--fg); --pb-muted: var(--muted); --pb-line: var(--line); --pb-hover: rgba(255, 255, 255, 0.05);
+    --pb-btn-bg: var(--teal); --pb-btn-fg: #032119; --pb-radius: 999px; --pb-font: Inter, sans-serif;
+    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--fg); --pf-card: var(--card); --pf-hover: rgba(45, 212, 167, 0.45); --pf-radius: 16px;
+    background: var(--bg); color: var(--fg); font: 400 16px/1.6 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .wrap { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  .sr, .lk :global(.sr-only) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  h1, h2, h3 { margin: 0; font-family: Sora, Inter, sans-serif; letter-spacing: -0.035em; line-height: 1.05; }
+  code { font: 500 0.86em ui-monospace, Menlo, monospace; color: var(--teal-2); }
+  /* shared sections (Privacy, Faq, Support) in the page's type */
+  .lk :global(.pv h2), .lk :global(.fq h2), .lk :global(.sp h2) { font-family: Sora, Inter, sans-serif; letter-spacing: -0.035em; }
+  .lk :global(.pv) { padding: 110px 0 80px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 24px; border-radius: 999px; font-weight: 600; font-size: 15.5px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; }
+  .btn svg { width: 19px; height: 19px; fill: currentColor; }
+  .btn-dim svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-teal { background: var(--teal); color: #032119; box-shadow: 0 0 0 6px rgba(45, 212, 167, 0.12), 0 18px 40px -12px rgba(45, 212, 167, 0.6); }
+  .btn-dim { background: rgba(255, 255, 255, 0.06); color: var(--fg); border: 1px solid var(--line); }
+  .btn-dim:hover { background: rgba(255, 255, 255, 0.1); }
+
+  .hero { position: relative; padding: 84px 0 40px; text-align: center; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; left: 50%; top: -260px; width: 1100px; height: 800px; transform: translateX(-50%); background: radial-gradient(closest-side, rgba(45, 212, 167, 0.22), transparent 70%); pointer-events: none; }
+  .early { position: relative; display: inline-flex; align-items: center; gap: 9px; margin: 0; padding: 6px 14px; border-radius: 999px; border: 1px solid rgba(45, 212, 167, 0.3); background: rgba(45, 212, 167, 0.08); color: var(--teal-2); font-size: 13px; font-weight: 500; }
+  .early span { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 0 rgba(45, 212, 167, 0.7); animation: ping 2s infinite; }
+  @keyframes ping { 70% { box-shadow: 0 0 0 9px rgba(45, 212, 167, 0); } 100% { box-shadow: 0 0 0 0 rgba(45, 212, 167, 0); } }
+  h1 { position: relative; margin-top: 24px; font-size: clamp(44px, 7vw, 88px); font-weight: 700; }
+  .glow { background: linear-gradient(90deg, var(--teal), var(--teal-2), #a7f3d0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { position: relative; margin: 22px auto 0; max-width: 620px; font-size: 18.5px; color: var(--muted); }
+  .cta { position: relative; z-index: 2; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 34px; }
+  .req { position: relative; z-index: 2; margin: 16px 0 0; font-size: 13.5px; color: var(--muted); }
+  .req a { color: var(--teal-2); }
+
+  .devices { position: relative; margin: 70px auto 0; max-width: 980px; height: 560px; pointer-events: none; }
+  .rings { position: absolute; left: 50%; top: 46%; width: 0; height: 0; }
+  .rings i { position: absolute; left: 50%; top: 50%; width: 360px; height: 360px; border-radius: 50%; border: 1px solid rgba(45, 212, 167, 0.35); transform: translate(-50%, -50%) scale(0.4); opacity: 0; animation: ring 4.5s ease-out infinite; }
+  .rings i:nth-child(2) { animation-delay: 1.5s; }
+  .rings i:nth-child(3) { animation-delay: 3s; }
+  @keyframes ring { 0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0.9; } 100% { transform: translate(-50%, -50%) scale(3); opacity: 0; } }
+  .laptop { position: absolute; left: 0; top: 0; width: 78%; }
+  .laptop-screen { padding: 12px 12px 14px; border-radius: 20px 20px 6px 6px; background: #0d1117; border: 1px solid #222a33; box-shadow: 0 50px 100px -40px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.04) inset; }
+  .laptop-screen img { width: 100%; height: 420px; object-fit: cover; object-position: top left; border-radius: 10px; display: block; }
+  .laptop-base { height: 16px; margin: 0 -5%; border-radius: 0 0 18px 18px; background: linear-gradient(#2a323c, #11161c); }
+  .phone { position: absolute; right: 2%; top: 70px; width: 230px; padding: 9px; border-radius: 38px; background: #0d1117; border: 1px solid #2a323c; box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9), 0 0 60px -20px rgba(45, 212, 167, 0.35); }
+  .phone img { width: 100%; height: auto; display: block; border-radius: 30px; }
+
+  .sec { padding: 110px 0; }
+  .head { max-width: 700px; }
+  .head.center { margin: 0 auto; text-align: center; }
+  .kick { margin: 0 0 14px; font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); }
+  h2 { font-size: clamp(32px, 4.4vw, 54px); font-weight: 700; }
+  .body { margin: 18px 0 0; font-size: 17.5px; color: var(--muted); }
+  .body :global(b) { color: var(--fg); }
+
+  /* feature groups */
+  .grp { margin-top: 64px; scroll-margin-top: 80px; }
+  .grp-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--line); }
+  .grp-n { font: 600 13px Sora, sans-serif; color: var(--teal); }
+  .grp-head h3 { font-size: clamp(22px, 2.4vw, 28px); }
+  .grp-head p { margin: 0; color: var(--muted); font-size: 15px; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { padding: 24px; border-radius: 20px; background: var(--card); border: 1px solid var(--line); transition: border-color 0.25s, background 0.25s; }
+  .card:hover { border-color: rgba(45, 212, 167, 0.4); background: rgba(45, 212, 167, 0.04); }
+  .ic { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: rgba(45, 212, 167, 0.12); color: var(--teal); margin-bottom: 18px; }
+  .ic svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .ic-sm { width: 30px; height: 30px; margin: 0; border-radius: 9px; flex: none; }
+  .ic-sm svg { width: 16px; height: 16px; }
+  .card h3 { font-size: 17.5px; letter-spacing: -0.02em; }
+  .card p { margin: 8px 0 0; font-size: 14.5px; color: var(--muted); }
+  .card-art { padding: 0 0 22px; overflow: hidden; }
+  .card-art h3, .card-art h4, .card-art p, .card-art .keys { margin-left: 22px; margin-right: 22px; }
+  .card-art h3 { display: flex; align-items: center; gap: 9px; margin-top: 18px; }
+  .art { height: 170px; border-bottom: 1px solid var(--line); background: #0b1016; overflow: hidden; }
+  .art img { width: 100%; height: 100%; display: block; }
+  .art-cover img { object-fit: cover; object-position: top left; }
+  .art-top img { object-fit: cover; object-position: top center; }
+  .art-low img { object-fit: cover; object-position: center 72%; }
+  .art-contain img { object-fit: contain; padding: 12px; box-sizing: border-box; }
+  .art-notch { display: grid; place-items: center; padding: 0 14px; background: radial-gradient(80% 90% at 50% 0%, rgba(45, 212, 167, 0.14), transparent 70%), #0b1016; }
+  .art-notch img { width: 100%; height: auto; max-height: 128px; object-fit: contain; border-radius: 0 0 18px 18px; box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.9); }
+
+  /* phone as a work tool */
+  .work { margin-top: 72px; padding: 40px; border-radius: 28px; background: linear-gradient(135deg, rgba(45, 212, 167, 0.12), rgba(45, 212, 167, 0.02)); border: 1px solid rgba(45, 212, 167, 0.25); }
+  .work-head h3 { font-size: clamp(24px, 2.6vw, 32px); }
+  .work-list { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .work-list li { padding-bottom: 18px; }
+  .work-list h4 { margin: 16px 16px 0; font: 600 15.5px Sora, sans-serif; letter-spacing: -0.02em; }
+  .work-list p { margin: 6px 16px 0; font-size: 13.5px; }
+  .work-list .art { height: 140px; }
+
+  /* widgets band */
+  .wid { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; padding: 32px; border-radius: 28px; background: var(--card); border: 1px solid var(--line); }
+  .wid-art { height: 300px; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); }
+  .wid-art :global(.wg) { zoom: 1.25; width: 76%; }
+  .wid-copy h3 { font-size: clamp(22px, 2.4vw, 30px); }
+  .wid-copy > p { margin: 12px 0 0; color: var(--muted); font-size: 15px; }
+  .chips { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips li { padding: 4px 11px; border-radius: 999px; font-size: 13px; color: var(--teal-2); background: rgba(45, 212, 167, 0.08); border: 1px solid rgba(45, 212, 167, 0.25); }
+  .wid-tiles { margin-top: 20px; display: grid; grid-template-columns: 220px 1fr; gap: 16px; align-items: center; }
+  .wid-tiles > :global(.il) { height: 112px; border-radius: 14px; border: 1px solid var(--line); }
+  .wid-tiles p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  /* no Mac needed */
+  .sec-solo { border-top: 1px solid var(--line); }
+  .solo { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: start; }
+  .solo-copy { position: sticky; top: 100px; }
+  .solo-phone { margin-top: 36px; width: 210px; padding: 8px; border-radius: 34px; background: #0d1117; border: 1px solid #2a323c; box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9), 0 0 60px -20px rgba(45, 212, 167, 0.35); }
+  .solo-phone img { width: 100%; height: auto; display: block; border-radius: 27px; }
+  .solo-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .solo-item { display: grid; grid-template-columns: 230px 1fr; gap: 18px; align-items: center; padding: 10px; }
+  .solo-item .art { height: 140px; border: 0; border-radius: 12px; }
+  .solo-item h3 { font-size: 18px; }
+  .solo-item p { margin-top: 6px; }
+
+  /* Mac */
+  .sec-mac { background: radial-gradient(60% 50% at 50% 0%, rgba(45, 212, 167, 0.08), transparent 70%), var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .tools { margin-top: 52px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .tool { padding: 18px 18px 24px; border-radius: 24px; background: var(--card); border: 1px solid var(--line); }
+  .tool-1 { grid-row: span 2; display: flex; flex-direction: column; }
+  .tool-1 .tool-shot { flex: 1; }
+  .tool-shot { border-radius: 14px; overflow: hidden; background: #0b1016; border: 1px solid var(--line); display: grid; place-items: center; }
+  .tool-shot img { width: 100%; height: auto; display: block; }
+  .tool h3 { margin: 18px 6px 0; font-size: 21px; }
+  .tool p { margin: 8px 6px 0; color: var(--muted); font-size: 15px; }
+  .keys { display: inline-flex; gap: 4px; margin-left: 10px; vertical-align: 3px; }
+  .card .keys { margin-top: 10px; }
+  kbd { font: 600 12px Inter, sans-serif; min-width: 14px; text-align: center; padding: 3px 7px; border-radius: 6px; background: rgba(45, 212, 167, 0.1); border: 1px solid rgba(45, 212, 167, 0.3); color: var(--teal-2); }
+  .tgrid { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .notch-gal { margin-top: 18px; padding: 24px; border-radius: 24px; border: 1px solid var(--line); background: #05080c; }
+  .notch-gal ul { list-style: none; margin: 0; padding: 0 0 6px; display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .notch-gal li { flex: none; width: 340px; scroll-snap-align: start; }
+  .notch-gal img { width: 100%; height: auto; display: block; border-radius: 0 0 20px 20px; }
+  .notch-gal span { display: block; margin-top: 8px; font-size: 13px; color: var(--muted); }
+
+  .care { margin-top: 48px; padding: 36px; border-radius: 28px; background: var(--card); border: 1px solid var(--line); }
+  .care-head { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 40px; align-items: end; }
+  .care-head h3 { font-size: clamp(22px, 2.4vw, 30px); }
+  .care-head p { margin: 0; color: var(--muted); font-size: 15px; }
+  .care-grid { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px 16px; }
+  .care-shot { height: 180px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: #0b1016; margin-bottom: 14px; }
+  .care-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top left; display: block; }
+  .care-fit { display: grid; place-items: center; }
+  .care-fit img { height: auto; object-fit: contain; }
+  .care-grid b { display: block; font: 600 16px Sora, sans-serif; letter-spacing: -0.02em; }
+  .care-grid span { display: block; margin-top: 4px; font-size: 14px; color: var(--muted); }
+  .care-note { margin: 26px 0 0; padding: 16px 18px; border-radius: 14px; border: 1px dashed rgba(45, 212, 167, 0.35); background: rgba(45, 212, 167, 0.04); font-size: 14px; color: var(--muted); }
+  .care-note :global(b) { color: var(--fg); }
+  .upd { margin-top: 18px; display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: center; padding: 10px; }
+  .upd .art { height: 150px; border: 0; border-radius: 12px; }
+  .upd h3 { font-size: 19px; }
+  .upd p { font-size: 15px; }
+  .upd :global(b) { color: var(--fg); }
+
+  /* download */
+  .sec-dl { border-top: 1px solid var(--line); }
+  .steps { list-style: none; margin: 52px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .steps .card { display: flex; flex-direction: column; gap: 4px; }
+  .num { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font: 600 15px Sora, sans-serif; background: var(--teal); color: #032119; margin-bottom: 14px; }
+  .steps h3 { font-size: 20px; }
+  .steps a { margin-top: auto; padding-top: 14px; color: var(--teal-2); font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+  .pair { margin-top: auto; padding-top: 14px; font: 600 22px ui-monospace, Menlo, monospace; letter-spacing: 0.12em; color: var(--teal-2); }
+  .note { margin: 28px auto 0; max-width: 720px; text-align: center; font-size: 14px; color: var(--muted); }
+
+  :global(.dl-motion) .dl-reveal { opacity: 0; transform: translateY(22px) scale(0.99); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.2,.8,.2,1); }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
+
+  @media (max-width: 1060px) {
+    .work-list, .care-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 960px) {
+    .grid, .tgrid { grid-template-columns: 1fr 1fr; }
+    .tools, .steps, .wid, .care-head { grid-template-columns: 1fr; }
+    .tool-1 { grid-row: auto; }
+    .solo { grid-template-columns: 1fr; }
+    .solo-copy { position: static; }
+    .solo-phone { display: none; }
+    .devices { height: 460px; }
+    .laptop { width: 88%; }
+    .laptop-screen img { height: 320px; }
+    .phone { width: 170px; top: 120px; right: 0; }
+    .upd { grid-template-columns: 240px 1fr; }
+  }
+  @media (max-width: 560px) {
+    .sec { padding: 76px 0; }
+    .hero { padding-top: 56px; }
+    .grid, .tgrid, .work-list, .care-grid { grid-template-columns: 1fr; }
+    .grp { margin-top: 48px; }
+    .solo-item, .upd, .wid-tiles { grid-template-columns: 1fr; }
+    .notch-gal { padding: 14px; }
+    .notch-gal li { width: 270px; }
+    .work, .care, .wid { padding: 20px; }
+    .wid-art { height: 260px; }
+    .wid-art :global(.wg) { zoom: 1; width: 92%; }
+    .devices { height: 340px; margin-top: 48px; }
+    .laptop-screen { padding: 7px; border-radius: 12px 12px 4px 4px; }
+    .laptop-screen img { height: 200px; }
+    .phone { width: 120px; top: 90px; border-radius: 24px; padding: 5px; }
+    .phone img { border-radius: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .rings i, .early span { animation: none; } }
+</style>

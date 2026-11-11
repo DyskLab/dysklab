@@ -1,0 +1,82 @@
+---
+/*
+  Top bar for a product page: DyskLab / product, section links, GitHub star, language,
+  primary action. Colours and font come from CSS variables set by the page (--pb-*),
+  so each product keeps its own look.
+*/
+import Logo from "./Logo.astro";
+import { alternate, href, ui, type Lang } from "../i18n";
+import { stars } from "../lib/github";
+interface Props {
+  lang: Lang;
+  name: string;
+  icon: string;
+  repo: string; // "DyskLab/dyskfiles"
+  links: { href: string; label: string }[];
+  cta: { href: string; label: string; external?: boolean };
+}
+const { lang, name, icon, repo, links, cta } = Astro.props;
+const t = ui[lang];
+const other: Lang = lang === "id" ? "en" : "id";
+const count = await stars(repo);
+// A small number reads as "nobody uses this", so the count only shows from 10 stars up.
+const showCount = count !== null && count >= 10;
+---
+<nav class="pb" aria-label={t.navLabel(name)}>
+  <div class="pb-in">
+    <a class="pb-home" href={href(lang, "/")} aria-label={`DyskLab, ${t.home}`}><Logo size={26} /><span>DyskLab</span></a>
+    <span class="pb-sep" aria-hidden="true">/</span>
+    <a class="pb-prod" href="#top"><img src={icon} width="26" height="26" alt="" />{name}</a>
+    <div class="pb-links">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </div>
+    <a class="pb-star" href={`https://github.com/${repo}`} target="_blank" rel="noopener" aria-label={`${t.star}${showCount ? `, ${t.stars(count!)}` : ""}${t.newTab}`}>
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .2a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.3 1.9.9 2.4.7 0-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8a7.4 7.4 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.1 0 3.1-1.9 3.8-3.6 4 .3.3.5.7.5 1.4v2.2c0 .2.1.5.6.4A8 8 0 0 0 8 .2Z" /></svg>
+      <span class="pb-star-t">★{showCount && <b>{count}</b>}</span>
+    </a>
+    <a class="pb-lang" href={alternate(Astro.url.pathname, other)} data-lang={other} hreflang={other} lang={other} aria-label={t.switchLabel}>{other.toUpperCase()}</a>
+    <a class="pb-cta" href={cta.href} {...(cta.external ? { target: "_blank", rel: "noopener" } : {})}>
+      {cta.label}{cta.external && <span class="pb-sr">{t.newTab}</span>}
+    </a>
+  </div>
+</nav>
+
+<style>
+  .pb {
+    position: sticky; top: 0; z-index: 40;
+    background: color-mix(in srgb, var(--pb-bg) 80%, transparent);
+    -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px);
+    border-bottom: 1px solid var(--pb-line); font-family: var(--pb-font, inherit);
+  }
+  .pb-in { width: min(1160px, calc(100% - 32px)); margin: 0 auto; height: 62px; display: flex; align-items: center; gap: 10px; }
+  .pb a { color: var(--pb-fg); text-decoration: none; }
+  .pb-home { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14.5px; opacity: 0.8; }
+  .pb-home:hover { opacity: 1; }
+  .pb-home :global(svg) { border-radius: 7px; }
+  .pb-sep { color: var(--pb-muted); }
+  .pb-prod { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; white-space: nowrap; }
+  .pb-prod img { border-radius: 7px; }
+  .pb-links { display: flex; gap: 2px; margin-left: auto; }
+  .pb-links a { padding: 7px 10px; border-radius: 8px; font-size: 14px; color: var(--pb-muted); white-space: nowrap; }
+  .pb-links a:hover { color: var(--pb-fg); background: var(--pb-hover); }
+  .pb-star, .pb-lang {
+    display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 10px; border-radius: var(--pb-radius, 10px);
+    border: 1px solid var(--pb-line); font-size: 13px; font-weight: 600; color: var(--pb-fg); white-space: nowrap;
+  }
+  .pb-star:hover, .pb-lang:hover { background: var(--pb-hover); }
+  .pb-star svg { width: 15px; height: 15px; fill: currentColor; }
+  .pb-star-t b { margin-left: 4px; }
+  .pb-cta {
+    display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: var(--pb-radius, 10px);
+    font-size: 14px; font-weight: 600; background: var(--pb-btn-bg); color: var(--pb-btn-fg) !important; white-space: nowrap;
+  }
+  .pb-cta:hover { filter: brightness(1.08); }
+  .pb-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 1020px) { .pb-links { display: none; } .pb-star { margin-left: auto; } }
+  @media (max-width: 560px) {
+    .pb-home span, .pb-sep { display: none; }
+    .pb-star-t { display: none; }
+    .pb-cta { padding: 0 11px; font-size: 13px; }
+  }
+  @media (max-width: 440px) { .pb-prod { font-size: 0; gap: 0; } }
+</style>

@@ -1,0 +1,637 @@
+---
+/*
+  DyskFlow product page. Look: bold editorial / neo-brutalist — cream paper, thick ink
+  borders with hard offset shadows, signal red, Bricolage Grotesque + IBM Plex Mono.
+  The hero idea: no terminal, no build step, one-button updates.
+  Copy lives in T (Indonesian and English); facts come from the DyskFlow repo (README, SETUP.md, app/).
+*/
+import Base from "../layouts/Base.astro";
+import ProductBar from "../components/ProductBar.astro";
+import ProductFooter from "../components/ProductFooter.astro";
+import Privacy from "../components/Privacy.astro";
+import Faq from "../components/Faq.astro";
+import Support from "../components/Support.astro";
+import { pick, ui, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const nt = ui[lang].newTab;
+
+const repo = "https://github.com/DyskLab/dyskflow";
+const release = `${repo}/releases/latest`;
+const issues = `${repo}/issues`;
+const img = (n: string) => `/images/products/dyskflow/${n}.jpg`;
+
+const keep = [".env", "storage", "landing", "plugins", "theme", "public/uploads", "cms.json"];
+const widgets = ["Heading", "Text", "Image", "Button", "Icon box", "Tabs", "Accordion", "Counter", "Progress bar", "Countdown", "Carousel", "Reviews", "Price list", "Pricing", "Flip box", "Hotspot", "Video playlist", "Code block", "Share buttons", "Social icons", "Table of contents", "FAQ", "Testimonials", "Gallery", "Portfolio", "Map", "Form", "Slides", "Star rating", "Stats", "Animated headline", "Call to action", "Posts", "Breadcrumbs", "Reading progress", "Audio"];
+
+const T = pick(lang, {
+  id: {
+    title: "DyskFlow: CMS Laravel tanpa build step | DyskLab",
+    description: "DyskFlow adalah CMS Laravel tanpa build step: page builder visual dengan 65 widget, pasang lewat wizard tanpa terminal, update satu tombol dari GitHub, SEO bawaan, dua bahasa, dan plugin.",
+    nav: { install: "Pasang", features: "Fitur" },
+    cta: "Unduh rilis",
+    h1a: "CMS Laravel.",
+    h1b: "Tanpa build step.",
+    lede: "Desain halaman secara visual dengan page builder ala Elementor, atau tulis landing page sendiri sebagai Blade. Tidak ada Node, tidak ada Vite, dan hosting tidak butuh Composer.",
+    download: "Unduh dari GitHub ↗",
+    howInstall: "Cara pasang",
+    shotSite: "Situs", shotSiteAlt: "Situs yang dibuat dengan DyskFlow",
+    shotDash: "Dashboard", shotDashAlt: "Dashboard admin DyskFlow",
+    ticker: "Page builder visual ✺ 65 widget ✺ Tanpa terminal ✺ Tanpa Node ✺ Tanpa Vite ✺ Tanpa Composer di server ✺ Update satu tombol ✺ SEO bawaan ✺ Dua bahasa ✺",
+    bH2a: "Seret, atur, terbitkan.", bH2b: "Seperti Elementor, tanpa beban.",
+    bBody: "Susun halaman dari section, kolom, container, dan widget dengan pratinjau langsung. Hasilnya JSON yang dirender di server, jadi mesin pencari menerima HTML biasa, bukan halaman yang dibangun di browser.",
+    mock: {
+      page: "Halaman › Promo Ramadan", draft: "Draf tersimpan", search: "⌕ Cari widget…", basic: "Dasar", interactive: "Interaktif",
+      order: "Pesan sekarang", drop: "+ Lepas widget di sini", tabs: ["Konten", "Gaya", "Lanjutan"],
+      lTitle: "Judul", vTitle: "Gratis ongkir", lText: "Teks · EN", vText: "Free shipping", lIcon: "Ikon", lAlign: "Perataan",
+    },
+    points: [
+      { t: "Pratinjau langsung", d: "Desktop, tablet, dan HP, dengan pengaturan per ukuran layar." },
+      { t: "Dua bahasa", d: "Setiap teks bisa punya versi Indonesia dan Inggris di halaman yang sama." },
+      { t: "Draf, revisi, Publish", d: "Perubahan tersimpan sebagai draf. 20 layout terakhir bisa dipulihkan." },
+    ],
+    aiT: "Ramah AI", aiD: "membuat AI bisa membaca dan menulis halaman.", and: "dan",
+    wall: "widget, ditulis khusus untuk DyskFlow", more: "dan lainnya…",
+    startersH: "Mulai dari template", startersP: "Delapan template awal, masing-masing dengan pratinjau langsung.",
+    starters: ["Tentang kami", "Kontak", "Kafe atau restoran", "Segera hadir", "Acara", "Portofolio freelancer", "Produk", "Jasa"],
+    design: [
+      { t: "Form tanpa plugin", d: "Form kontak, pendaftaran, atau pesanan dari page builder. Pesan masuk ke Konten › Form (ekspor CSV) dan email. Tanpa cookie, dengan honeypot dan rate limit." },
+      { t: "Theme Builder dan Blocks", d: "Desain template artikel, daftar artikel, kategori, header, dan footer. Simpan bagian halaman sebagai block untuk dipakai ulang." },
+      { t: "Warna dan font", d: "Warna brand, Google Fonts yang diunduh ke situs (pengunjung tidak terhubung ke Google), ukuran teks, dan radius sudut." },
+      { t: "Explorer kode", d: "Edit file di theme/, landing/, dan plugins/ dengan editor kode, revisi, dan deteksi konflik. Plus CSS dan JavaScript kustom." },
+    ],
+    installH2a: "Pasang seperti", installH2b: "pengguna shared hosting.",
+    install: [
+      { t: "Unggah file", d: "Unggah ke hosting tanpa folder vendor. Tidak perlu Composer, Node, atau Vite di server." },
+      { t: "Buka situsnya", d: "Tekan Pasang sekarang. Wizard bisa mengambil vendor sendiri, tanpa terminal." },
+      { t: "Ikuti wizard", d: "Isi database dan akun admin. MySQL atau SQLite, keduanya didukung." },
+    ],
+    landK: "Atau tulis kode sendiri", landH2a: "Landing page bebas.", landH2b: "Manual atau dengan AI.",
+    landBody1: "Landing page dan halaman khusus disimpan sebagai file Blade di folder",
+    landBody2: "Beranda bisa dipilih dari pengaturan: landing page, daftar artikel, atau halaman biasa. Sisanya, artikel, halaman, kategori, tag, komentar, dan media, diurus dari dashboard.",
+    treeLabel: "Folder situs DyskFlow", treeRoot: "situs-anda/",
+    tree: { landing: "# landing page, ditulis manual / AI", plugins: "# plugin dengan hooks", theme: "# override tema, aman saat update", uploads: "# media" },
+    updK: "Update satu tombol", updH2a: "Tekan update.", updH2b: "Situs Anda tetap utuh.",
+    update: ["Backup database dulu", "Ambil kode dari rilis terbaru di GitHub", "Ganti vendor hanya kalau composer.lock berubah", "Jalankan migrasi"],
+    keepT: "Tidak pernah ditimpa",
+    keepN1: "Isi dan kode milik situs bertahan di setiap update. Setiap rilis diterbitkan GitHub Actions bersama", keepN2: "-nya.",
+    featH2a: "Semua yang dibutuhkan situs,", featH2b: "sudah di dalam.",
+    features: [
+      { t: "SEO bawaan", d: "Meta tag, canonical, Open Graph, JSON-LD, hreflang, pratinjau hasil pencarian, checklist, sitemap, dan robots.txt." },
+      { t: "Dua bahasa", d: "Indonesia dan Inggris dengan URL per bahasa seperti /en/blog/slug, plus RSS per bahasa." },
+      { t: "Konten lengkap", d: "Artikel, halaman, kategori, tag, media, dan komentar dengan moderasi. Foto JPG dan PNG bisa otomatis jadi WebP." },
+      { t: "Dashboard yang jujur", d: "Yang perlu perhatian, angka penting, komentar terbaru, jadwal terbit, dan status situs, sesuai hak akses." },
+      { t: "Pengguna dan keamanan", d: "Peran pengguna, log aktivitas, dan verifikasi dua langkah (TOTP) dengan kode pemulihan." },
+      { t: "Backup dan impor", d: "Backup database dan penuh, plus impor dan ekspor artikel, halaman, template, dan pengaturan." },
+      { t: "Tempat sampah", d: "Artikel, halaman, dan komentar yang dihapus bisa dikembalikan." },
+      { t: "Statistik tanpa cookie", d: "Hitungan kunjungan tanpa cookie, panduan privasi, dan halaman kesehatan situs." },
+      { t: "Plugin dan hooks", d: "Plugin di folder plugins/ dengan hooks dan halaman pengaturan yang dibuat otomatis." },
+      { t: "Cari di mana saja", d: "⌘K atau Ctrl+K, notifikasi komentar, versi baru, dan error, plus mode gelap." },
+      { t: "Domain rapi", d: "Versi www dan tanpa www dialihkan permanen ke alamat situs yang dipilih." },
+      { t: "Bahasa admin", d: "Panel admin tersedia dalam bahasa Inggris dan Indonesia." },
+    ],
+    finalH: "Siap dicoba?",
+    finalP1: "Unggah file, buka situsnya, tekan", finalBtn: "Pasang sekarang", finalP2: ". Panduan lengkap ada di",
+    finalDl: "Unduh rilis terbaru ↗", finalCode: "Lihat kode ↗",
+    pvSummary: "Situs Anda, database Anda. DyskFlow tidak mengirim data pengunjung ke mana pun.",
+    pv: [
+      { t: "Data di database Anda sendiri", d: "Artikel, komentar, akun, dan pesan form disimpan di MySQL atau SQLite di hosting Anda. Tidak ada akun DyskLab, tidak ada telemetri, dan aset admin tidak dimuat dari CDN." },
+      { t: "Hitungan kunjungan tanpa cookie", d: "Setiap kunjungan hanya menambah satu angka di artikel atau halaman. Bot dan admin yang login tidak dihitung, dan tidak ada script analitik pihak ketiga." },
+      { t: "Membaca halaman tanpa cookie", d: "Pengunjung baru tidak diberi cookie. Cookie sesi dan keamanan hanya muncul di halaman dengan form komentar dan saat login." },
+      { t: "Google Fonts diunduh ke situs", d: "Font dipilih di admin lalu diunduh sekali oleh server. Pengunjung memuat font dari situs Anda, tidak pernah terhubung ke Google." },
+      { t: "Form tanpa cookie", d: "Spam ditahan dengan honeypot, rate limit, dan daftar blokir komentar. Pesan disimpan di Konten › Form dan dikirim ke email Anda." },
+      { t: "Panduan privasi bawaan", d: "Pengaturan › Panduan privasi menjelaskan apa yang benar-benar dikumpulkan situs Anda, dengan checklist dan draf Kebijakan Privasi sebagai titik awal." },
+      { t: "Verifikasi dua langkah", d: "Akun admin bisa memakai TOTP dengan kode pemulihan. Password disimpan dalam bentuk hash, dan log aktivitas mencatat siapa mengubah apa." },
+      { ok: false, t: "Yang menghubungi GitHub", d: "Server Anda, bukan pengunjung, menghubungi GitHub saat memeriksa pembaruan dan mengunduh <code>vendor</code> atau rilis baru. Tidak ada data pengunjung yang dikirim." },
+      { ok: false, t: "Embed pihak ketiga", d: "Widget Map (Google Maps) dan video YouTube atau Vimeo baru dimuat saat pengunjung menekan tombol. Thumbnail YouTube diambil dari server YouTube, kecuali Anda memasang poster sendiri." },
+      { ok: false, t: "Yang tetap tanggung jawab Anda", d: "Komentar menyimpan nama, email, dan alamat IP untuk melawan spam. Email lewat penyedia SMTP Anda, backup berisi salinan database, dan plugin bisa menambah data atau cookie sendiri." },
+    ],
+    pvNote: "DyskFlow adalah software yang Anda pasang sendiri. DyskLab tidak menerima data apa pun dari situs Anda.",
+    faq: [
+      { q: "Hosting seperti apa yang dibutuhkan?", a: "<p>PHP 8.3 atau lebih baru dengan ekstensi <code>mbstring</code>, <code>openssl</code>, <code>fileinfo</code>, <code>dom</code>, <code>zip</code>, dan <code>pdo_mysql</code> atau <code>pdo_sqlite</code>. Opsional: <code>gd</code> untuk mengolah gambar dan <code>curl</code> untuk mengunduh.</p><p>Apache, LiteSpeed, dan Nginx bisa dipakai. Langkah lengkapnya ada di <code>SETUP.md</code>.</p>" },
+      { q: "Bisa dipasang di shared hosting atau cPanel tanpa terminal?", a: "<p>Bisa. Unggah file lewat File Manager, buka situsnya, tekan <b>Pasang sekarang</b> untuk memasang <code>vendor</code>, lalu ikuti wizard. Tidak perlu Composer, Node, atau SSH.</p><p>Kalau server tidak bisa mengunduh dari GitHub, unduh <code>vendor.zip</code> dari halaman rilis dan taruh di folder utama aplikasi.</p>" },
+      { q: "Pilih MySQL atau SQLite?", a: "<p>Keduanya didukung dan dipilih di wizard. SQLite tidak butuh server database dan cocok untuk situs kecil atau percobaan. MySQL cocok kalau hosting Anda sudah menyediakannya. Databasenya harus kosong saat instalasi.</p>" },
+      { q: "Apakah update menimpa perubahan saya?", a: "<p>Tidak. Backup database dibuat lebih dulu, dan <code>.env</code>, <code>storage</code>, <code>landing</code>, <code>plugins</code>, <code>theme</code>, <code>public/uploads</code>, serta <code>cms.json</code> tidak pernah ditimpa. Untuk mengubah tema bawaan, salin filenya ke <code>theme/</code> lewat Explorer; salinan itu bertahan di setiap update.</p>" },
+      { q: "Bisakah AI membuat halaman?", a: "<p>Bisa, dengan dua cara. Halaman page builder bisa diekspor dan diimpor sebagai JSON dengan <code>php artisan builder:export</code> dan <code>builder:import</code>. Landing page bebas ditulis sebagai Blade atau HTML di folder <code>landing/</code>. Panduan khusus untuk AI ada di <code>docs/AI-GUIDE.md</code>.</p>" },
+      { q: "Bagaimana dengan plugin?", a: "<p>Plugin adalah folder di <code>plugins/</code> dengan <code>plugin.json</code> dan <code>plugin.php</code>. Plugin bisa memakai hooks, migrasi, dan tabel sendiri (ikut di-backup), dan field di <code>plugin.json</code> otomatis menjadi halaman pengaturan. Plugin yang error saat dimuat langsung dimatikan.</p>" },
+      { q: "Apakah DyskFlow gratis?", a: "<p>Ya. DyskFlow open source dengan lisensi MIT: bebas dipakai untuk situs pribadi maupun klien, tanpa versi berbayar atau batasan fitur.</p>" },
+      { q: "Saya terkunci dari verifikasi dua langkah. Bagaimana?", a: "<p>Pakai kode pemulihan saat login, atau minta admin lain memakai <b>Pengguna › Reset TOTP</b>. Kalau tidak ada yang bisa login, jalankan <code>php artisan cms:totp-reset email@contoh.com</code> di server.</p>" },
+      { q: "Menemukan bug atau punya usulan?", a: `<p>Buat issue di <a href="${issues}" target="_blank" rel="noopener">GitHub<span class="sr"> (tab baru)</span></a>. Sertakan versi DyskFlow, versi PHP, dan langkah untuk memunculkan masalahnya.</p>` },
+    ],
+  },
+  en: {
+    title: "DyskFlow: a Laravel CMS with no build step | DyskLab",
+    description: "DyskFlow is a Laravel CMS with no build step: a visual page builder with 65 widgets, a no-terminal install wizard, one-click updates from GitHub, built-in SEO, two languages, and plugins.",
+    nav: { install: "Install", features: "Features" },
+    cta: "Download",
+    h1a: "Laravel CMS.",
+    h1b: "No build step.",
+    lede: "Design pages visually with an Elementor-style page builder, or write your own landing pages in Blade. No Node, no Vite, and your hosting doesn't need Composer.",
+    download: "Download from GitHub ↗",
+    howInstall: "How to install",
+    shotSite: "Site", shotSiteAlt: "A site built with DyskFlow",
+    shotDash: "Dashboard", shotDashAlt: "The DyskFlow admin dashboard",
+    ticker: "Visual page builder ✺ 65 widgets ✺ No terminal ✺ No Node ✺ No Vite ✺ No Composer on the server ✺ One-click updates ✺ Built-in SEO ✺ Two languages ✺",
+    bH2a: "Drag, arrange, publish.", bH2b: "Like Elementor, minus the weight.",
+    bBody: "Build pages from sections, columns, containers, and widgets with a live preview. The layout is JSON rendered on the server, so search engines get plain HTML, not a page assembled in the browser.",
+    mock: {
+      page: "Pages › Summer Sale", draft: "Draft saved", search: "⌕ Search widgets…", basic: "Basic", interactive: "Interactive",
+      order: "Order now", drop: "+ Drop a widget here", tabs: ["Content", "Style", "Advanced"],
+      lTitle: "Title", vTitle: "Free shipping", lText: "Text · ID", vText: "Gratis ongkir", lIcon: "Icon", lAlign: "Alignment",
+    },
+    points: [
+      { t: "Live preview", d: "Desktop, tablet, and phone, with settings per screen size." },
+      { t: "Two languages", d: "Every text can have an Indonesian and an English version on the same page." },
+      { t: "Drafts, revisions, Publish", d: "Changes are saved as a draft. The last 20 layouts can be restored." },
+    ],
+    aiT: "AI friendly", aiD: "let AI tools read and write pages.", and: "and",
+    wall: "widgets, written for DyskFlow", more: "and more…",
+    startersH: "Start from a template", startersP: "Eight starter templates, each with a live preview.",
+    starters: ["About us", "Contact", "Cafe or restaurant", "Coming soon", "Event", "Freelancer portfolio", "Product", "Service"],
+    design: [
+      { t: "Forms without a plugin", d: "Contact, sign-up, or order forms from the page builder. Messages land in Content › Forms (CSV export) and your inbox. No cookies, with a honeypot and rate limits." },
+      { t: "Theme Builder and Blocks", d: "Design the article, article list, category, header, and footer templates. Save parts of a page as blocks to reuse." },
+      { t: "Colors and fonts", d: "Brand colors, Google Fonts downloaded to the site (visitors never connect to Google), text size, and corner radius." },
+      { t: "Code Explorer", d: "Edit files in theme/, landing/, and plugins/ with a code editor, revisions, and conflict detection. Plus custom CSS and JavaScript." },
+    ],
+    installH2a: "Install it like", installH2b: "a shared hosting user.",
+    install: [
+      { t: "Upload the files", d: "Upload to your hosting without the vendor folder. No Composer, Node, or Vite needed on the server." },
+      { t: "Open the site", d: "Press Install now. The wizard can fetch vendor by itself, with no terminal." },
+      { t: "Follow the wizard", d: "Fill in the database and admin account. MySQL or SQLite, both are supported." },
+    ],
+    landK: "Or write the code yourself", landH2a: "Free-form landing pages.", landH2b: "By hand or with AI.",
+    landBody1: "Landing pages and custom pages are Blade files in the",
+    landBody2: "folder. The homepage is chosen in Settings: a landing page, the article list, or a regular page. Everything else, articles, pages, categories, tags, comments, and media, is managed from the dashboard.",
+    treeLabel: "A DyskFlow site's folders", treeRoot: "your-site/",
+    tree: { landing: "# landing pages, by hand / AI", plugins: "# plugins with hooks", theme: "# theme overrides, safe on update", uploads: "# media" },
+    updK: "One-click updates", updH2a: "Press update.", updH2b: "Your site stays intact.",
+    update: ["Back up the database first", "Fetch the code from the latest GitHub release", "Replace vendor only when composer.lock changed", "Run the migrations"],
+    keepT: "Never overwritten",
+    keepN1: "Your site's content and code survive every update. Each release is published by GitHub Actions together with its", keepN2: ".",
+    featH2a: "Everything a site needs,", featH2b: "already inside.",
+    features: [
+      { t: "Built-in SEO", d: "Meta tags, canonical URLs, Open Graph, JSON-LD, hreflang, a search result preview, a checklist, sitemap, and robots.txt." },
+      { t: "Two languages", d: "Indonesian and English with per-language URLs such as /en/blog/slug, plus per-language RSS." },
+      { t: "Complete content", d: "Articles, pages, categories, tags, media, and moderated comments. JPG and PNG photos can become WebP automatically." },
+      { t: "An honest dashboard", d: "What needs attention, key numbers, recent comments, scheduled posts, and site status, based on permissions." },
+      { t: "Users and security", d: "User roles, an activity log, and two-step verification (TOTP) with recovery codes." },
+      { t: "Backup and import", d: "Database and full backups, plus import and export of articles, pages, templates, and settings." },
+      { t: "Trash", d: "Deleted articles, pages, and comments can be restored." },
+      { t: "Cookie-free stats", d: "View counts without cookies, a privacy guide, and a site health page." },
+      { t: "Plugins and hooks", d: "Plugins in the plugins/ folder with hooks and automatically generated settings pages." },
+      { t: "Search anywhere", d: "⌘K or Ctrl+K, notifications for comments, new versions, and errors, plus dark mode." },
+      { t: "Tidy domains", d: "The www and bare domain redirect permanently to the site address you chose." },
+      { t: "Admin language", d: "The admin panel is available in English and Indonesian." },
+    ],
+    finalH: "Ready to try it?",
+    finalP1: "Upload the files, open the site, press", finalBtn: "Install now", finalP2: ". The full guide is in",
+    finalDl: "Download the latest release ↗", finalCode: "View the code ↗",
+    pvSummary: "Your site, your database. DyskFlow sends your visitors' data nowhere.",
+    pv: [
+      { t: "Data in your own database", d: "Articles, comments, accounts, and form messages live in MySQL or SQLite on your hosting. No DyskLab account, no telemetry, and the admin loads nothing from a CDN." },
+      { t: "Cookie-free view counts", d: "A visit only adds one to a number on the article or page. Bots and logged-in admins aren't counted, and there's no third-party analytics script." },
+      { t: "Reading pages sets no cookies", d: "New visitors get no cookies. Session and security cookies appear only on pages with a comment form and when logging in." },
+      { t: "Google Fonts downloaded to the site", d: "You pick fonts in the admin and the server downloads them once. Visitors load them from your site and never connect to Google." },
+      { t: "Forms without cookies", d: "Spam is held back by a honeypot, rate limits, and the comment blocklist. Messages are stored in Content › Forms and sent to your email." },
+      { t: "Built-in Privacy Guide", d: "Settings › Privacy Guide describes what your site really collects, with a checklist and a draft Privacy Policy to start from." },
+      { t: "Two-step verification", d: "Admin accounts can use TOTP with recovery codes. Passwords are stored hashed, and the activity log records who changed what." },
+      { ok: false, t: "What contacts GitHub", d: "Your server, not your visitors, contacts GitHub to check for updates and to download <code>vendor</code> or a new release. No visitor data is sent." },
+      { ok: false, t: "Third-party embeds", d: "The Map widget (Google Maps) and YouTube or Vimeo videos load only when a visitor presses the button. YouTube thumbnails come from YouTube's servers unless you set your own poster." },
+      { ok: false, t: "What stays your responsibility", d: "Comments store a name, email, and IP address to fight spam. Email goes through your SMTP provider, backups hold a copy of the database, and plugins can add their own data or cookies." },
+    ],
+    pvNote: "DyskFlow is software you install yourself. DyskLab receives no data from your site.",
+    faq: [
+      { q: "What hosting do I need?", a: "<p>PHP 8.3 or newer with the <code>mbstring</code>, <code>openssl</code>, <code>fileinfo</code>, <code>dom</code>, <code>zip</code>, and <code>pdo_mysql</code> or <code>pdo_sqlite</code> extensions. Optional: <code>gd</code> for image processing and <code>curl</code> for downloads.</p><p>Apache, LiteSpeed, and Nginx all work. The full steps are in <code>SETUP.md</code> (in Indonesian).</p>" },
+      { q: "Can I install it on shared hosting or cPanel without a terminal?", a: "<p>Yes. Upload the files with the File Manager, open the site, press <b>Install now</b> to install <code>vendor</code>, then follow the wizard. No Composer, Node, or SSH needed.</p><p>If the server can't download from GitHub, get <code>vendor.zip</code> from the releases page and put it in the app's root folder.</p>" },
+      { q: "MySQL or SQLite?", a: "<p>Both are supported and chosen in the wizard. SQLite needs no database server and suits small sites or a trial. MySQL suits hosting that already provides it. The database must be empty at install time.</p>" },
+      { q: "Does an update overwrite my changes?", a: "<p>No. A database backup is made first, and <code>.env</code>, <code>storage</code>, <code>landing</code>, <code>plugins</code>, <code>theme</code>, <code>public/uploads</code>, and <code>cms.json</code> are never overwritten. To change the default theme, copy its file into <code>theme/</code> with the Explorer; the copy survives every update.</p>" },
+      { q: "Can AI build pages?", a: "<p>Yes, two ways. Page builder pages can be exported and imported as JSON with <code>php artisan builder:export</code> and <code>builder:import</code>. Free-form landing pages are Blade or HTML in the <code>landing/</code> folder. A guide written for AI tools is in <code>docs/AI-GUIDE.md</code>.</p>" },
+      { q: "What about plugins?", a: "<p>A plugin is a folder in <code>plugins/</code> with a <code>plugin.json</code> and a <code>plugin.php</code>. Plugins can use hooks, migrations, and their own tables (included in backups), and fields in <code>plugin.json</code> become a settings page automatically. A plugin that errors while loading is turned off.</p>" },
+      { q: "Is DyskFlow free?", a: "<p>Yes. DyskFlow is open source under the MIT license: use it for your own sites or for clients, with no paid tier or feature limits.</p>" },
+      { q: "I'm locked out of two-step verification. Now what?", a: "<p>Use a recovery code when you log in, or ask another admin to use <b>Users › Reset TOTP</b>. If nobody can log in, run <code>php artisan cms:totp-reset email@example.com</code> on the server.</p>" },
+      { q: "Found a bug or have an idea?", a: `<p>Open an issue on <a href="${issues}" target="_blank" rel="noopener">GitHub<span class="sr"> (new tab)</span></a>. Include your DyskFlow version, PHP version, and the steps that cause the problem.</p>` },
+    ],
+  },
+});
+---
+
+<Base
+  title={T.title}
+  description={T.description}
+  path={Astro.url.pathname}
+  ogImage="/images/products/dyskflow/og.jpg"
+  ogTitle="DyskFlow"
+  fonts="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+  theme="light"
+  themeColor="#f5efe6"
+>
+  <div class="fl" id="top">
+    <ProductBar
+      lang={lang}
+      repo="DyskLab/dyskflow"
+      name="DyskFlow"
+      icon="/images/apps/dyskflow.svg"
+      links={[
+        { href: "#builder", label: "Page builder" },
+        { href: "#pasang", label: T.nav.install },
+        { href: "#fitur", label: T.nav.features },
+        { href: "#privasi", label: ui[lang].privacy },
+        { href: "#faq", label: "FAQ" },
+      ]}
+      cta={{ href: release, label: T.cta, external: true }}
+    />
+
+    <main>
+      <header class="hero">
+        <div class="wrap">
+          <div class="tags">
+            <span>Laravel 13</span><span>PHP 8.3+</span><span>MySQL / SQLite</span><span>MIT</span>
+          </div>
+          <h1>{T.h1a}<br /><span class="mark">{T.h1b}</span></h1>
+          <div class="hero-row">
+            <p class="lede">{T.lede}</p>
+            <div class="cta">
+              <a class="btn btn-red" href={release} target="_blank" rel="noopener">{T.download}<span class="sr">{nt}</span></a>
+              <a class="btn btn-paper" href="#pasang">{T.howInstall}</a>
+            </div>
+          </div>
+          <div class="shots dl-reveal">
+            <figure class="box s-site"><img src={img("01-landing")} width="1800" height="1019" alt={T.shotSiteAlt} fetchpriority="high" /><figcaption>{T.shotSite}</figcaption></figure>
+            <figure class="box s-dash"><img src={img("02-dasbor")} width="1800" height="1019" alt={T.shotDashAlt} loading="lazy" /><figcaption>{T.shotDash}</figcaption></figure>
+          </div>
+        </div>
+      </header>
+
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-in">
+          {[0, 1].map(() => <span>{T.ticker}&nbsp;</span>)}
+        </div>
+      </div>
+
+      <section id="builder" class="sec">
+        <div class="wrap">
+          <div class="b-head dl-reveal">
+            <p class="kick red">Page builder</p>
+            <h2>{T.bH2a}<br />{T.bH2b}</h2>
+            <p class="body">{T.bBody}</p>
+          </div>
+
+          <div class="box builder dl-reveal" aria-hidden="true">
+            <div class="b-top">
+              <span class="b-logo">DyskFlow</span>
+              <span class="b-page">{T.mock.page}</span>
+              <span class="b-lang">{lang === "id" ? <><b>ID</b> EN</> : <><b>EN</b> ID</>}</span>
+              <span class="b-dev">▭ ▯ ▮</span>
+              <span class="b-draft">{T.mock.draft}</span>
+              <span class="b-pub">Publish</span>
+            </div>
+            <div class="b-body">
+              <aside class="b-side">
+                <div class="b-search">{T.mock.search}</div>
+                <p class="b-grp">{T.mock.basic}</p>
+                <div class="b-wg"><span>H</span>Heading</div><div class="b-wg"><span>¶</span>Text</div><div class="b-wg"><span>▣</span>Image</div><div class="b-wg"><span>◉</span>Button</div>
+                <p class="b-grp">{T.mock.interactive}</p>
+                <div class="b-wg"><span>⧉</span>Tabs</div><div class="b-wg"><span>≡</span>Accordion</div><div class="b-wg"><span>⏱</span>Countdown</div><div class="b-wg"><span>✉</span>Form</div>
+              </aside>
+              <div class="b-canvas">
+                <div class="b-sec b-hero">
+                  <span class="b-label">Section</span>
+                  <div class="b-col b-c7">
+                    <i class="ln w40 accent"></i><i class="ln big w90"></i><i class="ln big w70"></i><i class="ln w80"></i><i class="ln w60"></i>
+                    <span class="b-btn">{T.mock.order}</span>
+                  </div>
+                  <div class="b-col b-c5 b-img"><span>▣</span></div>
+                </div>
+                <div class="b-sec b-three">
+                  <div class="b-col sel"><span class="b-tag">Icon box</span><i class="dot"></i><i class="ln w70"></i><i class="ln w90"></i></div>
+                  <div class="b-col"><i class="dot"></i><i class="ln w60"></i><i class="ln w90"></i></div>
+                  <div class="b-col"><i class="dot"></i><i class="ln w80"></i><i class="ln w70"></i></div>
+                </div>
+                <div class="b-drop">{T.mock.drop}</div>
+              </div>
+              <aside class="b-props">
+                <p class="b-ptitle">Icon box</p>
+                <div class="b-tabs"><b>{T.mock.tabs[0]}</b><span>{T.mock.tabs[1]}</span><span>{T.mock.tabs[2]}</span></div>
+                <label>{T.mock.lTitle}</label><div class="b-in">{T.mock.vTitle}</div>
+                <label>{T.mock.lText}</label><div class="b-in">{T.mock.vText}</div>
+                <label>{T.mock.lIcon}</label><div class="b-in">truck</div>
+                <label>{T.mock.lAlign}</label><div class="b-seg"><b>⇤</b><span>↔</span><span>⇥</span></div>
+              </aside>
+            </div>
+          </div>
+
+          <ul class="b-points">
+            {T.points.map((p) => <li class="dl-reveal"><b>{p.t}</b>{p.d}</li>)}
+            <li class="dl-reveal"><b>{T.aiT}</b><code>builder:export</code> {T.and} <code>builder:import</code> {T.aiD}</li>
+          </ul>
+
+          <div class="wall dl-reveal">
+            <div class="wall-n"><span>65</span>{T.wall}</div>
+            <ul class="chips">
+              {widgets.map((w) => <li>{w}</li>)}
+              <li class="more">{T.more}</li>
+            </ul>
+          </div>
+
+          <div class="starters dl-reveal">
+            <h3>{T.startersH}</h3>
+            <p>{T.startersP}</p>
+            <ul>{T.starters.map((t, i) => <li class={`st st-${(i % 4) + 1}`}><span aria-hidden="true"></span>{t}</li>)}</ul>
+          </div>
+
+          <ul class="design">
+            {T.design.map((d) => (
+              <li class="box dl-reveal"><h3>{d.t}</h3><p>{d.d}</p></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="pasang" class="sec sec-cream">
+        <div class="wrap">
+          <h2 class="dl-reveal">{T.installH2a}<br />{T.installH2b}</h2>
+          <ol class="steps">
+            {T.install.map((s, i) => (
+              <li class="box step dl-reveal">
+                <span class="big">{i + 1}</span>
+                <h3>{s.t}</h3>
+                <p>{s.d}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section id="landing" class="sec sec-ink">
+        <div class="wrap split">
+          <div class="dl-reveal">
+            <p class="kick">{T.landK}</p>
+            <h2>{T.landH2a}<br />{T.landH2b}</h2>
+            <p class="body">{T.landBody1} <code>landing/</code>{lang === "id" ? ". " : " "}{T.landBody2}</p>
+          </div>
+          <pre class="box tree dl-reveal" aria-label={T.treeLabel}><code><span class="r">{T.treeRoot}</span>
+├── <b>landing/</b>        <i>{T.tree.landing}</i>
+├── <b>plugins/</b>        <i>{T.tree.plugins}</i>
+├── <b>theme/</b>          <i>{T.tree.theme}</i>
+├── public/uploads/  <i>{T.tree.uploads}</i>
+├── storage/
+├── .env
+└── cms.json</code></pre>
+        </div>
+      </section>
+
+      <section id="update" class="sec">
+        <div class="wrap split">
+          <div class="dl-reveal">
+            <p class="kick red">{T.updK}</p>
+            <h2>{T.updH2a}<br />{T.updH2b}</h2>
+            <ol class="flow">
+              {T.update.map((u, i) => <li><span>{String(i + 1).padStart(2, "0")}</span>{u}</li>)}
+            </ol>
+          </div>
+          <div class="box keep dl-reveal">
+            <p class="keep-t">{T.keepT}</p>
+            <ul>{keep.map((k) => <li><code>{k}</code></li>)}</ul>
+            <p class="keep-n">{T.keepN1} <code>vendor.zip</code>{T.keepN2}</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="fitur" class="sec sec-cream">
+        <div class="wrap">
+          <h2 class="dl-reveal">{T.featH2a}<br />{T.featH2b}</h2>
+          <ul class="feats">
+            {T.features.map((f) => (
+              <li class="box feat dl-reveal">
+                <h3>{f.t}</h3>
+                <p>{f.d}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="wrap">
+          <div class="box final dl-reveal">
+            <h2>{T.finalH}</h2>
+            <p>{T.finalP1} <b>{T.finalBtn}</b>{T.finalP2} <code>SETUP.md</code>.</p>
+            <div class="cta">
+              <a class="btn btn-paper" href={release} target="_blank" rel="noopener">{T.finalDl}<span class="sr">{nt}</span></a>
+              <a class="btn btn-ghost" href={repo} target="_blank" rel="noopener">{T.finalCode}<span class="sr">{nt}</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Privacy lang={lang} id="privasi" summary={T.pvSummary} items={T.pv} note={T.pvNote} />
+      <Faq lang={lang} id="faq" items={T.faq} />
+      <Support lang={lang} product="DyskFlow" repos={[{ repo: "DyskLab/dyskflow" }]} />
+    </main>
+
+    <ProductFooter lang={lang} current="dyskflow" />
+  </div>
+  <script src="../scripts/reveal.js"></script>
+</Base>
+
+<style>
+  :global(body) { margin: 0; background: #f5efe6; }
+  .fl {
+    --cream: #f5efe6; --cream-2: #ece3d4; --ink: #1a1714; --muted: #5d554c; --red: #e8412c; --yellow: #ffd23f;
+    --pb-bg: var(--cream); --pb-fg: var(--ink); --pb-muted: var(--muted); --pb-line: var(--ink); --pb-hover: var(--cream-2);
+    --pb-btn-bg: var(--red); --pb-btn-fg: #fff; --pb-radius: 6px; --pb-font: "Bricolage Grotesque", sans-serif;
+    --pf-line: var(--ink); --pf-muted: var(--muted); --pf-fg: var(--ink); --pf-card: #fffaf2; --pf-hover: var(--red); --pf-radius: 8px;
+    background: var(--cream); color: var(--ink); font: 400 16.5px/1.6 "Bricolage Grotesque", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .wrap { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  .sr, .fl :global(.sr) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.035em; line-height: 0.98; }
+  code { font: 500 0.88em "IBM Plex Mono", monospace; background: rgba(26, 23, 20, 0.08); padding: 1px 6px; border-radius: 4px; }
+  .box { border: 2.5px solid var(--ink); border-radius: 10px; background: #fffaf2; box-shadow: 6px 6px 0 var(--ink); }
+
+  .btn { display: inline-flex; align-items: center; height: 52px; padding: 0 22px; border: 2.5px solid var(--ink); border-radius: 8px; font-weight: 600; font-size: 16px; text-decoration: none; color: var(--ink); box-shadow: 4px 4px 0 var(--ink); transition: transform 0.12s, box-shadow 0.12s; }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-paper { background: #fffaf2; }
+  .btn-ghost { background: transparent; color: #fff; border-color: #fff; box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35); }
+
+  .hero { padding: 64px 0 72px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tags span { font: 500 13px "IBM Plex Mono", monospace; padding: 5px 10px; border: 2px solid var(--ink); border-radius: 999px; background: #fffaf2; }
+  h1 { margin-top: 26px; font-size: clamp(54px, 10vw, 140px); }
+  .mark { position: relative; color: var(--red); }
+  .hero-row { margin-top: 30px; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: end; }
+  .lede { margin: 0; max-width: 620px; font-size: 20px; color: var(--muted); }
+  .cta { display: flex; flex-wrap: wrap; gap: 14px; }
+  .shots { position: relative; margin-top: 56px; display: grid; grid-template-columns: 1.15fr 1fr; gap: 0; }
+  .shots figure { margin: 0; overflow: hidden; position: relative; }
+  .shots img { width: 100%; height: auto; display: block; }
+  .shots figcaption { position: absolute; left: 12px; top: 12px; font: 600 12px "IBM Plex Mono", monospace; padding: 4px 9px; background: var(--yellow); border: 2px solid var(--ink); border-radius: 5px; }
+  .s-site { transform: rotate(-1.5deg); z-index: 1; }
+  .s-dash { transform: rotate(1.8deg) translate(-40px, 50px); z-index: 2; }
+
+  .ticker { border-top: 2.5px solid var(--ink); border-bottom: 2.5px solid var(--ink); background: var(--yellow); overflow: hidden; padding: 14px 0; }
+  .ticker-in { display: flex; width: max-content; animation: tick 32s linear infinite; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; white-space: nowrap; }
+  @keyframes tick { to { transform: translateX(-50%); } }
+
+  .sec { padding: 104px 0; }
+  h2 { font-size: clamp(38px, 5.6vw, 72px); }
+  .steps { list-style: none; margin: 52px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .step { padding: 28px; }
+  .big { display: block; font-size: 88px; line-height: 0.8; font-weight: 800; color: var(--red); -webkit-text-stroke: 2.5px var(--ink); }
+  .step h3 { margin-top: 22px; font-size: 28px; }
+  .step p { margin: 10px 0 0; color: var(--muted); }
+
+  .sec-ink { background: var(--ink); color: var(--cream); }
+  .sec-ink .body { color: #cfc6b8; }
+  .sec-ink code { background: rgba(245, 239, 230, 0.12); color: var(--cream); }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .kick { margin: 0 0 16px; font: 600 13px "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; color: var(--yellow); }
+  .kick.red { color: var(--red); }
+  .body { margin: 20px 0 0; font-size: 18px; color: var(--muted); }
+  .tree { margin: 0; padding: 28px; background: var(--cream); color: var(--ink); box-shadow: 8px 8px 0 var(--red); border-color: var(--cream); overflow-x: auto; font: 400 15px/1.8 "IBM Plex Mono", monospace; }
+  .tree code { all: unset; }
+  .tree b { color: var(--red); }
+  .tree i { font-style: normal; color: #8a7f72; }
+  .tree .r { font-weight: 600; }
+
+  .flow { list-style: none; margin: 30px 0 0; padding: 0; display: grid; gap: 10px; }
+  .flow li { display: flex; align-items: center; gap: 14px; font-size: 18px; font-weight: 600; padding: 12px 16px; border: 2px solid var(--ink); border-radius: 8px; background: #fffaf2; }
+  .flow span { font: 600 13px "IBM Plex Mono", monospace; color: #fff; background: var(--ink); padding: 3px 7px; border-radius: 4px; }
+  .keep { padding: 30px; background: var(--yellow); }
+  .keep-t { margin: 0; font-weight: 800; font-size: 26px; letter-spacing: -0.02em; }
+  .keep ul { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .keep li code { display: inline-block; font-size: 15px; padding: 7px 11px; background: #fffaf2; border: 2px solid var(--ink); border-radius: 6px; }
+  .keep-n { margin: 18px 0 0; font-size: 15.5px; }
+
+  .sec-cream { background: var(--cream-2); border-top: 2.5px solid var(--ink); border-bottom: 2.5px solid var(--ink); }
+  .feats { list-style: none; margin: 52px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .feat { padding: 22px; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; }
+  .feat:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink); background: #fff; }
+  .feat h3 { font-size: 21px; letter-spacing: -0.02em; }
+  .feat p { margin: 8px 0 0; font-size: 15px; color: var(--muted); }
+
+
+  /* page builder */
+  .b-head { max-width: 760px; }
+  .builder { margin-top: 48px; overflow: hidden; background: #fffaf2; box-shadow: 10px 10px 0 var(--ink); font-size: 13px; }
+  .b-top { display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-bottom: 2.5px solid var(--ink); background: var(--ink); color: var(--cream); font-weight: 600; }
+  .b-logo { color: var(--red); font-weight: 800; }
+  .b-page { color: #b9afa2; }
+  .b-lang { margin-left: auto; font: 500 12px "IBM Plex Mono", monospace; padding: 3px 8px; border: 1px solid #5d554c; border-radius: 5px; }
+  .b-lang b { color: var(--yellow); }
+  .b-dev { letter-spacing: 4px; color: #b9afa2; }
+  .b-draft { font-size: 12px; color: #9ee6a8; }
+  .b-pub { padding: 5px 14px; border-radius: 5px; background: var(--red); color: #fff; }
+  .b-body { display: grid; grid-template-columns: 200px 1fr 220px; min-height: 420px; }
+  .b-side, .b-props { padding: 14px; background: #f1e9db; }
+  .b-side { border-right: 2.5px solid var(--ink); }
+  .b-props { border-left: 2.5px solid var(--ink); }
+  .b-search { padding: 7px 10px; border: 2px solid var(--ink); border-radius: 6px; background: #fffaf2; color: var(--muted); }
+  .b-grp { margin: 14px 0 8px; font: 600 11px "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .b-side { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; align-content: start; }
+  .b-search, .b-grp { grid-column: span 2; }
+  .b-wg { display: grid; justify-items: center; gap: 4px; padding: 10px 4px; border: 2px solid var(--ink); border-radius: 6px; background: #fffaf2; font-size: 11.5px; font-weight: 600; }
+  .b-wg span { font-size: 16px; color: var(--red); }
+  .b-canvas { padding: 22px; display: grid; gap: 16px; align-content: start; background: repeating-linear-gradient(0deg, transparent 0 23px, rgba(26, 23, 20, 0.05) 23px 24px), #fffaf2; }
+  .b-sec { position: relative; display: grid; gap: 14px; padding: 18px; border: 2px dashed #c9bda9; border-radius: 8px; background: #fff; }
+  .b-label { position: absolute; left: -2px; top: -12px; font: 600 10.5px "IBM Plex Mono", monospace; padding: 2px 7px; border-radius: 4px; background: var(--ink); color: var(--cream); }
+  .b-hero { grid-template-columns: 7fr 5fr; align-items: center; }
+  .b-col { position: relative; display: grid; gap: 7px; align-content: start; padding: 12px; border-radius: 6px; }
+  .b-three { grid-template-columns: repeat(3, 1fr); }
+  .b-three .b-col { border: 1.5px solid #ece3d4; }
+  .b-col.sel { border: 2.5px solid var(--red); box-shadow: 4px 4px 0 var(--red); }
+  .b-tag { position: absolute; right: -2px; top: -12px; font: 600 10.5px "IBM Plex Mono", monospace; padding: 2px 7px; border-radius: 4px; background: var(--red); color: #fff; }
+  .ln { display: block; height: 7px; border-radius: 4px; background: #e2d8c7; }
+  .ln.big { height: 16px; background: var(--ink); }
+  .ln.accent { background: var(--red); height: 6px; }
+  .w40 { width: 40%; } .w60 { width: 60%; } .w70 { width: 70%; } .w80 { width: 80%; } .w90 { width: 90%; }
+  .dot { width: 26px; height: 26px; border-radius: 8px; background: var(--yellow); border: 2px solid var(--ink); }
+  .b-btn { justify-self: start; margin-top: 6px; padding: 6px 12px; border-radius: 5px; background: var(--red); color: #fff; font-weight: 700; font-size: 12px; }
+  .b-img { min-height: 130px; display: grid !important; place-items: center; background: repeating-linear-gradient(45deg, #ffe58a 0 10px, #ffd23f 10px 20px); border: 2px solid var(--ink); font-size: 28px; }
+  .b-drop { padding: 14px; text-align: center; border: 2px dashed var(--red); border-radius: 8px; color: var(--red); font-weight: 700; background: rgba(232, 65, 44, 0.05); }
+  .b-ptitle { margin: 0 0 10px; font-weight: 800; font-size: 15px; }
+  .b-tabs { display: flex; gap: 4px; margin-bottom: 12px; font-size: 11.5px; }
+  .b-tabs > * { flex: 1; text-align: center; padding: 5px 0; border-radius: 5px; border: 1.5px solid var(--ink); background: #fffaf2; }
+  .b-tabs b { background: var(--ink); color: var(--cream); }
+  .b-props label { display: block; margin: 10px 0 4px; font: 600 11px "IBM Plex Mono", monospace; color: var(--muted); }
+  .b-in { padding: 6px 9px; border: 2px solid var(--ink); border-radius: 5px; background: #fffaf2; font-weight: 600; }
+  .b-seg { display: flex; border: 2px solid var(--ink); border-radius: 5px; overflow: hidden; }
+  .b-seg > * { flex: 1; text-align: center; padding: 4px 0; background: #fffaf2; }
+  .b-seg b { background: var(--yellow); }
+  .b-points { list-style: none; margin: 34px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .b-points li { padding-top: 14px; border-top: 3px solid var(--ink); color: var(--muted); font-size: 15px; }
+  .b-points b { display: block; margin-bottom: 4px; color: var(--ink); font-size: 18px; letter-spacing: -0.02em; }
+  .wall { margin-top: 72px; display: grid; grid-template-columns: 260px 1fr; gap: 36px; align-items: center; }
+  .wall-n { font-weight: 600; font-size: 18px; line-height: 1.3; }
+  .wall-n span { display: block; font-size: 120px; line-height: 0.85; font-weight: 800; letter-spacing: -0.05em; color: var(--red); -webkit-text-stroke: 2.5px var(--ink); }
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips li { padding: 6px 12px; border: 2px solid var(--ink); border-radius: 999px; background: #fffaf2; font-weight: 600; font-size: 14px; }
+  .chips li:nth-child(5n + 2) { background: var(--yellow); }
+  .chips li:nth-child(7n + 4) { background: var(--red); color: #fff; }
+  .chips .more { border-style: dashed; background: transparent !important; color: var(--muted) !important; }
+  .starters { margin-top: 72px; }
+  .starters h3 { font-size: 32px; }
+  .starters p { margin: 8px 0 0; color: var(--muted); }
+  .starters ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .st { padding: 10px 10px 14px; border: 2.5px solid var(--ink); border-radius: 10px; background: #fffaf2; font-weight: 700; box-shadow: 4px 4px 0 var(--ink); }
+  .st span { display: block; height: 92px; margin-bottom: 12px; border-radius: 6px; border: 2px solid var(--ink); }
+  .st-1 span { background: linear-gradient(var(--ink) 0 30%, #fffaf2 30% 34%, var(--red) 34% 46%, #fffaf2 46%); }
+  .st-2 span { background: linear-gradient(90deg, var(--yellow) 0 45%, #fffaf2 45%); }
+  .st-3 span { background: repeating-linear-gradient(90deg, #f3c9a8 0 30%, #fffaf2 30% 35%); }
+  .st-4 span { background: radial-gradient(circle at 50% 50%, var(--red) 0 20%, var(--ink) 21%); }
+  .design { list-style: none; margin: 48px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .design li { padding: 22px; }
+  .design h3 { font-size: 21px; letter-spacing: -0.02em; }
+  .design p { margin: 8px 0 0; font-size: 15px; color: var(--muted); }
+  .feats { grid-template-columns: repeat(4, 1fr); }
+
+  .final { padding: 56px; background: var(--red); color: #fff; text-align: center; box-shadow: 10px 10px 0 var(--ink); }
+  .final p { margin: 16px auto 0; max-width: 560px; font-size: 18.5px; }
+  .final code { background: rgba(255, 255, 255, 0.2); color: #fff; }
+  .final .cta { justify-content: center; margin-top: 28px; }
+
+  /* shared Privacy / FAQ / Support sections, pulled into the neo-brutalist look */
+  .fl :global(:is(.pv, .fq, .sp) h2) { font-weight: 800; letter-spacing: -0.035em; }
+  .fl :global(.pv) { border-top: 2.5px solid var(--ink); }
+  .fl :global(.pv-k) { font-family: "IBM Plex Mono", monospace; color: var(--red); }
+  .fl :global(:is(.pv-list li, .fq details, .sp-card)) { border: 2.5px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); }
+  .fl :global(.pv-dot) { border: 2px solid var(--ink); }
+  .fl :global(.pv-warn .pv-dot) { background: var(--yellow); color: var(--ink); }
+  .fl :global(.fq details[open]) { background: #fff; }
+  .fl :global(.sp-in) { border: 2.5px solid var(--ink); box-shadow: 10px 10px 0 var(--ink); background: var(--yellow); }
+  .fl :global(.sp-card) { background: #fffaf2; }
+  .fl :global(.sp-why) { color: var(--ink); }
+  .fl :global(.sp-copy p) { color: var(--ink); }
+  .fl :global(.sp-btn) { border: 2.5px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+  .fl :global(.sp-btn:hover) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); filter: none; }
+
+  :global(.dl-motion) .dl-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.3,1.4,.5,1); }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .hero-row, .split { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .feats, .design, .starters ul, .b-points { grid-template-columns: 1fr 1fr; }
+    .b-body { grid-template-columns: 1fr; }
+    .b-side, .b-props { display: none; }
+    .b-page, .b-dev, .b-draft { display: none; }
+    .wall { grid-template-columns: 1fr; gap: 18px; }
+    .shots { grid-template-columns: 1fr; }
+    .s-dash { transform: rotate(1.5deg) translate(20px, -30px); width: 85%; justify-self: end; }
+  }
+  @media (max-width: 560px) {
+    .sec { padding: 72px 0; }
+    .fl :global(.sp-in) { box-shadow: 6px 6px 0 var(--ink); }
+    .feats, .design, .b-points { grid-template-columns: 1fr; }
+    .b-hero { grid-template-columns: 1fr; }
+    .b-three { grid-template-columns: 1fr 1fr; }
+    .b-three .b-col:last-child { display: none; }
+    .wall-n span { font-size: 88px; }
+    .final { padding: 34px 22px; }
+    .ticker-in { font-size: 17px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .ticker-in { animation: none; } }
+</style>

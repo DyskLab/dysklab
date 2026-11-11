@@ -1,0 +1,631 @@
+---
+/*
+  DyskFocus product page. Look: bright, friendly "bento" — soft lilac canvas, white rounded
+  tiles, violet + lime accents, Plus Jakarta Sans. The hero is a real, tickable Today list
+  (HTML, not a screenshot) so the page feels like the app before any picture loads.
+  Bilingual: every string goes through s(id, en). The quick-add example stays in English in
+  both languages, because that is the parser's documented syntax.
+*/
+import Base from "../layouts/Base.astro";
+import ProductBar from "../components/ProductBar.astro";
+import ProductFooter from "../components/ProductFooter.astro";
+import Privacy from "../components/Privacy.astro";
+import Faq from "../components/Faq.astro";
+import Support from "../components/Support.astro";
+import { pick, ui, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+const nt = ui[lang].newTab;
+
+const repo = "https://github.com/DyskLab/dyskfocus";
+const release = `${repo}/releases/latest`;
+const img = (n: string) => `/images/products/dyskfocus/${n}.jpg`;
+
+const work = s("Kerja", "Work");
+const home = s("Rumah", "Home");
+const todayDue = s("Hari ini", "Today");
+const today = [
+  { t: s("Kirim invoice ke klien", "Send the client invoice"), tag: work, c: "v", due: todayDue, flag: true, done: true },
+  { t: s("Bayar listrik", "Pay the power bill"), tag: home, c: "o", due: todayDue, flag: false, done: false },
+  { t: s("Review draft proposal", "Review the proposal draft"), tag: work, c: "v", due: s("Besok", "Tomorrow"), flag: true, done: false },
+  { t: s("Siram tanaman", "Water the plants"), tag: home, c: "o", due: s("Berulang", "Repeats"), flag: false, done: false },
+];
+
+const viewAlt = (v: string) => s(`Tampilan ${v} di DyskFocus`, `The ${v} view in DyskFocus`);
+const views = [
+  { id: "today", label: "Today", src: img("01-today"), alt: viewAlt("Today") },
+  { id: "inbox", label: "Inbox", src: img("02-inbox"), alt: viewAlt("Inbox") },
+  { id: "forecast", label: "Forecast", src: img("03-forecast"), alt: viewAlt("Forecast") },
+  { id: "calendar", label: "Calendar", src: img("04-calendar"), alt: viewAlt("Calendar") },
+];
+
+const forms = [
+  {
+    t: s("Aplikasi web", "Web app"),
+    d: s("Pasang di server sendiri. Laravel menyajikan aplikasi React lewat API di domain yang sama.", "Host it on your own server. Laravel serves the React app over an API on the same domain."),
+    i: "M3 5h18v12H3zM8 21h8M12 17v4",
+  },
+  {
+    t: "PWA",
+    d: s("Pasang dari browser ke layar utama HP atau desktop, lengkap dengan pengingat web push.", "Install it from the browser to your phone or desktop home screen, with web push reminders."),
+    i: "M8 2h8v20H8zM11 18h2",
+  },
+  {
+    t: s("Aplikasi macOS", "macOS app"),
+    d: s("Satu file .app yang membawa PHP dan SQLite sendiri. Tidak perlu server sama sekali.", "One .app that brings its own PHP and SQLite. No server needed at all."),
+    i: "M4 5h16v11H4zM2 19h20",
+  },
+];
+
+const privacy = {
+  summary: s("Tugas Anda tinggal di server Anda sendiri, atau di Mac Anda.", "Your tasks live on your own server, or on your Mac."),
+  items: [
+    {
+      t: s("Database milik Anda", "Your own database"),
+      d: s(
+        "Versi self-hosted menyimpan semuanya di file SQLite di server Anda (<code>database/database.sqlite</code>). Aplikasi Mac menyimpannya di <code>~/Library/Application Support/DyskFocus</code>.",
+        "The self-hosted version keeps everything in a SQLite file on your server (<code>database/database.sqlite</code>). The Mac app keeps it in <code>~/Library/Application Support/DyskFocus</code>.",
+      ),
+    },
+    {
+      t: s("Tidak ada server DyskLab", "No DyskLab server"),
+      d: s(
+        "Akun dibuat di instance Anda sendiri, bukan di layanan kami. DyskLab tidak pernah melihat tugas, akun, atau kata sandi Anda.",
+        "Your account is created on your own instance, not on a service of ours. DyskLab never sees your tasks, account or password.",
+      ),
+    },
+    {
+      t: s("Tanpa analitik dan telemetri", "No analytics or telemetry"),
+      d: s(
+        "Tidak ada skrip pelacak, font, atau CDN dari pihak lain. Aplikasi hanya memuat file dari domain Anda sendiri.",
+        "No tracking scripts, and no third-party fonts or CDNs. The app only loads files from your own domain.",
+      ),
+    },
+    {
+      t: s("Aplikasi Mac sepenuhnya lokal", "The Mac app stays local"),
+      d: s(
+        "Server PHP bawaannya hanya mendengarkan di <code>127.0.0.1</code>, dan tidak ada pemeriksaan update otomatis. Bisa dipakai tanpa internet.",
+        "Its bundled PHP server only listens on <code>127.0.0.1</code>, and there is no automatic update check. It works without internet.",
+      ),
+    },
+    {
+      t: s("Web push lewat layanan browser", "Web push goes through the browser vendor"),
+      d: s(
+        "Kalau Anda mengaktifkan pengingat push, server Anda mengirim notifikasi terenkripsi (berisi judul tugas) lewat layanan push milik pembuat browser, seperti Google, Mozilla, atau Apple. Opsional, dan mati di aplikasi Mac.",
+        "If you turn on push reminders, your server sends an encrypted notification (with the task title) through your browser vendor's push service, such as Google, Mozilla or Apple. Optional, and off in the Mac app.",
+      ),
+      ok: false,
+    },
+    {
+      t: s("Keamanan server dan cadangan jadi tanggung jawab Anda", "Server security and backups are on you"),
+      d: s(
+        "Pasang HTTPS dan jaga server Anda. File cadangan JSON berisi semua data tanpa enkripsi, jadi simpan dengan hati-hati.",
+        "Use HTTPS and keep your server patched. A JSON backup holds all your data unencrypted, so store it with care.",
+      ),
+      ok: false,
+    },
+  ],
+  note: s(
+    `Semua ini bisa Anda periksa sendiri di <a href="${repo}" target="_blank" rel="noopener">kode sumbernya</a>.`,
+    `You can check all of this in the <a href="${repo}" target="_blank" rel="noopener">source code</a>.`,
+  ),
+};
+
+const xattr = "<code>xattr -dr com.apple.quarantine /Applications/DyskFocus.app</code>";
+const faq = s(
+  [
+    {
+      q: "Apakah DyskFocus jalan di Windows atau Linux?",
+      a: "<p>Ya, lewat web. Pasang versi self-hosted di server mana pun, lalu buka dari browser di Windows, Linux, macOS, atau HP, dan pasang sebagai PWA kalau mau. Aplikasi native hanya ada untuk macOS.</p>",
+    },
+    {
+      q: "Bisa dipakai di HP?",
+      a: "<p>Bisa. Buka instance Anda di browser HP dan tambahkan ke layar utama sebagai PWA. Tampilannya punya gestur geser, aksi massal, dan bottom sheet, dan pengingat web push bisa datang ke HP.</p>",
+    },
+    {
+      q: "Ada versi untuk Mac Intel?",
+      a: `<p>Rilis resmi hanya untuk Apple Silicon. Di Mac Intel Anda bisa membangunnya sendiri dengan PHP statis x86_64 dan <code>npm run dist:x64</code>, lihat <a href="${repo}/blob/main/desktop.md" target="_blank" rel="noopener">desktop.md</a>. Atau pakai versi web.</p>`,
+    },
+    {
+      q: "macOS bilang aplikasinya tidak bisa dibuka. Kenapa?",
+      a: `<p>Aplikasinya belum dinotarisasi Apple, jadi macOS memblokir peluncuran pertama. Buka <b>System Settings › Privacy &amp; Security</b> dan pilih <b>Open Anyway</b>, atau jalankan ${xattr}.</p>`,
+    },
+    {
+      q: "Apa yang dibutuhkan untuk self-hosting?",
+      a: "<p>PHP 8.4 (dengan <code>openssl</code>, <code>mbstring</code>, <code>bcmath</code>, <code>curl</code>), Composer 2, Node 20+ dan npm, serta SQLite. Pengingat push butuh kunci VAPID dan cron untuk <code>php artisan schedule:run</code>.</p>",
+    },
+    {
+      q: "Apakah gratis?",
+      a: "<p>Ya. DyskFocus open source dengan lisensi MIT, tanpa iklan, tanpa langganan, dan tanpa versi berbayar.</p>",
+    },
+    {
+      q: "Bagaimana cara mencadangkan atau memindahkan data?",
+      a: "<p>Buka <b>Settings › Data › Export backup</b> untuk mengunduh semuanya sebagai JSON. Pulihkan lewat <b>Import backup</b> atau di wizard pertama. Impor <b>mengganti</b> semua data yang ada.</p><p>Kalau sebelumnya memakai Stackr di Mac, datanya disalin otomatis saat DyskFocus pertama dibuka, dan salinan lama tetap di tempatnya.</p>",
+    },
+    {
+      q: "Bisa dipakai beberapa orang?",
+      a: "<p>Bisa, di versi self-hosted. Setelah akun pertama dibuat, pendaftaran ditutup. Set <code>ALLOW_REGISTRATION=true</code> agar orang lain bisa mendaftar di instance yang sama, masing-masing dengan datanya sendiri.</p>",
+    },
+    {
+      q: "Menemukan bug atau punya ide?",
+      a: `<p>Buka issue di <a href="${repo}/issues" target="_blank" rel="noopener">GitHub</a>. Sertakan versi, cara pakai (web atau Mac), dan langkah untuk mengulang masalahnya.</p>`,
+    },
+  ],
+  [
+    {
+      q: "Does DyskFocus run on Windows or Linux?",
+      a: "<p>Yes, on the web. Host the self-hosted version on any server, then open it in a browser on Windows, Linux, macOS or your phone, and install it as a PWA if you like. The native app is macOS only.</p>",
+    },
+    {
+      q: "Can I use it on my phone?",
+      a: "<p>Yes. Open your instance in your phone's browser and add it to the home screen as a PWA. It has swipe gestures, bulk actions and a bottom sheet, and web push reminders can reach your phone.</p>",
+    },
+    {
+      q: "Is there a build for Intel Macs?",
+      a: `<p>The official release is Apple Silicon only. On an Intel Mac you can build it yourself with an x86_64 static PHP and <code>npm run dist:x64</code>; see <a href="${repo}/blob/main/desktop.md" target="_blank" rel="noopener">desktop.md</a>. Or use the web version.</p>`,
+    },
+    {
+      q: "macOS says the app can't be opened. Why?",
+      a: `<p>The app isn't notarized by Apple yet, so macOS blocks the first launch. Open <b>System Settings › Privacy &amp; Security</b> and choose <b>Open Anyway</b>, or run ${xattr}.</p>`,
+    },
+    {
+      q: "What do I need to self-host it?",
+      a: "<p>PHP 8.4 (with <code>openssl</code>, <code>mbstring</code>, <code>bcmath</code>, <code>curl</code>), Composer 2, Node 20+ with npm, and SQLite. Push reminders also need VAPID keys and a cron entry for <code>php artisan schedule:run</code>.</p>",
+    },
+    {
+      q: "Is it free?",
+      a: "<p>Yes. DyskFocus is open source under the MIT license, with no ads, no subscription and no paid tier.</p>",
+    },
+    {
+      q: "How do I back up or move my data?",
+      a: "<p>Go to <b>Settings › Data › Export backup</b> to download everything as JSON. Restore it with <b>Import backup</b> or in the first-run wizard. Importing <b>replaces</b> all current data.</p><p>If you used Stackr on your Mac, your data is copied over the first time you open DyskFocus, and the old copy stays where it was.</p>",
+    },
+    {
+      q: "Can several people use one instance?",
+      a: "<p>Yes, on the self-hosted version. Sign-up closes after the first account is created. Set <code>ALLOW_REGISTRATION=true</code> to let other people register on the same instance, each with their own data.</p>",
+    },
+    {
+      q: "Found a bug or have an idea?",
+      a: `<p>Open an issue on <a href="${repo}/issues" target="_blank" rel="noopener">GitHub</a>. Include the version, how you use it (web or Mac), and the steps to reproduce the problem.</p>`,
+    },
+  ],
+);
+---
+
+<Base
+  title={s(
+    "DyskFocus: pengelola tugas self-hosted untuk web, PWA, dan macOS | DyskLab",
+    "DyskFocus: a self-hosted task manager for the web, PWA and macOS | DyskLab",
+  )}
+  description={s(
+    "DyskFocus adalah pengelola tugas bergaya OmniFocus yang di-host sendiri: inbox, project, tag, perspektif, review, dan forecast. Tersedia sebagai aplikasi web, PWA, dan aplikasi macOS.",
+    "DyskFocus is a self-hosted, OmniFocus-style task manager: inbox, projects, tags, perspectives, review and forecast. Available as a web app, a PWA and a macOS app.",
+  )}
+  path={Astro.url.pathname}
+  ogImage="/images/products/dyskfocus/og.jpg"
+  ogTitle="DyskFocus"
+  fonts="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+  theme="light"
+  themeColor="#f3f0ff"
+>
+  <div class="fo" id="top">
+    <ProductBar
+      lang={lang}
+      repo="DyskLab/dyskfocus"
+      name="DyskFocus"
+      icon="/images/apps/dyskfocus.png"
+      links={[
+        { href: "#tampilan", label: s("Tampilan", "Views") },
+        { href: "#fitur", label: s("Fitur", "Features") },
+        { href: "#mulai", label: s("Mulai", "Get started") },
+        { href: "#privasi", label: ui[lang].privacy },
+        { href: "#faq", label: "FAQ" },
+      ]}
+      cta={{ href: release, label: s("Unduh untuk Mac", "Download for Mac"), external: true }}
+    />
+
+    <main>
+      <header class="hero">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <p class="pill"><span>{s("Gratis", "Free")}</span>Web · PWA · macOS</p>
+            {lang === "id" ? (
+              <h1>Kosongkan kepala.<br /><span class="hl">Biar DyskFocus</span> yang ingat.</h1>
+            ) : (
+              <h1>Clear your head.<br /><span class="hl">Let DyskFocus</span> remember.</h1>
+            )}
+            <p class="lede">
+              {s(
+                "Pengelola tugas bergaya OmniFocus yang sepenuhnya milik Anda. Inbox, project, tag, perspektif, review, dan forecast, di server sendiri atau di Mac tanpa server.",
+                "An OmniFocus-style task manager that is entirely yours. Inbox, projects, tags, perspectives, review and forecast, on your own server or on a Mac with no server at all.",
+              )}
+            </p>
+            <div class="cta">
+              <a class="btn btn-violet" href="#mulai">{s("Pakai di web", "Use it on the web")}</a>
+              <a class="btn btn-white" href={release} target="_blank" rel="noopener">{s("Unduh untuk Mac", "Download for Mac")}<span class="sr">{nt}</span></a>
+            </div>
+            <ul class="plat" aria-label={s("Platform", "Platforms")}>
+              <li><b>Web</b>{s("Semua OS, lewat browser", "Any OS, in the browser")}</li>
+              <li><b>PWA</b>{s("HP dan desktop", "Phone and desktop")}</li>
+              <li><b>macOS</b>{s("Tanpa server", "No server")}</li>
+            </ul>
+          </div>
+
+          <div class="board dl-reveal">
+            <div class="today">
+              <div class="today-head">
+                <span class="star" aria-hidden="true">★</span>
+                <div><b>Today</b><small>{s("Coba centang tugasnya", "Try ticking a task")}</small></div>
+              </div>
+              <ul>
+                {today.map((t) => (
+                  <li>
+                    <label class={`task task-${t.c}`}>
+                      <input type="checkbox" checked={t.done} />
+                      <span class="box" aria-hidden="true"></span>
+                      <span class="t">{t.t}</span>
+                      <span class="meta">
+                        {t.flag && <span class="flag" aria-label={s("Ditandai", "Flagged")}>⚑</span>}
+                        <span class="tag">{t.tag}</span>
+                        <span class="due">{t.due}</span>
+                      </span>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="qa" aria-label={s("Contoh tambah tugas cepat", "Quick add example")}>
+              <span class="plus" aria-hidden="true">+</span>
+              <span class="typed">Pay rent <mark class="m1">!high</mark> <mark class="m2">#home</mark> <mark class="m3">tomorrow</mark></span>
+              <kbd>↵</kbd>
+            </div>
+            <div class="sticker" aria-hidden="true">{s("Satu kalimat,", "One sentence,")}<br />{s("langsung jadi tugas", "one task")}</div>
+          </div>
+        </div>
+      </header>
+
+      <section id="tampilan" class="sec">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <h2>{s("Lima cara melihat hari Anda.", "Five ways to see your day.")}</h2>
+            <p>{s("Today, Inbox, Forecast, Calendar, plus Flagged dan Completed. Semuanya sadar zona waktu.", "Today, Inbox, Forecast, Calendar, plus Flagged and Completed. All of them timezone-aware.")}</p>
+          </div>
+          <div class="views dl-reveal" data-views>
+            <div class="tabs" role="tablist" aria-label={s("Tampilan DyskFocus", "DyskFocus views")}>
+              {views.map((v, i) => (
+                <button type="button" role="tab" id={`tab-${v.id}`} aria-controls={`panel-${v.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>{v.label}</button>
+              ))}
+            </div>
+            <div class="window">
+              <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+              {views.map((v, i) => (
+                <div class="panel" role="tabpanel" id={`panel-${v.id}`} aria-labelledby={`tab-${v.id}`} hidden={i !== 0}>
+                  <img src={v.src} width="1800" height="1019" alt={v.alt} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="fitur" class="sec sec-tight">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <h2>{s("Kecil di luar, lengkap di dalam.", "Small on the outside, complete inside.")}</h2>
+          </div>
+          <div class="bento">
+            <article class="tile t-quick dl-reveal">
+              <h3>{s("Tambah cepat dengan bahasa biasa", "Quick add in plain language")}</h3>
+              <p>{s("Tulis satu kalimat. Prioritas, tag, dan tanggal dikenali sendiri.", "Type one sentence. Priority, tags and dates are picked up for you.")}</p>
+              <div class="parse">
+                <code>Pay rent !high #home tomorrow</code>
+                <div class="chips"><span>{s("Prioritas · Tinggi", "Priority · High")}</span><span>Tag · home</span><span>{s("Due · Besok", "Due · Tomorrow")}</span></div>
+              </div>
+            </article>
+            <article class="tile t-persp dl-reveal">
+              <h3>{s("Perspektif dan Review", "Perspectives and Review")}</h3>
+              <p>{s("Simpan filter favorit sebagai perspektif, lalu tinjau project satu per satu di mode Review.", "Save your favourite filters as perspectives, then go through projects one by one in Review mode.")}</p>
+              <div class="pchips">
+                {s(
+                  ["Kerja minggu ini", "Menunggu balasan", "Ditandai", "Tanpa tag"],
+                  ["Work this week", "Waiting for reply", "Flagged", "Untagged"],
+                ).map((c) => <span>{c}</span>)}
+              </div>
+            </article>
+            <article class="tile t-date dl-reveal">
+              <span class="big-ic" aria-hidden="true">📅</span>
+              <h3>{s("Tanggal yang masuk akal", "Dates that make sense")}</h3>
+              <p>{s("Defer dan due date, flag, prioritas, warna tugas, dan tugas berulang.", "Defer and due dates, flags, priorities, task colours and recurring tasks.")}</p>
+            </article>
+            <article class="tile t-tree dl-reveal">
+              <h3>{s("Project dan subtugas", "Projects and subtasks")}</h3>
+              {lang === "id" ? (
+                <ul class="tree" aria-hidden="true">
+                  <li>Pindah rumah<ul><li>Packing dapur</li><li>Urus alamat<ul><li>Bank</li><li>Kantor pos</li></ul></li></ul></li>
+                </ul>
+              ) : (
+                <ul class="tree" aria-hidden="true">
+                  <li>Move house<ul><li>Pack the kitchen</li><li>Change address<ul><li>Bank</li><li>Post office</li></ul></li></ul></li>
+                </ul>
+              )}
+              <p>{s("Bertingkat, dan urutannya tinggal diseret.", "Nested as deep as you need, reordered by dragging.")}</p>
+            </article>
+            <article class="tile t-md dl-reveal">
+              <span class="big-ic" aria-hidden="true">✍️</span>
+              <h3>{s("Catatan Markdown", "Markdown notes")}</h3>
+              <p>{s("Catatan dan komentar lengkap di setiap tugas.", "Full notes and comments on every task.")}</p>
+            </article>
+            <article class="tile t-sync dl-reveal">
+              <h3>{s("Sinkron real-time dan web push", "Real-time sync and web push")}</h3>
+              <p>{s("Perubahan langsung muncul di tab lain, dan pengingat datang ke HP atau desktop (versi self-hosted).", "Changes show up in your other tabs right away, and reminders reach your phone or desktop (self-hosted version).")}</p>
+              <span class="live"><i></i>{s("Tersinkron", "In sync")}</span>
+            </article>
+            <article class="tile t-mobile dl-reveal">
+              <h3>{s("Nyaman di HP", "Comfortable on a phone")}</h3>
+              <p>{s("Aksi massal, gestur geser, dan bottom sheet di layar kecil.", "Bulk actions, swipe gestures and a bottom sheet on small screens.")}</p>
+            </article>
+            <article class="tile t-backup dl-reveal">
+              <h3>{s("Data Anda, kapan saja", "Your data, any time")}</h3>
+              <p>{s("Cadangkan dan pulihkan lewat JSON, dengan wizard saat pertama dibuka.", "Back up and restore with JSON, with a setup wizard on first launch.")}</p>
+            </article>
+            <article class="tile t-strip dl-reveal">
+              {s(
+                ["Mode gelap", "Pintasan keyboard", "Zona waktu", "Flagged dan Completed"],
+                ["Dark mode", "Keyboard shortcuts", "Time zones", "Flagged and Completed"],
+              ).map((c) => <span>{c}</span>)}
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="bentuk" class="sec sec-tight">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <h2>{s("Satu kode, tiga bentuk.", "One codebase, three forms.")}</h2>
+          </div>
+          <ul class="forms">
+            {forms.map((f) => (
+              <li class="tile dl-reveal">
+                <span class="f-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={f.i} /></svg></span>
+                <h3>{f.t}</h3>
+                <p>{f.d}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="mulai" class="sec">
+        <div class="wrap">
+          <div class="head dl-reveal">
+            <h2>{s("Pilih cara mulai.", "Pick how to start.")}</h2>
+          </div>
+          <div class="start">
+            <article class="tile s-srv dl-reveal">
+              <p class="s-k">{s("Web · Windows, Linux, HP", "Web · Windows, Linux, phones")}</p>
+              <h3>{s("Di web, server sendiri", "On the web, your own server")}</h3>
+              <pre><code>git clone https://github.com/DyskLab/dyskfocus.git
+cd dyskfocus && cp .env.example .env
+composer install && npm install
+npm run build && php artisan key:generate</code></pre>
+              <p>{s(
+                "Buka aplikasinya, lalu wizard membuat database dan akun Anda, dan bisa mengimpor cadangan. Setelah itu DyskFocus bisa dibuka dari browser di perangkat apa pun, dan dipasang sebagai PWA.",
+                "Open the app and a wizard creates the database and your account, and can import a backup. After that, DyskFocus opens in a browser on any device and installs as a PWA.",
+              )}</p>
+              <a class="btn btn-white" href={repo} target="_blank" rel="noopener">{s("Lihat di GitHub", "View on GitHub")} ↗<span class="sr">{nt}</span></a>
+            </article>
+            <article class="tile s-mac dl-reveal">
+              <p class="s-k">{s("Paling mudah", "Easiest")}</p>
+              <h3>{s("Di Mac, tanpa server", "On a Mac, no server")}</h3>
+              {lang === "id" ? (
+                <p>Unduh DMG dari rilis terbaru dan seret <b>DyskFocus</b> ke Applications. Aplikasi belum dinotarisasi, jadi izinkan
+                  lewat <b>Privacy &amp; Security › Open Anyway</b>, atau jalankan:</p>
+              ) : (
+                <p>Download the DMG from the latest release and drag <b>DyskFocus</b> into Applications. The app isn't notarized yet,
+                  so allow it in <b>Privacy &amp; Security › Open Anyway</b>, or run:</p>
+              )}
+              <pre><code>xattr -dr com.apple.quarantine /Applications/DyskFocus.app</code></pre>
+              <a class="btn btn-violet" href={release} target="_blank" rel="noopener">{s("Unduh DMG", "Download DMG")}<span class="sr">{nt}</span></a>
+            </article>
+          </div>
+          <p class="tech dl-reveal">Laravel · React 19 · TypeScript · TanStack Query · Zustand · dnd-kit · Tailwind · SQLite · Electron · MIT License</p>
+        </div>
+      </section>
+
+      <Privacy lang={lang} id="privasi" summary={privacy.summary} items={privacy.items} note={privacy.note} />
+      <Faq lang={lang} id="faq" items={faq} />
+      <Support lang={lang} product="DyskFocus" repos={[{ repo: "DyskLab/dyskfocus" }]} />
+    </main>
+
+    <ProductFooter lang={lang} current="dyskfocus" />
+  </div>
+  <script src="../scripts/reveal.js"></script>
+  <script>
+    // View tabs: click or arrow keys switch the screenshot.
+    document.querySelectorAll<HTMLElement>("[data-views]").forEach((box) => {
+      const tabs = Array.from(box.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+      const select = (tab: HTMLButtonElement) => {
+        tabs.forEach((t) => {
+          const on = t === tab;
+          t.setAttribute("aria-selected", String(on));
+          t.tabIndex = on ? 0 : -1;
+          const panel = document.getElementById(t.getAttribute("aria-controls")!);
+          if (panel) panel.hidden = !on;
+        });
+      };
+      tabs.forEach((t, i) => {
+        t.addEventListener("click", () => select(t));
+        t.addEventListener("keydown", (e) => {
+          if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+          const next = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+          select(next);
+          next.focus();
+        });
+      });
+    });
+  </script>
+</Base>
+
+<style>
+  :global(body) { margin: 0; background: #f3f0ff; }
+  .fo {
+    --bg: #f3f0ff; --card: #fff; --ink: #17142b; --muted: #625d7a; --line: #e4def9; --violet: #6d5dfc; --violet-d: #5443e8; --violet-s: #ebe7ff; --lime: #d8f86a; --orange: #ff8a4c;
+    --pb-bg: rgba(243, 240, 255, 0.85); --pb-fg: var(--ink); --pb-muted: var(--muted); --pb-line: var(--line); --pb-hover: var(--violet-s);
+    --pb-btn-bg: var(--violet); --pb-btn-fg: #fff; --pb-radius: 999px; --pb-font: "Plus Jakarta Sans", sans-serif;
+    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--ink); --pf-card: var(--card); --pf-hover: #c9bff7; --pf-radius: 22px; --pf-font: "Plus Jakarta Sans", sans-serif;
+    background: var(--bg); color: var(--ink); font: 400 16px/1.6 "Plus Jakarta Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .wrap { width: min(1140px, calc(100% - 32px)); margin: 0 auto; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  h1, h2, h3 { margin: 0; letter-spacing: -0.035em; line-height: 1.05; }
+  code, pre, kbd { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+  .btn { display: inline-flex; align-items: center; height: 52px; padding: 0 24px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-violet { background: var(--violet); color: #fff; box-shadow: 0 14px 30px -12px rgba(109, 93, 252, 0.7); }
+  .btn-white { background: #fff; color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
+
+  /* hero */
+  .hero { position: relative; padding: 72px 0 40px; }
+  .hero::before { content: ""; position: absolute; right: -10%; top: -20%; width: 720px; height: 720px; border-radius: 50%; background: radial-gradient(closest-side, rgba(216, 248, 106, 0.55), transparent); pointer-events: none; }
+  .hero-grid { position: relative; display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+  .pill { display: inline-flex; align-items: center; gap: 10px; margin: 0; padding: 5px 14px 5px 5px; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px var(--line); font-size: 13.5px; font-weight: 500; color: var(--muted); }
+  .pill span { padding: 3px 10px; border-radius: 999px; background: var(--lime); color: var(--ink); font-weight: 700; font-size: 12.5px; }
+  h1 { margin-top: 24px; font-size: clamp(42px, 5.6vw, 72px); font-weight: 800; }
+  .hl { position: relative; z-index: 0; color: var(--violet); white-space: nowrap; }
+  .hl::after { content: ""; position: absolute; left: -2px; right: -2px; bottom: 4px; height: 0.28em; background: var(--lime); border-radius: 6px; z-index: -1; }
+  .lede { margin: 22px 0 0; max-width: 520px; font-size: 18px; color: var(--muted); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .plat { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .plat li { display: flex; flex-direction: column; padding: 9px 14px; border-radius: 16px; background: #fff; box-shadow: 0 0 0 1px var(--line); font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+  .plat b { color: var(--ink); font-size: 14px; }
+
+  .board { position: relative; padding: 0 0 36px; }
+  .today { position: relative; z-index: 1; padding: 22px; border-radius: 28px; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 40px 80px -40px rgba(60, 40, 160, 0.35); transform: rotate(1.2deg); }
+  .today-head { display: flex; align-items: center; gap: 12px; padding: 4px 6px 16px; border-bottom: 1px dashed var(--line); }
+  .star { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: #fff4d6; color: #f5a524; font-size: 18px; }
+  .today-head b { display: block; font-size: 19px; letter-spacing: -0.02em; }
+  .today-head small { color: var(--muted); font-size: 13px; }
+  .today ul { list-style: none; margin: 10px 0 0; padding: 0; }
+  .task { position: relative; display: grid; grid-template-columns: 24px 1fr; gap: 4px 12px; align-items: center; padding: 13px 8px; border-radius: 14px; cursor: pointer; transition: background 0.15s; }
+  .task:hover { background: #f7f5ff; }
+  .task input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .box { width: 22px; height: 22px; box-sizing: border-box; border-radius: 50%; border: 2px solid #c9c2ea; display: grid; place-items: center; transition: background 0.2s, border-color 0.2s; }
+  .box::after { content: ""; width: 9px; height: 5px; border: solid #fff; border-width: 0 0 2.5px 2.5px; transform: rotate(-45deg) translate(1px, -1px) scale(0); transition: transform 0.2s; }
+  .task input:checked + .box { background: var(--violet); border-color: var(--violet); }
+  .task input:checked + .box::after { transform: rotate(-45deg) translate(1px, -1px) scale(1); }
+  .task input:focus-visible + .box { outline: 3px solid rgba(109, 93, 252, 0.4); outline-offset: 2px; }
+  .t { font-weight: 600; font-size: 15.5px; transition: color 0.2s; }
+  .task input:checked ~ .t { color: #a7a2bd; text-decoration: line-through; }
+  .meta { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; font-weight: 600; }
+  .tag, .due { padding: 2px 8px; border-radius: 6px; }
+  .task-v .tag { background: var(--violet-s); color: var(--violet-d); }
+  .task-o .tag { background: #ffeadf; color: #c2541b; }
+  .due { background: #eef8d0; color: #4d6b00; }
+  .flag { color: var(--orange); font-size: 13px; }
+  .qa { position: relative; z-index: 2; display: flex; align-items: center; gap: 12px; margin: -18px 22px 0 -22px; padding: 16px 18px; border-radius: 18px; background: var(--ink); color: #fff; font-size: 16px; box-shadow: 0 24px 50px -20px rgba(23, 20, 43, 0.6); transform: rotate(-1.5deg); }
+  .plus { width: 26px; height: 26px; flex: none; border-radius: 8px; display: grid; place-items: center; background: var(--violet); font-weight: 700; }
+  .typed { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .qa mark { padding: 1px 5px; border-radius: 6px; }
+  .m1 { background: #ff8a4c; color: #2b1100; }
+  .m2 { background: #b6abff; color: #160f4d; }
+  .m3 { background: var(--lime); color: #1e2a00; }
+  .qa kbd { margin-left: auto; font-size: 12px; padding: 3px 8px; border-radius: 6px; background: rgba(255, 255, 255, 0.12); }
+  .sticker { position: absolute; z-index: 3; right: -14px; bottom: 0; padding: 12px 16px; border-radius: 16px; background: var(--lime); font-weight: 800; font-size: 14px; line-height: 1.25; letter-spacing: -0.01em; transform: rotate(4deg); box-shadow: 0 10px 24px -10px rgba(77, 107, 0, 0.6); }
+
+  /* sections */
+  .sec { padding: 100px 0; }
+  .sec-tight { padding-top: 40px; }
+  .head { max-width: 640px; }
+  h2 { font-size: clamp(32px, 4.2vw, 52px); font-weight: 800; }
+  .head p { margin: 14px 0 0; font-size: 17.5px; color: var(--muted); }
+
+  .views { margin-top: 36px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+  .tabs button { all: unset; cursor: pointer; padding: 10px 20px; border-radius: 999px; font-weight: 700; font-size: 14.5px; color: var(--muted); background: #fff; box-shadow: 0 0 0 1px var(--line); transition: background 0.2s, color 0.2s; }
+  .tabs button:hover { color: var(--ink); }
+  .tabs button[aria-selected="true"] { background: var(--ink); color: #fff; box-shadow: none; }
+  .tabs button:focus-visible { outline: 3px solid rgba(109, 93, 252, 0.45); outline-offset: 2px; }
+  .window { padding: 12px; border-radius: 28px; background: var(--ink); box-shadow: 0 50px 100px -50px rgba(40, 20, 120, 0.6); }
+  .dots { display: flex; gap: 7px; padding: 4px 6px 12px; }
+  .dots i { width: 11px; height: 11px; border-radius: 50%; background: #3a3555; }
+  .dots i:first-child { background: #ff6b5e; }
+  .dots i:nth-child(2) { background: #ffc130; }
+  .dots i:nth-child(3) { background: #2bd15a; }
+  .panel img { width: 100%; height: auto; display: block; border-radius: 16px; }
+  .panel[hidden] { display: none; }
+
+  .tile { padding: 26px; border-radius: 26px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
+  .tile h3 { font-size: 21px; font-weight: 800; letter-spacing: -0.025em; }
+  .tile p { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
+  .bento { margin-top: 36px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .t-quick { grid-column: span 4; background: var(--violet); color: #fff; box-shadow: none; }
+  .t-quick p { color: #ddd8ff; }
+  .parse { margin-top: 22px; padding: 18px; border-radius: 18px; background: rgba(255, 255, 255, 0.12); }
+  .parse code { font-size: 17px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .chips span { padding: 6px 12px; border-radius: 999px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 700; }
+  .chips span:first-child { background: #ffb08a; }
+  .chips span:last-child { background: var(--lime); }
+  .t-persp { grid-column: span 2; }
+  .pchips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+  .pchips span { padding: 5px 11px; border-radius: 999px; background: var(--violet-s); color: var(--violet-d); font-size: 12.5px; font-weight: 700; }
+  .t-date, .t-md { grid-column: span 2; }
+  .big-ic { display: block; font-size: 30px; margin-bottom: 14px; }
+  .t-tree { grid-column: span 2; background: #fff9e8; box-shadow: 0 0 0 1px #f3e6bc; }
+  .tree, .tree ul { list-style: none; margin: 0; padding: 0 0 0 18px; }
+  .tree { margin: 18px 0 0; padding: 0; font-weight: 600; font-size: 14.5px; }
+  .tree li { position: relative; padding: 6px 0 0; }
+  .tree ul li::before { content: ""; position: absolute; left: -12px; top: 0; width: 8px; height: 18px; border: solid #e0c97a; border-width: 0 0 2px 2px; border-bottom-left-radius: 6px; }
+  .t-sync { grid-column: span 4; background: var(--lime); box-shadow: none; display: flex; flex-direction: column; }
+  .t-sync p { color: #3f4f05; max-width: 520px; }
+  .live { margin-top: 18px; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 13px; font-weight: 700; }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: #5df07f; animation: pulse 1.6s infinite; }
+  @keyframes pulse { 50% { opacity: 0.3; } }
+  .t-mobile, .t-backup { grid-column: span 2; }
+  .t-strip { grid-column: span 4; display: flex; flex-wrap: wrap; align-content: center; align-items: center; justify-content: space-around; gap: 12px 28px; padding: 18px 26px; background: var(--ink); color: #fff; box-shadow: none; font-weight: 700; font-size: 15px; }
+
+  .forms { list-style: none; margin: 36px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .f-ic { width: 48px; height: 48px; border-radius: 15px; display: grid; place-items: center; background: var(--violet-s); color: var(--violet); margin-bottom: 18px; }
+  .f-ic svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+  .start { margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .start .tile { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; padding: 32px; }
+  .start .btn { margin-top: auto; }
+  .start pre { margin: 18px 0 24px; width: 100%; box-sizing: border-box; padding: 16px 18px; border-radius: 16px; background: var(--ink); color: #e8e4ff; font-size: 13.5px; line-height: 1.7; overflow-x: auto; }
+  .s-srv p { margin-bottom: 24px; }
+  .s-k { margin: 0 0 8px !important; font-size: 12.5px !important; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--violet) !important; }
+  .start h3 { font-size: 26px; }
+  .tech { margin: 28px 0 0; text-align: center; font-size: 13.5px; color: var(--muted); }
+
+  /* shared sections (Privacy, Faq, Support): match the page's heavy headings */
+  .fo :global(.pv h2), .fo :global(.fq h2), .fo :global(.sp h2) { font-weight: 800; letter-spacing: -0.035em; }
+  /* Support's card has padding on a calc(100% - 32px) width without border-box, so it overflows; contain it here */
+  .fo :global(.sp-in) { box-sizing: border-box; width: min(1140px, calc(100% - 32px)); }
+
+  :global(.dl-motion) .dl-reveal { opacity: 0; transform: translateY(26px) scale(0.98); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.34,1.4,.6,1); }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .bento .tile { grid-column: span 1; grid-row: auto; }
+    .bento .t-quick, .bento .t-sync, .bento .t-strip { grid-column: span 2; }
+    .forms, .start { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .sec { padding: 72px 0; }
+    .sec-tight { padding-top: 24px; }
+    .hero { padding-top: 48px; }
+    .bento { grid-template-columns: 1fr; }
+    .bento .tile, .bento .t-quick, .bento .t-sync, .bento .t-strip { grid-column: span 1; }
+    .t-strip { justify-content: flex-start; }
+    .qa { margin: -18px 8px 0 -8px; font-size: 14px; }
+    .sticker { right: -6px; }
+    .hl { white-space: normal; }
+  }
+  /* the long "Download for Mac" CTA needs the product name hidden a little earlier than ProductBar does */
+  @media (max-width: 440px) { .fo :global(.pb-prod) { font-size: 0; gap: 0; } }
+  @media (prefers-reduced-motion: reduce) { .live i { animation: none; } }
+</style>

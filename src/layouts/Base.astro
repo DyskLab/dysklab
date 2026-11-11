@@ -1,0 +1,105 @@
+---
+/*
+  Document shell shared by every page: meta, SEO, Open Graph, favicons, fonts.
+  `toggle` turns on the saved light/dark theme (home page); product pages pass a
+  fixed `theme` because each one has its own look.
+*/
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  ogImage?: string;
+  ogTitle?: string;
+  fonts: string;
+  theme?: "light" | "dark";
+  toggle?: boolean;
+  themeColor?: string;
+  jsonLd?: object | object[];
+}
+import { langOf, alternate } from "../i18n";
+const { title, description, path = "/", ogImage = "/og.jpg", ogTitle = "DyskLab", fonts, theme = "light", toggle = false, themeColor, jsonLd } = Astro.props;
+const site = Astro.site!;
+const lang = langOf(new URL(path, site));
+const url = new URL(path, site).href;
+const idUrl = new URL(alternate(path, "id"), site).href;
+const enUrl = new URL(alternate(path, "en"), site).href;
+const image = new URL(ogImage, site).href;
+---
+
+<!doctype html>
+<html lang={lang} data-theme={theme}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {toggle && (
+      <script is:inline>
+        /* Saved theme before first paint. */
+        (function (d) {
+          try {
+            var t = localStorage.getItem("dysklab-theme");
+            if (t === "light" || t === "dark") d.dataset.theme = t;
+          } catch (e) {}
+        })(document.documentElement);
+      </script>
+    )}
+    <script is:inline>
+      /* Opt in to scroll reveal unless reduced motion is asked for. */
+      if (window.matchMedia && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("dl-motion");
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fonts} />
+
+    <meta name="description" content={description} />
+    <meta name="author" content="Fanny" />
+    <link rel="canonical" href={url} />
+    <link rel="alternate" hreflang="id" href={idUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    {themeColor ? <meta name="theme-color" content={themeColor} /> : (
+      <>
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)" />
+      </>
+    )}
+
+    <meta property="og:site_name" content="DyskLab" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:secure_url" content={image} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogTitle} />
+    <meta property="og:locale" content={lang === "id" ? "id_ID" : "en_US"} />
+    <meta property="og:locale:alternate" content={lang === "id" ? "en_US" : "id_ID"} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content={ogTitle} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {jsonLd && (Array.isArray(jsonLd) ? jsonLd : [jsonLd]).map((j) => <script is:inline type="application/ld+json" set:html={JSON.stringify(j)} />)}
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+    <script is:inline>
+      /* A language picked by hand wins over location (see vercel.json). */
+      document.addEventListener("click", function (e) {
+        var a = e.target.closest && e.target.closest("a[data-lang]");
+        if (a) document.cookie = "dl-lang=" + a.dataset.lang + "; path=/; max-age=31536000; samesite=lax";
+      });
+    </script>
+  </body>
+</html>

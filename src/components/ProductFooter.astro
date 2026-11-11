@@ -1,0 +1,53 @@
+---
+/* Footer for a product page: the other DyskLab products, then a closing line. Themed by --pf-* variables. */
+import content from "../data/content";
+import Logo from "./Logo.astro";
+import { BMC, href, ui, type Lang } from "../i18n";
+interface Props { lang: Lang; current: string; license?: string }
+const { lang, current, license = "MIT License" } = Astro.props;
+const t = ui[lang];
+const others = content.apps.filter((a) => a.slug !== current);
+const year = new Date().getFullYear();
+---
+<footer class="pf">
+  <div class="pf-in">
+    <p class="pf-kicker">{t.otherProducts}</p>
+    <ul class="pf-grid">
+      {others.map((a) => (
+        <li>
+          <a href={href(lang, a.page)}>
+            <img src={a.icon} width="40" height="40" alt="" loading="lazy" />
+            <span><b>{a.name}</b><small>{lang === "id" ? a.kind : a.kind_en} · {a.platform}</small></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="pf-bottom">
+      <a class="pf-brand" href={href(lang, "/")}><Logo size={22} /> DyskLab</a>
+      <span>
+        © {year} DyskLab · {license} · <a href={BMC} target="_blank" rel="noopener">☕ {t.coffee}</a>{" · "}<a href={href(lang, "/") + "#layanan"}>{t.customSoftware}</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pf { border-top: 1px solid var(--pf-line); padding: 56px 0 36px; color: var(--pf-muted); font-size: 14px; font-family: var(--pf-font, inherit); }
+  .pf-in { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  .pf a { color: inherit; text-decoration: none; }
+  .pf-kicker { margin: 0 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .pf-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .pf-grid a {
+    display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: var(--pf-radius, 14px);
+    border: 1px solid var(--pf-line); background: var(--pf-card); transition: border-color 0.2s, transform 0.2s;
+  }
+  .pf-grid a:hover { border-color: var(--pf-hover); transform: translateY(-2px); }
+  .pf-grid img { border-radius: 10px; flex: none; }
+  .pf-grid b { display: block; color: var(--pf-fg); font-size: 15px; }
+  .pf-grid small { font-size: 13px; }
+  .pf-bottom { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--pf-line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+  .pf-brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--pf-fg) !important; }
+  .pf-brand :global(svg) { border-radius: 6px; }
+  .pf-bottom a:hover { color: var(--pf-fg); }
+  @media (max-width: 760px) { .pf-grid { grid-template-columns: 1fr; } }
+</style>

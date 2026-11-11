@@ -1,0 +1,55 @@
+---
+/*
+  FAQ as native <details> (works without JavaScript, keyboard friendly) plus FAQPage
+  structured data. Answers may contain simple HTML (links, <code>, <b>).
+  Themed by the page's --pf-* variables.
+*/
+import { ui, type Lang } from "../i18n";
+interface Props { lang: Lang; items: { q: string; a: string }[]; id?: string; title?: string }
+const { lang, items, id = "faq", title = ui[lang].faq } = Astro.props;
+const strip = (h: string) => h.replace(/<[^>]+>/g, "");
+const ld = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  inLanguage: lang,
+  mainEntity: items.map((i) => ({ "@type": "Question", name: i.q, acceptedAnswer: { "@type": "Answer", text: strip(i.a) } })),
+};
+---
+<section class="fq" id={id} aria-labelledby={`${id}-title`}>
+  <div class="fq-in">
+    <h2 id={`${id}-title`}>{title}</h2>
+    <div class="fq-list">
+      {items.map((i, n) => (
+        <details open={n === 0}>
+          <summary>{i.q}<span class="fq-ic" aria-hidden="true"></span></summary>
+          <div class="fq-a" set:html={i.a} />
+        </details>
+      ))}
+    </div>
+  </div>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(ld)} />
+</section>
+
+<style>
+  .fq { padding: 80px 0; }
+  .fq-in { width: min(1160px, calc(100% - 32px)); margin: 0 auto; display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 48px; align-items: start; }
+  .fq h2 { margin: 0; position: sticky; top: 96px; font-size: clamp(30px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -0.03em; color: var(--pf-fg); }
+  .fq-list { display: grid; gap: 10px; }
+  details { border: 1px solid var(--pf-line); border-radius: var(--pf-radius, 14px); background: var(--pf-card); }
+  summary {
+    list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding: 18px 20px; font-weight: 600; font-size: 16.5px; color: var(--pf-fg);
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:focus-visible { outline: 2px solid var(--pb-btn-bg); outline-offset: 2px; border-radius: var(--pf-radius, 14px); }
+  .fq-ic { position: relative; flex: none; width: 14px; height: 14px; }
+  .fq-ic::before, .fq-ic::after { content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 2px; border-radius: 2px; background: currentColor; transition: transform 0.2s; }
+  .fq-ic::after { transform: rotate(90deg); }
+  details[open] .fq-ic::after { transform: rotate(0deg); }
+  .fq-a { padding: 0 20px 18px; color: var(--pf-muted); font-size: 15.5px; line-height: 1.65; }
+  .fq-a :global(p) { margin: 0 0 10px; }
+  .fq-a :global(p:last-child) { margin: 0; }
+  .fq-a :global(a) { color: var(--pf-fg); text-decoration: underline; text-underline-offset: 3px; }
+  .fq-a :global(code) { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; padding: 1px 5px; border-radius: 5px; border: 1px solid var(--pf-line); }
+  @media (max-width: 860px) { .fq-in { grid-template-columns: 1fr; gap: 24px; } .fq h2 { position: static; } }
+</style>
