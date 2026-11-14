@@ -170,9 +170,9 @@ const content: Content =
       "name": "DyskLink",
       "kind": "Konektivitas",
       "kind_en": "Connectivity",
-      "platform": "macOS, Android",
+      "platform": "macOS, Windows, Linux, Android",
       "icon": "/images/apps/dysklink.png",
-      "text": "Menghubungkan Mac dan HP Android lewat Wi-Fi lokal, tanpa cloud dan tanpa akun: kirim file, clipboard, notifikasi, layar HP, sampai remote control.",
+      "text": "Menghubungkan HP Android dengan Mac, Windows, atau Linux lewat Wi-Fi lokal, tanpa cloud dan tanpa akun: kirim file, clipboard, notifikasi, layar HP, sampai remote control.",
       "stack": [
         "Swift",
         "SwiftUI",

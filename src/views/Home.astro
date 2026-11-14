@@ -49,10 +49,10 @@ const meta = {
   },
   dysklink: {
     repo: "DyskLab/dysklink-mac", match: /mac.*\.zip$/i, color: "#2dd4a7", shot: "/images/products/dysklink/mac-02-notifications.jpg",
-    tag: { id: "Mac dan Android, satu jaringan.", en: "Mac and Android, one network." },
-    text: { id: "File, clipboard, notifikasi, SMS, layar HP, dan remote control lewat Wi-Fi lokal, tanpa cloud dan tanpa akun. Plus alat ekstra untuk Mac.", en: "Files, clipboard, notifications, SMS, phone screen and remote control over local Wi-Fi, with no cloud and no account. Plus extra Mac tools." },
-    points: { id: ["Terenkripsi, langsung antar perangkat", "Notch, Clipboard History, Launcher", "Mac care dan kontrol baterai"], en: ["Encrypted, straight between devices", "Notch, Clipboard History, Launcher", "Mac care and battery control"] },
-    platforms: ["macOS", "Android"],
+    tag: { id: "Komputer dan Android, satu jaringan.", en: "Computer and Android, one network." },
+    text: { id: "File, clipboard, notifikasi, SMS, layar HP, dan remote control lewat Wi-Fi lokal, tanpa cloud dan tanpa akun. Plus alat ekstra untuk Mac, Windows, dan Linux.", en: "Files, clipboard, notifications, SMS, phone screen and remote control over local Wi-Fi, with no cloud and no account. Plus extra tools for Mac, Windows and Linux." },
+    points: { id: ["Terenkripsi, langsung antar perangkat", "Notch/Island, Clipboard History, Launcher", "Perawatan PC dan kontrol baterai"], en: ["Encrypted, straight between devices", "Notch/Island, Clipboard History, Launcher", "PC care and battery control"] },
+    platforms: ["macOS", "Windows", "Linux", "Android"],
   },
 } as const;
 
@@ -63,22 +63,22 @@ const products = await Promise.all(
     return { ...a, ...m, version: dl.version, star, url: href(lang, a.page), kindL: lang === "id" ? a.kind : a.kind_en };
   })
 );
-const allRepos = ["DyskLab/dyskfiles", "DyskLab/dyskfocus", "DyskLab/dyskflow", "DyskLab/dysklink-mac", "DyskLab/dysklink-android"];
+const allRepos = ["DyskLab/dyskfiles", "DyskLab/dyskfocus", "DyskLab/dyskflow", "DyskLab/dysklink-mac", "DyskLab/dysklink-desktop", "DyskLab/dysklink-android"];
 const starTotal = await totalStars(allRepos);
 const showStars = starTotal !== null && starTotal >= 25;
 
 /* ---------- copy ---------- */
 const T = L({
   id: {
-    title: "DyskLab: software open source untuk Mac, Android, dan web",
+    title: "DyskLab: software open source untuk Mac, Windows, Linux, Android, dan web",
     description: "DyskLab membuat software gratis dan open source: DyskFiles, DyskFocus, DyskFlow, dan DyskLink. Juga menerima pembuatan sistem untuk perusahaan.",
     nav: [["#produk", "Produk"], ["#kenapa", "Open source"], ["#layanan", "Untuk perusahaan"], ["#faq", "FAQ"]],
     cta: "Lihat produk",
     badge: "Gratis · MIT License · tanpa akun",
     h1a: "Software open source", h1b: "untuk kerja sehari-hari.",
-    lede: "DyskLab membuat aplikasi gratis untuk Mac, Android, dan web. Kelola aset, tugas, dan situs, lalu hubungkan HP ke Mac. Tanpa iklan, tanpa akun, dan kodenya terbuka untuk siapa saja.",
+    lede: "DyskLab membuat aplikasi gratis untuk Mac, Windows, Linux, Android, dan web. Kelola aset, tugas, dan situs, lalu hubungkan HP ke komputer. Tanpa iklan, tanpa akun, dan kodenya terbuka untuk siapa saja.",
     explore: "Jelajahi produk", gh: "DyskLab di GitHub",
-    strip: ["4 produk", "macOS · Android · Web", "Data tetap milik Anda", "Dibuat di Gresik, Indonesia"],
+    strip: ["4 produk", "macOS · Windows · Linux · Android · Web", "Data tetap milik Anda", "Dibuat di Gresik, Indonesia"],
     starsLabel: (n: number) => `${n} star di GitHub`,
     prodK: "Produk", prodH: "Empat aplikasi, satu cara kerja:", prodH2: "sederhana, jujur, dan terbuka.",
     latest: "Versi terbaru", see: (n: string) => `Lihat ${n}`, code: "Kode",
@@ -118,15 +118,15 @@ const T = L({
     themeLabel: "Ganti tema terang atau gelap",
   },
   en: {
-    title: "DyskLab: open-source software for Mac, Android and the web",
+    title: "DyskLab: open-source software for Mac, Windows, Linux, Android and the web",
     description: "DyskLab makes free, open-source software: DyskFiles, DyskFocus, DyskFlow and DyskLink. Custom systems for companies, too.",
     nav: [["#produk", "Products"], ["#kenapa", "Open source"], ["#layanan", "For companies"], ["#faq", "FAQ"]],
     cta: "See products",
     badge: "Free · MIT License · no account",
     h1a: "Open-source software", h1b: "for everyday work.",
-    lede: "DyskLab makes free apps for Mac, Android and the web. Manage assets, tasks and websites, then link your phone to your Mac. No ads, no accounts, and the code is open to everyone.",
+    lede: "DyskLab makes free apps for Mac, Windows, Linux, Android and the web. Manage assets, tasks and websites, then link your phone to your computer. No ads, no accounts, and the code is open to everyone.",
     explore: "Explore the products", gh: "DyskLab on GitHub",
-    strip: ["4 products", "macOS · Android · Web", "Your data stays yours", "Made in Gresik, Indonesia"],
+    strip: ["4 products", "macOS · Windows · Linux · Android · Web", "Your data stays yours", "Made in Gresik, Indonesia"],
     starsLabel: (n: number) => `${n} stars on GitHub`,
     prodK: "Products", prodH: "Four apps, one way of working:", prodH2: "simple, honest and open.",
     latest: "Latest version", see: (n: string) => `See ${n}`, code: "Code",
@@ -360,6 +360,9 @@ const jsonLd = {
                     <img src={p.icon} width="22" height="22" alt="" />{p.name}<span class="s">★</span><span class="sr">{t.newTab}</span>
                   </a></li>
                 ))}
+                <li><a href="https://github.com/DyskLab/dysklink-desktop" target="_blank" rel="noopener" style="--c:#2dd4a7">
+                  <img src="/images/apps/dysklink.png" width="22" height="22" alt="" />DyskLink Windows/Linux<span class="s">★</span><span class="sr">{t.newTab}</span>
+                </a></li>
                 <li><a href="https://github.com/DyskLab/dysklink-android" target="_blank" rel="noopener" style="--c:#2dd4a7">
                   <img src="/images/apps/dysklink.png" width="22" height="22" alt="" />DyskLink Android<span class="s">★</span><span class="sr">{t.newTab}</span>
                 </a></li>
