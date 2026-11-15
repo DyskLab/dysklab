@@ -12,17 +12,20 @@ const { lang } = Astro.props;
 const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
 const img = (n: string) => `/images/products/dyskos/${n}.jpg`;
 
-const workers = ["Claude Code", "Codex", "Gemini CLI", "OpenCode", "Hermes"];
+const workers = ["Claude Code", "Codex", "OpenCode", "Hermes"];
 
 const shots = [
   { src: img("01-chat"), t: s("Chat", "Chat"), d: s("Balasan streaming, setiap langkah agen, subagent paralel, dan kartu izin sebelum perintah dijalankan.", "Streamed replies, every step the agent takes, parallel subagents, and permission cards before anything runs."), alt: s("Sesi Claude dengan tiga subagent di DyskOS", "A Claude session with three subagents in DyskOS") },
-  { src: img("02-town"), t: "Town", d: s("Kota pixel-art: tiap sesi adalah karakter. Yang bekerja mengetik di mejanya, yang butuh izin berdiri dengan tanda seru.", "A pixel-art town where each session is a character. Working ones type at their desks; one that needs permission stands up with a “!”."), alt: s("Tampilan Town di DyskOS", "The Town view in DyskOS") },
-  { src: img("03-agents"), t: s("Agen", "Agents"), d: s("Lima agen dan kuota masing-masing, lengkap dengan login dan model yang tersedia.", "Five agents with their quotas, logins and available models."), alt: s("Daftar agen dan kuota di DyskOS", "The agents and quotas in DyskOS") },
+  { src: img("02-town"), t: "Town", d: s("Kota pixel-art: tiap sesi adalah karakter, dan tiap agen punya kantor di jalan utama. Yang bekerja mengetik di mejanya, yang butuh izin berdiri dengan tanda seru, dan yang menganggur jalan-jalan ke kantin, taman, atau pasar.", "A pixel-art town where each session is a character and each agent has an office on the main road. Working ones type at their desks, one that needs permission stands up with a “!”, and idle ones wander to the canteen, park or market."), alt: s("Tampilan Town di DyskOS", "The Town view in DyskOS") },
+  { src: img("03-agents"), t: s("Agen", "Agents"), d: s("Empat agen dan kuota masing-masing, lengkap dengan login dan model yang tersedia.", "Four agents with their quotas, logins and available models."), alt: s("Daftar agen dan kuota di DyskOS", "The agents and quotas in DyskOS") },
   { src: img("04-inbox"), t: "Inbox", d: s("Permintaan izin, error, dan balasan belum dibaca dari semua sesi di satu tempat.", "Permission requests, errors and unread replies from every session in one place."), alt: s("Inbox di DyskOS", "The Inbox in DyskOS") },
 ];
 
 const features = [
-  { t: s("Lima agen, satu tempat", "Five agents, one place"), d: s("Claude Code, Codex, Gemini CLI, OpenCode, dan Hermes jalan berdampingan, masing-masing dengan sesinya sendiri.", "Claude Code, Codex, Gemini CLI, OpenCode and Hermes run side by side, each with its own session.") },
+  { t: s("Empat agen, satu tempat", "Four agents, one place"), d: s("Claude Code, Codex, OpenCode, dan Hermes jalan berdampingan, masing-masing dengan sesinya sendiri. Agen mana pun bisa dimatikan di Pengaturan.", "Claude Code, Codex, OpenCode and Hermes run side by side, each with its own session. Any agent can be switched off in Settings.") },
+  { t: s("9router untuk model lain", "9router for other models"), d: s("Gemini, DeepSeek, dan penyedia lain muncul di OpenCode dan Hermes lewat 9router. Model yang ditolak penyedia disembunyikan, dan mode Otomatis memilih yang masih berfungsi.", "Gemini, DeepSeek and other providers show up in OpenCode and Hermes through 9router. Models a provider rejects are hidden, and Auto picks one that works.") },
+  { t: s("Hemat token", "Token saver"), d: s("Ringkas keluaran tool dengan RTK, jawaban lebih pendek (Caveman), dan kode minimal (Ponytail) di tingkat Lite, Full, atau Ultra.", "Compress tool output with RTK, shorter answers (Caveman) and minimal code (Ponytail) at Lite, Full or Ultra.") },
+  { t: "Skills", d: s("Katalog skill agen dengan paket cepat. Pilih skill dan proyek, lalu DyskOS memasangnya untuk Claude Code, OpenCode, Codex, dan Hermes.", "A catalog of agent skills with quick packs. Pick skills and a project, and DyskOS installs them for Claude Code, OpenCode, Codex and Hermes.") },
   { t: s("Serahkan ke agen lain", "Hand off to another agent"), d: s("Saat kuota satu agen habis, sesi diserahkan ke agen lain beserta ringkasannya. Disarankan atau otomatis, Anda yang memilih.", "When one agent's quota runs out, the session moves to another with a summary. Suggested or automatic, your choice.") },
   { t: s("Tetap jalan saat tab ditutup", "Keeps going with the tab closed"), d: s("Agen terus bekerja di Mac. Buka lagi dari browser atau HP kapan saja.", "Agents keep working on the Mac. Open it again from a browser or your phone whenever you like.") },
   { t: "Git", d: s("Satu sesi bisa punya worktree sendiri: lihat file dan diff, batalkan satu file, commit, push, lalu merge kembali.", "A session can have its own worktree: see changed files and diffs, revert a file, commit, push and merge back.") },
@@ -40,8 +43,8 @@ const safe = [
 <Base
   title={s("DyskOS: dasbor lokal untuk agen AI coding | DyskLab", "DyskOS: a local dashboard for AI coding agents | DyskLab")}
   description={s(
-    "DyskOS menjalankan Claude Code, Codex, Gemini CLI, OpenCode, dan Hermes berdampingan dari Mac atau HP. Setiap agen punya sesi sendiri, dan semuanya tetap di Mac Anda.",
-    "DyskOS runs Claude Code, Codex, Gemini CLI, OpenCode and Hermes side by side from your Mac or your phone. Each agent gets its own session, and everything stays on your Mac.",
+    "DyskOS menjalankan Claude Code, Codex, OpenCode, dan Hermes berdampingan dari Mac atau HP. Setiap agen punya sesi sendiri, dan semuanya tetap di Mac Anda.",
+    "DyskOS runs Claude Code, Codex, OpenCode and Hermes side by side from your Mac or your phone. Each agent gets its own session, and everything stays on your Mac.",
   )}
   path={Astro.url.pathname}
   ogImage="/images/products/dyskos/og.jpg"
@@ -74,8 +77,8 @@ const safe = [
           )}
           <p class="lede">
             {s(
-              "Jalankan Claude Code, Codex, Gemini CLI, OpenCode, dan Hermes berdampingan dari Mac atau HP. Lihat setiap langkahnya, setujui yang boleh dijalankan, dan serahkan pekerjaan ke agen lain saat kuota habis.",
-              "Run Claude Code, Codex, Gemini CLI, OpenCode and Hermes side by side from your Mac or phone. Watch every step, approve what may run, and hand work to another agent when a quota runs out.",
+              "Jalankan Claude Code, Codex, OpenCode, dan Hermes berdampingan dari Mac atau HP. Lihat setiap langkahnya, setujui yang boleh dijalankan, dan serahkan pekerjaan ke agen lain saat kuota habis.",
+              "Run Claude Code, Codex, OpenCode and Hermes side by side from your Mac or phone. Watch every step, approve what may run, and hand work to another agent when a quota runs out.",
             )}
           </p>
           <ul class="workers" aria-label={s("Agen yang didukung", "Supported agents")}>

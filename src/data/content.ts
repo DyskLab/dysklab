@@ -189,7 +189,7 @@ const content: Content =
       "kind_en": "AI agent dashboard",
       "platform": "macOS, Web, PWA",
       "icon": "/images/apps/dyskos.png",
-      "text": "Dasbor lokal untuk menjalankan Claude Code, Codex, Gemini CLI, OpenCode, dan Hermes berdampingan, dari Mac atau HP.",
+      "text": "Dasbor lokal untuk menjalankan Claude Code, Codex, OpenCode, dan Hermes berdampingan, dari Mac atau HP.",
       "stack": [
         "Node.js",
         "TypeScript",
