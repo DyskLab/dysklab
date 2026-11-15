@@ -54,12 +54,19 @@ const meta = {
     points: { id: ["Terenkripsi, langsung antar perangkat", "Notch/Island, Clipboard History, Launcher", "Perawatan PC dan kontrol baterai"], en: ["Encrypted, straight between devices", "Notch/Island, Clipboard History, Launcher", "PC care and battery control"] },
     platforms: ["macOS", "Windows", "Linux", "Android"],
   },
+  dyskos: {
+    repo: null, match: /./, color: "#ea6a1f", shot: "/images/products/dyskos/01-chat.jpg",
+    tag: { id: "Semua agen AI Anda, satu dasbor.", en: "All your AI agents, one dashboard." },
+    text: { id: "Dasbor lokal untuk menjalankan Claude Code, Codex, Gemini CLI, OpenCode, dan Hermes berdampingan, dari Mac atau HP. Setiap agen punya sesi sendiri, dan Anda yang menyetujui apa yang boleh dijalankan.", en: "A local dashboard for running Claude Code, Codex, Gemini CLI, OpenCode and Hermes side by side, from your Mac or your phone. Each agent gets its own session, and you approve what it may run." },
+    points: { id: ["Serahkan sesi ke agen lain saat kuota habis", "Git worktree, terminal, dan kuota dalam satu tempat", "Hanya di Mac Anda, HP lewat Tailscale"], en: ["Hand a session to another agent when a quota runs out", "Git worktrees, terminal and quotas in one place", "Stays on your Mac, phone access through Tailscale"] },
+    platforms: ["macOS", "Web", "PWA"],
+  },
 } as const;
 
 const products = await Promise.all(
   content.apps.map(async (a) => {
     const m = meta[a.slug as keyof typeof meta];
-    const [dl, star] = await Promise.all([download(m.repo, m.match), stars(m.repo)]);
+    const [dl, star] = m.repo ? await Promise.all([download(m.repo, m.match), stars(m.repo)]) : [{ version: null }, null];
     return { ...a, ...m, version: dl.version, star, url: href(lang, a.page), kindL: lang === "id" ? a.kind : a.kind_en };
   })
 );
@@ -71,16 +78,16 @@ const showStars = starTotal !== null && starTotal >= 25;
 const T = L({
   id: {
     title: "DyskLab: software open source untuk Mac, Windows, Linux, Android, dan web",
-    description: "DyskLab membuat software gratis dan open source: DyskFiles, DyskFocus, DyskFlow, dan DyskLink. Juga menerima pembuatan sistem untuk perusahaan.",
+    description: "DyskLab membuat software gratis dan open source: DyskFiles, DyskFocus, DyskFlow, DyskLink, dan DyskOS. Juga menerima pembuatan sistem untuk perusahaan.",
     nav: [["#produk", "Produk"], ["#kenapa", "Open source"], ["#layanan", "Untuk perusahaan"], ["#faq", "FAQ"]],
     cta: "Lihat produk",
     badge: "Gratis · MIT License · tanpa akun",
     h1a: "Software open source", h1b: "untuk kerja sehari-hari.",
     lede: "DyskLab membuat aplikasi gratis untuk Mac, Windows, Linux, Android, dan web. Kelola aset, tugas, dan situs, lalu hubungkan HP ke komputer. Tanpa iklan, tanpa akun, dan kodenya terbuka untuk siapa saja.",
     explore: "Jelajahi produk", gh: "DyskLab di GitHub",
-    strip: ["4 produk", "macOS · Windows · Linux · Android · Web", "Data tetap milik Anda", "Dibuat di Gresik, Indonesia"],
+    strip: ["5 produk", "macOS · Windows · Linux · Android · Web", "Data tetap milik Anda", "Dibuat di Gresik, Indonesia"],
     starsLabel: (n: number) => `${n} star di GitHub`,
-    prodK: "Produk", prodH: "Empat aplikasi, satu cara kerja:", prodH2: "sederhana, jujur, dan terbuka.",
+    prodK: "Produk", prodH: "Lima aplikasi, satu cara kerja:", prodH2: "sederhana, jujur, dan terbuka.",
     latest: "Versi terbaru", see: (n: string) => `Lihat ${n}`, code: "Kode",
     whyK: "Kenapa open source",
     whyH: "Software yang bisa Anda periksa, ubah, dan simpan sendiri.",
@@ -119,16 +126,16 @@ const T = L({
   },
   en: {
     title: "DyskLab: open-source software for Mac, Windows, Linux, Android and the web",
-    description: "DyskLab makes free, open-source software: DyskFiles, DyskFocus, DyskFlow and DyskLink. Custom systems for companies, too.",
+    description: "DyskLab makes free, open-source software: DyskFiles, DyskFocus, DyskFlow, DyskLink and DyskOS. Custom systems for companies, too.",
     nav: [["#produk", "Products"], ["#kenapa", "Open source"], ["#layanan", "For companies"], ["#faq", "FAQ"]],
     cta: "See products",
     badge: "Free · MIT License · no account",
     h1a: "Open-source software", h1b: "for everyday work.",
     lede: "DyskLab makes free apps for Mac, Windows, Linux, Android and the web. Manage assets, tasks and websites, then link your phone to your computer. No ads, no accounts, and the code is open to everyone.",
     explore: "Explore the products", gh: "DyskLab on GitHub",
-    strip: ["4 products", "macOS · Windows · Linux · Android · Web", "Your data stays yours", "Made in Gresik, Indonesia"],
+    strip: ["5 products", "macOS · Windows · Linux · Android · Web", "Your data stays yours", "Made in Gresik, Indonesia"],
     starsLabel: (n: number) => `${n} stars on GitHub`,
-    prodK: "Products", prodH: "Four apps, one way of working:", prodH2: "simple, honest and open.",
+    prodK: "Products", prodH: "Five apps, one way of working:", prodH2: "simple, honest and open.",
     latest: "Latest version", see: (n: string) => `See ${n}`, code: "Code",
     whyK: "Why open source",
     whyH: "Software you can inspect, change and keep.",
@@ -312,9 +319,11 @@ const jsonLd = {
                   </div>
                   <div class="panel-cta">
                     <a class="btn btn-c" href={p.url}>{T.see(p.name)} →</a>
-                    <a class="btn btn-line" href={`https://github.com/${p.repo}`} target="_blank" rel="noopener">
-                      ★ {t.star}{p.star !== null && p.star >= 10 && ` · ${p.star}`}<span class="sr">{t.newTab}</span>
-                    </a>
+                    {p.repo && (
+                      <a class="btn btn-line" href={`https://github.com/${p.repo}`} target="_blank" rel="noopener">
+                        ★ {t.star}{p.star !== null && p.star >= 10 && ` · ${p.star}`}<span class="sr">{t.newTab}</span>
+                      </a>
+                    )}
                   </div>
                 </div>
                 <a class="panel-shot" href={p.url} tabindex="-1" aria-hidden="true">
@@ -355,7 +364,7 @@ const jsonLd = {
               <a class="btn btn-coffee" href={BMC} target="_blank" rel="noopener"><span aria-hidden="true">☕</span> {t.coffee}<span class="sr">{t.newTab}</span></a>
               <p class="support-k">{T.starEach}</p>
               <ul class="star-list">
-                {products.map((p) => (
+                {products.filter((p) => p.repo).map((p) => (
                   <li><a href={`https://github.com/${p.repo}`} target="_blank" rel="noopener" style={`--c:${p.color}`}>
                     <img src={p.icon} width="22" height="22" alt="" />{p.name}<span class="s">★</span><span class="sr">{t.newTab}</span>
                   </a></li>

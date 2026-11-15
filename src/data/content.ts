@@ -180,6 +180,21 @@ const content: Content =
         "Jetpack Compose"
       ],
       "repo": "https://github.com/DyskLab/dysklink-mac"
+    },
+    {
+      "slug": "dyskos",
+      "page": "/produk/dyskos/",
+      "name": "DyskOS",
+      "kind": "Dasbor agen AI",
+      "kind_en": "AI agent dashboard",
+      "platform": "macOS, Web, PWA",
+      "icon": "/images/apps/dyskos.png",
+      "text": "Dasbor lokal untuk menjalankan Claude Code, Codex, Gemini CLI, OpenCode, dan Hermes berdampingan, dari Mac atau HP.",
+      "stack": [
+        "Node.js",
+        "TypeScript",
+        "React"
+      ]
     }
   ],
   "cases": [

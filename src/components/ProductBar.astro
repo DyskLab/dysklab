@@ -11,18 +11,18 @@ interface Props {
   lang: Lang;
   name: string;
   icon: string;
-  repo: string; // "DyskLab/dyskfiles"
+  repo?: string; // "DyskLab/dyskfiles"; omit for a closed product (no star button)
   links: { href: string; label: string }[];
   cta: { href: string; label: string; external?: boolean };
 }
 const { lang, name, icon, repo, links, cta } = Astro.props;
 const t = ui[lang];
 const other: Lang = lang === "id" ? "en" : "id";
-const count = await stars(repo);
+const count = repo ? await stars(repo) : null;
 // A small number reads as "nobody uses this", so the count only shows from 10 stars up.
 const showCount = count !== null && count >= 10;
 ---
-<nav class="pb" aria-label={t.navLabel(name)}>
+<nav class:list={["pb", { "pb-nostar": !repo }]} aria-label={t.navLabel(name)}>
   <div class="pb-in">
     <a class="pb-home" href={href(lang, "/")} aria-label={`DyskLab, ${t.home}`}><Logo size={26} /><span>DyskLab</span></a>
     <span class="pb-sep" aria-hidden="true">/</span>
@@ -30,10 +30,10 @@ const showCount = count !== null && count >= 10;
     <div class="pb-links">
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
     </div>
-    <a class="pb-star" href={`https://github.com/${repo}`} target="_blank" rel="noopener" aria-label={`${t.star}${showCount ? `, ${t.stars(count!)}` : ""}${t.newTab}`}>
+    {repo && <a class="pb-star" href={`https://github.com/${repo}`} target="_blank" rel="noopener" aria-label={`${t.star}${showCount ? `, ${t.stars(count!)}` : ""}${t.newTab}`}>
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .2a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.3 1.9.9 2.4.7 0-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8a7.4 7.4 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.1 0 3.1-1.9 3.8-3.6 4 .3.3.5.7.5 1.4v2.2c0 .2.1.5.6.4A8 8 0 0 0 8 .2Z" /></svg>
       <span class="pb-star-t">★{showCount && <b>{count}</b>}</span>
-    </a>
+    </a>}
     <a class="pb-lang" href={alternate(Astro.url.pathname, other)} data-lang={other} hreflang={other} lang={other} aria-label={t.switchLabel}>{other.toUpperCase()}</a>
     <a class="pb-cta" href={cta.href} {...(cta.external ? { target: "_blank", rel: "noopener" } : {})}>
       {cta.label}{cta.external && <span class="pb-sr">{t.newTab}</span>}
@@ -72,7 +72,7 @@ const showCount = count !== null && count >= 10;
   }
   .pb-cta:hover { filter: brightness(1.08); }
   .pb-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  @media (max-width: 1020px) { .pb-links { display: none; } .pb-star { margin-left: auto; } }
+  @media (max-width: 1020px) { .pb-links { display: none; } .pb-star { margin-left: auto; } .pb-nostar .pb-lang { margin-left: auto; } }
   @media (max-width: 560px) {
     .pb-home span, .pb-sep { display: none; }
     .pb-star-t { display: none; }

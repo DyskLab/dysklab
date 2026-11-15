@@ -4,7 +4,7 @@ export interface Service { name: string; text: string }
 export interface ServiceGroup { title: string; intro: string; items: Service[] }
 export interface App {
   slug: string; page: string; name: string; kind: string; kind_en: string; platform: string; icon: string; text: string;
-  stack: string[]; projectUrl?: string; repo: string;
+  stack: string[]; projectUrl?: string; repo?: string;
 }
 export interface Case {
   slug: string; kind: string; client: string; sector: string; title: string;
