@@ -12,6 +12,7 @@ import ProductFooter from "../components/ProductFooter.astro";
 import Privacy from "../components/Privacy.astro";
 import Faq from "../components/Faq.astro";
 import Support from "../components/Support.astro";
+import ReportBug from "../components/ReportBug.astro";
 import { pick, ui, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -435,6 +436,7 @@ npm run build && php artisan key:generate</code></pre>
 
       <Privacy lang={lang} id="privasi" summary={privacy.summary} items={privacy.items} note={privacy.note} />
       <Faq lang={lang} id="faq" items={faq} />
+      <ReportBug lang={lang} product="DyskFocus" repo="DyskLab/dyskfocus" platforms={["Web / PWA (self-hosted)", "macOS app"]} />
       <Support lang={lang} product="DyskFocus" repos={[{ repo: "DyskLab/dyskfocus" }]} />
     </main>
 

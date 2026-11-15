@@ -11,6 +11,7 @@ import ProductFooter from "../components/ProductFooter.astro";
 import Privacy from "../components/Privacy.astro";
 import Faq from "../components/Faq.astro";
 import Support from "../components/Support.astro";
+import ReportBug from "../components/ReportBug.astro";
 import { pick, ui, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -427,6 +428,7 @@ const T = pick(lang, {
 
       <Privacy lang={lang} id="privasi" summary={T.pvSummary} items={T.pv} note={T.pvNote} />
       <Faq lang={lang} id="faq" items={T.faq} />
+      <ReportBug lang={lang} product="DyskFlow" repo="DyskLab/dyskflow" platforms={["Web (Laravel)"]} />
       <Support lang={lang} product="DyskFlow" repos={[{ repo: "DyskLab/dyskflow" }]} />
     </main>
 

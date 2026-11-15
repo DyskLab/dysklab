@@ -1,0 +1,107 @@
+---
+/*
+  "Report a problem" block for product pages. The site is static, so there's no backend:
+  the form turns what the user typed into a pre-filled GitHub issue (opened in a new tab).
+  Nothing is sent to or stored on our side. Themed by the page's --pf-* and --pb-btn-* variables,
+  like Support.
+*/
+import { ui, type Lang } from "../i18n";
+interface Props { lang: Lang; product: string; repo: string; platforms: string[]; id?: string }
+const { lang, product, repo, platforms, id = "lapor" } = Astro.props;
+const t = (id: string, en: string) => (lang === "id" ? id : en);
+const nt = ui[lang].newTab;
+const issues = `https://github.com/${repo}/issues`;
+---
+<section class="rb" id={id} aria-labelledby={`${id}-title`} data-repo={repo} data-product={product}>
+  <div class="rb-in">
+    <div class="rb-copy">
+      <h2 id={`${id}-title`}>{t(`Menemukan masalah di ${product}?`, `Found a problem in ${product}?`)}</h2>
+      <p>{t(
+        "Ceritakan apa yang terjadi. Formulir ini menyiapkan laporan di GitHub dengan isian Anda, lalu Anda tinggal mengirimnya. Perlu akun GitHub gratis.",
+        "Tell us what happened. This form prepares a report on GitHub with what you wrote, and you just send it. A free GitHub account is needed.",
+      )}</p>
+      <p class="rb-sub">{t("Jangan menulis password, token, atau data pribadi di laporan: issue GitHub bersifat publik.", "Don't put passwords, tokens or personal data in the report: GitHub issues are public.")}
+        <a href={issues} target="_blank" rel="noopener">{t("Lihat laporan yang sudah ada", "See existing reports")}<span class="rb-sr">{nt}</span></a></p>
+    </div>
+    <form class="rb-form" novalidate>
+      <label>{t("Ringkasan masalah", "Short summary")}
+        <input name="title" required maxlength="120" placeholder={t("Misalnya: aplikasi menutup sendiri saat impor", "For example: the app closes by itself when importing")} />
+      </label>
+      <div class="rb-row">
+        <label>{t("Platform / sistem operasi", "Platform / operating system")}
+          <select name="platform">
+            {platforms.map((p) => <option>{p}</option>)}
+            <option>{t("Lainnya", "Other")}</option>
+          </select>
+        </label>
+        <label>{t("Versi (jika tahu)", "Version (if known)")}
+          <input name="version" maxlength="40" placeholder="1.0.0" />
+        </label>
+      </div>
+      <label>{t("Langkah untuk memunculkannya", "Steps to reproduce")}
+        <textarea name="steps" rows="3" required placeholder={t("1. Buka …\n2. Klik …\n3. Muncul …", "1. Open …\n2. Click …\n3. See …")}></textarea>
+      </label>
+      <label>{t("Apa yang Anda harapkan, dan apa yang terjadi", "What you expected, and what happened")}
+        <textarea name="actual" rows="3" required></textarea>
+      </label>
+      <p class="rb-err" role="alert" hidden>{t("Isi ringkasan, langkah, dan apa yang terjadi dulu.", "Please fill in the summary, steps, and what happened first.")}</p>
+      <button type="submit" class="rb-btn">{t("Buat laporan di GitHub", "Create the report on GitHub")}<span class="rb-sr">{nt}</span></button>
+    </form>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".rb").forEach((sec) => {
+    const form = sec.querySelector("form")!;
+    const err = sec.querySelector<HTMLElement>(".rb-err")!;
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const v = (n: string) => (form.elements.namedItem(n) as HTMLInputElement).value.trim();
+      if (!v("title") || !v("steps") || !v("actual")) { err.hidden = false; return; }
+      err.hidden = true;
+      const body = [
+        `**Platform:** ${v("platform")}`,
+        `**${sec.dataset.product} version:** ${v("version") || "unknown"}`,
+        "",
+        "### Steps to reproduce",
+        v("steps"),
+        "",
+        "### Expected vs. actual",
+        v("actual"),
+      ].join("\n");
+      const url = `https://github.com/${sec.dataset.repo}/issues/new?title=${encodeURIComponent(v("title"))}&body=${encodeURIComponent(body)}`;
+      window.open(url, "_blank", "noopener");
+    });
+  });
+</script>
+
+<style>
+  .rb { padding: 40px 0 0; }
+  .rb-in {
+    box-sizing: border-box; width: min(1160px, calc(100% - 32px)); margin: 0 auto; display: grid; grid-template-columns: 1fr 1.25fr; gap: 36px; align-items: start;
+    padding: 36px; border-radius: calc(var(--pf-radius, 14px) + 8px); border: 1px solid var(--pf-line); background: var(--pf-card);
+  }
+  .rb h2 { margin: 0; font-size: clamp(26px, 3vw, 36px); line-height: 1.1; letter-spacing: -0.03em; color: var(--pf-fg); }
+  .rb-copy p { margin: 12px 0 0; color: var(--pf-muted); font-size: 16px; }
+  .rb-copy .rb-sub { font-size: 14px; }
+  .rb-copy a { color: inherit; text-decoration: underline; }
+  .rb-form { display: grid; gap: 14px; }
+  .rb-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+  .rb label { display: grid; gap: 6px; font-size: 14px; font-weight: 600; color: var(--pf-fg); }
+  .rb input, .rb select, .rb textarea {
+    box-sizing: border-box; width: 100%; padding: 11px 12px; border-radius: var(--pb-radius, 12px); border: 1px solid var(--pf-line);
+    background: transparent; color: var(--pf-fg); font: inherit; font-weight: 400; font-size: 15px;
+  }
+  .rb select option { color: #111; }
+  .rb textarea { resize: vertical; }
+  .rb input:focus-visible, .rb select:focus-visible, .rb textarea:focus-visible { outline: 2px solid var(--pb-btn-bg); outline-offset: 1px; }
+  .rb-err { margin: 0; font-size: 14px; color: #e5484d; }
+  .rb-btn {
+    justify-self: start; min-height: 46px; padding: 0 20px; border: 0; border-radius: var(--pb-radius, 12px); cursor: pointer;
+    background: var(--pb-btn-bg); color: var(--pb-btn-fg); font: inherit; font-weight: 700; font-size: 15px; transition: transform 0.15s, filter 0.15s;
+  }
+  .rb-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+  .rb-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 900px) { .rb-in { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .rb-in { padding: 24px; } .rb-row { grid-template-columns: 1fr; } }
+</style>

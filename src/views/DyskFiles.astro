@@ -10,6 +10,7 @@ import ProductFooter from "../components/ProductFooter.astro";
 import Privacy from "../components/Privacy.astro";
 import Faq from "../components/Faq.astro";
 import Support from "../components/Support.astro";
+import ReportBug from "../components/ReportBug.astro";
 import { pick, ui, type Lang } from "../i18n";
 import { download } from "../lib/releases";
 interface Props { lang: Lang }
@@ -333,6 +334,7 @@ const swatches = [
 
       <Privacy lang={lang} id="privasi" summary={T.pvSummary} items={T.pv} note={T.pvNote} />
       <Faq lang={lang} id="faq" items={T.faq} />
+      <ReportBug lang={lang} product="DyskFiles" repo="DyskLab/dyskfiles" platforms={["macOS", "Windows"]} />
       <Support lang={lang} product="DyskFiles" repos={[{ repo: "DyskLab/dyskfiles" }]} />
     </main>
 
