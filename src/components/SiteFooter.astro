@@ -6,6 +6,7 @@
 */
 import content from "../data/content";
 import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
 import { waNumber } from "../lib/mask";
 import { BMC, alternate, href, ui, type Lang } from "../i18n";
 interface Props { lang: Lang; license?: string }
@@ -25,7 +26,7 @@ const mail = `mailto:${content.email}?subject=${encodeURIComponent(s("Konsultasi
         <h2>{t.customSoftware}</h2>
         <p>{s("DyskLab juga membangun dan merawat website, aplikasi web, dan aplikasi Android untuk perusahaan. Konsultasi awal gratis.", "DyskLab also builds and maintains websites, web apps and Android apps for companies. The first consultation is free.")}</p>
       </div>
-      <a class="dl-btn dl-btn-primary" href={`${home}#layanan`}>{s("Mulai konsultasi", "Start a consultation")}<span class="dl-arr" aria-hidden="true">→</span></a>
+      <a class="dl-btn dl-btn-primary" href={wa} target="_blank" rel="noopener">{s("Mulai konsultasi", "Start a consultation")}<span class="dl-arr sf-wa" aria-hidden="true"><Icon name="whatsapp" size={19} /></span><span class="dl-sr">{t.newTab}</span></a>
     </div>
 
     <div class="sf-cols">
@@ -73,6 +74,7 @@ const mail = `mailto:${content.email}?subject=${encodeURIComponent(s("Konsultasi
   }
   .sf-band h2 { font-size: clamp(24px, 2.8vw, 32px); font-weight: 800; }
   .sf-band p { margin: 8px 0 0; max-width: 620px; color: var(--text); }
+  .sf-band .sf-wa { background: #16a34a; color: #fff; }
   .sf-cols { display: grid; grid-template-columns: 1.5fr 1.2fr 1fr 1.2fr; gap: 36px; padding: 56px 0 40px; }
   .sf-logo { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); }
   .sf-logo :global(svg) { border-radius: 10px; box-shadow: 0 0 0 1px var(--line-2); }

@@ -1,10 +1,18 @@
 ---
-/* DyskMedia product page: pink. Shown, not distributed (private repo), like DyskOS. No screenshots yet. */
+/* DyskMedia product page: pink. Shown, not distributed (private repo), like DyskOS. */
 import ProductSimple from "../components/ProductSimple.astro";
 import { pick, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+const img = (n: string) => `/images/products/dyskmedia/${n}.jpg`;
+
+const shots = [
+  { src: img("create-post"), t: s("Buat post", "Create a post"), d: s("Pilih akun tujuan, unggah video atau gambar, tulis caption, lalu jadwalkan.", "Pick the target accounts, upload a video or image, write the caption and schedule it."), alt: s("Formulir buat post DyskMedia", "The DyskMedia create post form") },
+  { src: img("comments"), t: s("Komentar", "Comments"), d: s("Komentar dari semua akun di satu inbox, lengkap dengan balasan.", "Comments from every account in one inbox, with replies."), alt: s("Inbox komentar DyskMedia", "The DyskMedia comments inbox") },
+  { src: img("schedule"), t: s("Jadwal", "Schedule"), d: s("Daftar post yang akan terbit dan statusnya di tiap akun.", "Upcoming posts and their status on each account."), alt: s("Jadwal post DyskMedia", "The DyskMedia schedule") },
+  { src: img("monitoring"), t: "Monitoring", d: s("Views, suka, komentar, dan pengikut per platform, plus konten teratas.", "Views, likes, comments and followers per platform, plus top content."), alt: s("Monitoring di DyskMedia", "Monitoring in DyskMedia") },
+];
 
 const features = [
   { t: s("Kalender dan jadwal", "Calendar and schedule"), d: s("Semua post yang direncanakan per hari, dengan status di tiap akun.", "Every planned post by day, with its status on each account.") },
@@ -33,6 +41,9 @@ const features = [
     "Upload videos, write a post once, pick which accounts it goes to and schedule it. Comments and DMs from every account land in one inbox.",
   )}
   chips={["YouTube", "TikTok", "Instagram", "Threads", "X", "Facebook"]}
+  hero={{ src: img("calendar"), t: "", d: "", alt: s("Kalender konten DyskMedia", "The DyskMedia content calendar") }}
+  shots={shots}
+  views={{ kick: s("Tampilan", "Views"), h: s("Rencanakan, jadwalkan, balas.", "Plan, schedule, reply.") }}
   note={s("DyskMedia dipakai sendiri dan belum dirilis.", "DyskMedia is used in-house and not released yet.")}
   featH={s("Dibuat untuk yang posting di banyak tempat.", "Built for posting in many places.")}
   features={features}

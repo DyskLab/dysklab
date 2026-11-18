@@ -387,6 +387,14 @@ const faq = [
               ))}
             </ul>
           </div>
+          <div class="island-gal dl-reveal">
+            <p class="kick">{t("Island di Windows dan Linux", "The Island on Windows and Linux")}</p>
+            <div class="island-grid">
+              <figure class="island-big"><img src={img("desktop-03-island-music")} width="1600" height="589" alt={`Island: ${t("Musik", "Music")}`} loading="lazy" decoding="async" /><figcaption>{t("Musik", "Music")}</figcaption></figure>
+              <figure><img src={img("desktop-01-island-resting")} width="1600" height="252" alt={`Island: ${t("Diam", "Resting")}`} loading="lazy" decoding="async" /><figcaption>{t("Diam", "Resting")}</figcaption></figure>
+              <figure><img src={img("desktop-02-island-live")} width="1600" height="252" alt={`Island: ${t("Aktivitas langsung", "Live activity")}`} loading="lazy" decoding="async" /><figcaption>{t("Aktivitas langsung", "Live activity")}</figcaption></figure>
+            </div>
+          </div>
           <ul class="tgrid">
             {moreTools.map((x) => (
               <li class="card card-art dl-reveal">
@@ -591,6 +599,12 @@ const faq = [
 
   /* Mac */
   .sec-mac { background: radial-gradient(60% 50% at 50% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%), var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .island-gal { margin-top: 18px; padding: 24px; border-radius: 24px; border: 1px solid var(--line); background: #05080c; }
+  .island-grid { margin-top: 14px; display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: auto auto; gap: 14px; }
+  .island-grid figure { margin: 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.08); background: #0b1016; display: flex; flex-direction: column; justify-content: center; }
+  .island-big { grid-row: span 2; }
+  .island-grid img { width: 100%; height: auto; display: block; }
+  .island-grid figcaption { padding: 10px 14px; font-size: 13.5px; color: rgba(255, 255, 255, 0.6); border-top: 1px solid rgba(255, 255, 255, 0.08); margin-top: auto; }
   .tools { margin-top: 52px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .tool { padding: 18px 18px 24px; border-radius: 24px; background: var(--card); border: 1px solid var(--line); }
   .tool-1 { grid-row: span 2; display: flex; flex-direction: column; }
@@ -646,7 +660,8 @@ const faq = [
   }
   @media (max-width: 960px) {
     .grid, .tgrid { grid-template-columns: 1fr 1fr; }
-    .tools, .steps, .wid, .care-head { grid-template-columns: 1fr; }
+    .tools, .steps, .wid, .care-head, .island-grid { grid-template-columns: 1fr; }
+    .island-big { grid-row: auto; }
     .tool-1 { grid-row: auto; }
     .solo { grid-template-columns: 1fr; }
     .solo-copy { position: static; }

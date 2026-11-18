@@ -185,3 +185,10 @@ a.dl-card:hover, .dl-card-hover:hover { border-color: var(--accent-line); transf
   .dl-btn { min-height: 48px; font-size: 12.5px; padding-left: 20px; }
   .dl-btn > .dl-arr { width: 32px; height: 32px; }
 }
+
+/* Theme switch (see SiteNav): the new theme is revealed by a growing circle; without
+   View Transitions, colours cross-fade for a moment instead. */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+html.dl-theming, html.dl-theming *, html.dl-theming *::before, html.dl-theming *::after {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, fill 0.4s ease, stroke 0.4s ease, box-shadow 0.4s ease !important;
+}

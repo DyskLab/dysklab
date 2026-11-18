@@ -66,11 +66,33 @@ const menuLabel = lang === "id" ? "Menu" : "Menu";
 
 <script>
   const root = document.documentElement;
-  document.querySelectorAll("[data-theme-toggle]").forEach((b) =>
-    b.addEventListener("click", () => {
+  /* Theme switch: a circle grows from the button that was clicked (View Transitions API);
+     browsers without it cross-fade colours briefly; reduced motion switches instantly. */
+  const apply = (next: string) => {
+    root.dataset.theme = next;
+    try { localStorage.setItem("dysklab-theme", next); } catch {}
+  };
+  document.querySelectorAll<HTMLElement>("[data-theme-toggle]").forEach((b) =>
+    b.addEventListener("click", (e) => {
       const next = root.dataset.theme === "light" ? "dark" : "light";
-      root.dataset.theme = next;
-      try { localStorage.setItem("dysklab-theme", next); } catch {}
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return apply(next);
+      const doc = document as Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } };
+      if (!doc.startViewTransition) {
+        root.classList.add("dl-theming");
+        apply(next);
+        setTimeout(() => root.classList.remove("dl-theming"), 450);
+        return;
+      }
+      const r = b.getBoundingClientRect();
+      const x = e.clientX || r.left + r.width / 2;
+      const y = e.clientY || r.top + r.height / 2;
+      const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      doc.startViewTransition(() => apply(next)).ready.then(() => {
+        root.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
+          { duration: 550, easing: "cubic-bezier(.4, 0, .2, 1)", pseudoElement: "::view-transition-new(root)" },
+        );
+      });
     }),
   );
   const nav = document.querySelector<HTMLElement>("[data-nav]");

@@ -1,10 +1,18 @@
 ---
-/* DyskStream product page: purple, open source, no screenshots yet (hero shows the icon). */
+/* DyskStream product page: purple, open source. Screenshots from the repo's docs/screenshots. */
 import ProductSimple from "../components/ProductSimple.astro";
 import { pick, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+const img = (n: string) => `/images/products/dyskstream/${n}.jpg`;
+
+const shots = [
+  { src: img("overlay"), t: s("Overlay dan scene", "Overlays and scenes"), d: s("URL Browser Source untuk OBS, plus scene segera mulai, istirahat, dan selesai.", "Browser Source URLs for OBS, plus starting soon, be right back and ended scenes."), alt: s("Halaman overlay DyskStream", "The DyskStream overlay page") },
+  { src: img("templates"), t: s("Template alert", "Alert templates"), d: s("Command, biaya point, animasi, posisi, warna, gambar, suara, dan TTS per alert, dengan Test Alert.", "Command, point cost, animation, position, colours, image, sound and TTS per alert, with Test Alert."), alt: s("Editor template alert DyskStream", "The DyskStream alert template editor") },
+  { src: img("giveaway"), t: s("Giveaway dan kuis", "Giveaways and quizzes"), d: s("Penonton yang mengetik kata syarat jadi peserta undian. Yang pertama menjawab kuis dengan benar dapat point.", "Viewers who type the keyword enter the draw. The first right answer to a quiz earns points."), alt: s("Giveaway dan kuis di DyskStream", "Giveaways and quizzes in DyskStream") },
+  { src: img("overlays"), t: s("Di atas stream", "On the stream"), d: s("Alert yang ditukar penonton muncul satu per satu, dan avatar penonton yang sedang chat berjalan di bawah.", "Alerts viewers buy appear one at a time, and avatars of viewers who are chatting walk along the bottom."), alt: s("Alert dan avatar penonton DyskStream di OBS", "A DyskStream alert and viewer avatars in OBS") },
+];
 
 const features = [
   { t: s("Baca live chat tanpa login", "Reads live chat with no login"), d: s("Tempel URL atau ID video live dari channel publik mana pun. Tanpa OAuth, API key, atau kuota.", "Paste the URL or ID of any public live video. No OAuth, API key or quota.") },
@@ -34,6 +42,9 @@ const features = [
     "A YouTube Live bot you run yourself. Viewers earn points for every comment and spend them on alerts that pop up in OBS. Command replies and moderation are left to Nightbot.",
   )}
   chips={["YouTube Live", "OBS", "Nightbot", s("Aplikasi desktop", "Desktop app")]}
+  hero={{ src: img("monitor"), t: "", d: "", alt: s("Dasbor monitor DyskStream", "The DyskStream monitor dashboard") }}
+  shots={shots}
+  views={{ kick: s("Tampilan", "Views"), h: s("Dari dasbor sampai OBS.", "From the dashboard to OBS.") }}
   featH={s("Semua yang dibutuhkan stream interaktif.", "Everything an interactive stream needs.")}
   features={features}
   panel={{

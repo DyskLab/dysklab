@@ -11,6 +11,7 @@ import Base from "../layouts/Base.astro";
 import SiteNav from "../components/SiteNav.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import Faq from "../components/Faq.astro";
+import Icon from "../components/Icon.astro";
 import content from "../data/content";
 import { mask, waNumber } from "../lib/mask";
 import { download } from "../lib/releases";
@@ -65,7 +66,7 @@ const meta = {
     platforms: ["macOS", "Web", "PWA"],
   },
   dyskstream: {
-    repo: "DyskLab/dyskstream", match: /\.dmg$/i, color: "#a855f7", shot: null,
+    repo: "DyskLab/dyskstream", match: /\.dmg$/i, color: "#a855f7", shot: "/images/products/dyskstream/monitor.jpg",
     tag: { id: "Chat jadi point, point jadi alert.", en: "Chat earns points, points buy alerts." },
     text: { id: "Bot YouTube Live yang Anda jalankan sendiri. Penonton dapat point dari setiap komentar dan menukarnya dengan alert ala Saweria di OBS, tanpa login dan tanpa API key.", en: "A YouTube Live bot you run yourself. Viewers earn points for every comment and spend them on Saweria-style alerts in OBS, with no login and no API key." },
     points: { id: ["Overlay OBS: alert, chat, leaderboard, goal, avatar", "Scene segera mulai, istirahat, dan selesai", "Command !point dan !rank lewat Nightbot"], en: ["OBS overlays: alerts, chat, leaderboard, goal, avatars", "Starting soon, be right back and ended scenes", "!point and !rank through Nightbot"] },
@@ -79,7 +80,7 @@ const meta = {
     platforms: ["Web", "PWA"],
   },
   dyskmedia: {
-    repo: null, match: /./, color: "#ec4899", shot: null,
+    repo: null, match: /./, color: "#ec4899", shot: "/images/products/dyskmedia/calendar.jpg",
     tag: { id: "Satu kalender untuk semua platform.", en: "One calendar for every platform." },
     text: { id: "Perencana konten yang Anda host sendiri: upload video, jadwalkan post ke YouTube, TikTok, Instagram, Threads, X, dan Facebook, lalu balas komentar dan DM dari satu inbox.", en: "A content planner you host yourself: upload videos, schedule posts to YouTube, TikTok, Instagram, Threads, X and Facebook, then answer comments and DMs from one inbox." },
     points: { id: ["Banyak akun per platform", "Balasan otomatis berdasarkan kata kunci", "Akun demo untuk mencoba tanpa mengirim apa pun"], en: ["Several accounts per platform", "Keyword-based auto replies", "Demo accounts to try it without posting anything"] },
@@ -288,7 +289,7 @@ const jsonLd = {
           <p class="dl-lede">{T.lede}</p>
           <div class="dl-actions">
             <a class="dl-btn dl-btn-primary" href="#produk">{T.explore}<span class="dl-arr" aria-hidden="true">↓</span></a>
-            <a class="dl-btn dl-btn-ghost" href={github} target="_blank" rel="noopener">{T.gh}<span class="dl-arr" aria-hidden="true">↗</span><span class="dl-sr">{t.newTab}</span></a>
+            <a class="dl-btn dl-btn-ghost" href={github} target="_blank" rel="noopener">{T.gh}<span class="dl-arr" aria-hidden="true"><Icon name="github" size={18} /></span><span class="dl-sr">{t.newTab}</span></a>
           </div>
           <ul class="dl-checks">
             {T.strip.map((s) => <li>{s}</li>)}
@@ -300,14 +301,16 @@ const jsonLd = {
 
       <!-- product strip -->
       <section class="strip" aria-label={T.prodK}>
-        <div class="dl-wrap">
-          <ul>
-            {products.map((p) => (
-              <li style={`--c:${p.color}`}>
-                <a href={p.url} title={p.kindL}><img src={p.icon} width="28" height="28" alt="" /><b>{p.name}</b></a>
-              </li>
-            ))}
-          </ul>
+        <div class="strip-track">
+          {[0, 1].map((copy) => (
+            <ul aria-hidden={copy === 1 ? "true" : undefined}>
+              {products.map((p) => (
+                <li style={`--c:${p.color}`}>
+                  <a href={p.url} tabindex={copy === 1 ? -1 : undefined}><img src={p.icon} width="32" height="32" alt="" /><span><b>{p.name}</b><small>{p.kindL}</small></span></a>
+                </li>
+              ))}
+            </ul>
+          ))}
         </div>
       </section>
 
@@ -420,6 +423,7 @@ const jsonLd = {
         <div class="dl-wrap">
           <div class="dl-head-row dl-reveal">
             <div class="dl-head">
+              <span class="svc-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8 8-5 4 5 4M16 8l5 4-5 4M14 5l-4 14" /></svg></span>
               <p class="dl-label">{T.svcK}</p>
               <h2 class="dl-h2">{T.svcH}</h2>
               <p class="dl-sub">{T.svcP}</p>
@@ -468,8 +472,8 @@ const jsonLd = {
             <h3>{T.contactH}</h3>
             <p>{T.contactP}</p>
             <div class="dl-actions dl-actions-c">
-              <a class="dl-btn dl-btn-light" href={waHello} target="_blank" rel="noopener">WhatsApp<span class="dl-arr wa" aria-hidden="true">→</span><span class="dl-sr">{t.newTab}</span></a>
-              <a class="dl-btn dl-btn-outline-light dl-btn-plain" href={mail}>{content.email}</a>
+              <a class="dl-btn dl-btn-light" href={waHello} target="_blank" rel="noopener">WhatsApp<span class="dl-arr wa" aria-hidden="true"><Icon name="whatsapp" size={19} /></span><span class="dl-sr">{t.newTab}</span></a>
+              <a class="dl-btn dl-btn-outline-light dl-btn-plain mail" href={mail}><Icon name="mail" size={18} />{content.email}</a>
             </div>
           </div>
         </div>
@@ -521,16 +525,23 @@ const jsonLd = {
   .scroll { position: relative; display: grid; place-items: center; width: 30px; height: 46px; margin: 48px auto 0; border-radius: 999px; border: 1.5px solid var(--line-2); color: var(--muted); text-decoration: none; font-size: 14px; }
   .scroll span { animation: bob 2.4s ease-in-out infinite; }
 
-  /* product strip */
-  .strip { border-block: 1px solid var(--line); background: var(--bg-2); }
-  .strip ul { list-style: none; margin: 0; padding: 16px 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+  /* product strip: an endless marquee (two identical lists sliding by half the track) */
+  .strip { overflow: hidden; border-block: 1px solid var(--line); background: var(--bg-2); -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .strip-track { display: flex; width: max-content; animation: strip 40s linear infinite; }
+  .strip:hover .strip-track, .strip:focus-within .strip-track { animation-play-state: paused; }
+  .strip ul { list-style: none; margin: 0; padding: 18px 0; display: flex; gap: 12px; padding-right: 12px; }
   .strip li { flex: none; }
-  .strip a { display: flex; align-items: center; gap: 8px; padding: 6px 10px 6px 6px; border-radius: 14px; text-decoration: none; white-space: nowrap; transition: background 0.2s; }
-  .strip a:hover { background: var(--card); }
-  .strip img { border-radius: 10px; filter: grayscale(0.5); opacity: 0.85; transition: filter 0.2s, opacity 0.2s; }
-  .strip a:hover img { filter: none; opacity: 1; }
-  .strip b { color: var(--ink); font-size: 14px; }
-  .strip img { border-radius: 8px !important; }
+  .strip a { display: flex; align-items: center; gap: 12px; padding: 8px 18px 8px 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--card); text-decoration: none; white-space: nowrap; transition: border-color 0.2s, transform 0.2s; }
+  .strip a:hover { border-color: color-mix(in srgb, var(--c) 55%, transparent); transform: translateY(-2px); }
+  .strip img { border-radius: 9px; }
+  .strip b { display: block; color: var(--ink); font-size: 15px; line-height: 1.2; }
+  .strip small { display: block; font-size: 12.5px; color: var(--muted); }
+  @keyframes strip { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .strip-track { animation: none; width: auto; justify-content: center; flex-wrap: wrap; }
+    .strip ul[aria-hidden] { display: none; }
+    .strip ul { flex-wrap: wrap; justify-content: center; padding-inline: 16px; }
+  }
 
   /* product showcase */
   .pr {
@@ -644,6 +655,9 @@ const jsonLd = {
   .contact p { margin: 10px 0 0; color: rgba(255, 255, 255, 0.82); }
   .contact .dl-actions { margin-top: 28px; }
   .contact .wa { background: #16a34a; color: #fff; }
+  .contact .mail { gap: 10px; text-transform: none; letter-spacing: 0.01em; font-size: 15px; }
+  .svc-badge { display: grid; place-items: center; width: 56px; height: 56px; margin-bottom: 20px; border-radius: 16px; background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent-line); color: var(--accent-hi); }
+  .svc-badge svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
   @media (max-width: 1240px) { .float { display: none; } }
   @media (max-width: 1060px) {
