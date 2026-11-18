@@ -1,7 +1,7 @@
 ---
 /*
   DyskOS product page. Deliberately has no download or repository link: DyskOS is shown, not
-  distributed. Dark, warm-orange look. Bilingual through s(id, en). Static, no client script.
+  distributed. Shared layout tinted orange (#ea6a1f). Bilingual through s(id, en). Static, no client script.
 */
 import Base from "../layouts/Base.astro";
 import ProductBar from "../components/ProductBar.astro";
@@ -50,11 +50,9 @@ const safe = [
   path={Astro.url.pathname}
   ogImage="/images/products/dyskos/og.jpg"
   ogTitle="DyskOS"
-  fonts="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-  theme="dark"
-  themeColor="#14110f"
+  accent="#ea6a1f"
 >
-  <div class="os" id="top">
+  <div id="top">
     <ProductBar
       lang={lang}
       name="DyskOS"
@@ -68,45 +66,51 @@ const safe = [
     />
 
     <main>
-      <header class="hero">
-        <div class="wrap">
-          <p class="pill"><span>{s("Baru", "New")}</span>macOS · Web · PWA</p>
+      <header class="hero dl-gridbg">
+        <div class="dl-wrap dl-head-c">
+          <p class="dl-eyebrow"><b>{s("Baru", "New")}</b>macOS · Web · PWA</p>
           {lang === "id" ? (
-            <h1>Semua agen AI Anda,<br /><span class="hl">satu dasbor.</span></h1>
+            <h1 class="dl-h1">Semua agen AI Anda,<br /><span class="dl-hl">satu dasbor.</span></h1>
           ) : (
-            <h1>All your AI agents,<br /><span class="hl">one dashboard.</span></h1>
+            <h1 class="dl-h1">All your AI agents,<br /><span class="dl-hl">one dashboard.</span></h1>
           )}
-          <p class="lede">
+          <p class="dl-lede">
             {s(
               "Jalankan Claude Code, Codex, OpenCode, dan Hermes berdampingan dari Mac atau HP. Lihat setiap langkahnya, setujui yang boleh dijalankan, dan serahkan pekerjaan ke agen lain saat kuota habis.",
               "Run Claude Code, Codex, OpenCode and Hermes side by side from your Mac or phone. Watch every step, approve what may run, and hand work to another agent when a quota runs out.",
             )}
           </p>
-          <ul class="workers" aria-label={s("Agen yang didukung", "Supported agents")}>
+          <div class="dl-actions">
+            <a class="dl-btn dl-btn-primary" href="#tampilan">{s("Lihat tampilan", "See the views")}<span class="dl-arr" aria-hidden="true">→</span></a>
+            <a class="dl-btn dl-btn-ghost" href="#fitur">{s("Fitur", "Features")}<span class="dl-arr" aria-hidden="true">↓</span></a>
+          </div>
+          <ul class="dl-checks" aria-label={s("Agen yang didukung", "Supported agents")}>
             {workers.map((w) => <li>{w}</li>)}
           </ul>
           <p class="note">{s("DyskOS masih tahap awal dan sedang dikembangkan.", "DyskOS is in early development.")}</p>
-          <div class="shot hero-shot dl-reveal">
-            <span class="bar"><i></i><i></i><i></i></span>
+        </div>
+        <div class="dl-wrap">
+          <div class="dl-shot hero-shot dl-reveal">
+            <span class="dl-bar"><i></i><i></i><i></i></span>
             <img src={img("01-chat")} alt={shots[0].alt} width="1600" height="1000" decoding="async" />
           </div>
         </div>
       </header>
 
-      <section id="tampilan" class="sec">
-        <div class="wrap">
-          <div class="head">
-            <p class="kick">{s("Tampilan", "Views")}</p>
-            <h2>{s("Lihat apa yang dikerjakan agen.", "See what your agents are doing.")}</h2>
+      <section id="tampilan" class="dl-sec">
+        <div class="dl-wrap">
+          <div class="dl-head">
+            <p class="dl-label">{s("Tampilan", "Views")}</p>
+            <h2 class="dl-h2">{s("Lihat apa yang ", "See what your ")}<span class="dl-hl">{s("dikerjakan agen.", "agents are doing.")}</span></h2>
           </div>
           <div class="grid">
             {shots.slice(1).map((x) => (
-              <figure class="card dl-reveal">
-                <div class="shot"><span class="bar"><i></i><i></i><i></i></span><img src={x.src} alt={x.alt} loading="lazy" decoding="async" /></div>
+              <figure class="card dl-card dl-card-hover dl-reveal">
+                <div class="dl-shot"><span class="dl-bar"><i></i><i></i><i></i></span><img src={x.src} alt={x.alt} loading="lazy" decoding="async" /></div>
                 <figcaption><b>{x.t}</b>{x.d}</figcaption>
               </figure>
             ))}
-            <figure class="card phone dl-reveal">
+            <figure class="card dl-card dl-card-hover phone dl-reveal">
               <img src={img("05-mobile")} alt={s("DyskOS dibuka dari HP", "DyskOS opened on a phone")} loading="lazy" decoding="async" />
               <figcaption><b>{s("Dari HP", "From your phone")}</b>{s("Pasang sebagai PWA dan pantau sesi dari mana saja di tailnet Anda.", "Install it as a PWA and follow your sessions from anywhere on your tailnet.")}</figcaption>
             </figure>
@@ -114,26 +118,26 @@ const safe = [
         </div>
       </section>
 
-      <section id="fitur" class="sec sec-tight">
-        <div class="wrap">
-          <div class="head">
-            <p class="kick">{s("Fitur", "Features")}</p>
-            <h2>{s("Dibuat untuk kerja dengan banyak agen.", "Built for working with many agents.")}</h2>
+      <section id="fitur" class="dl-sec dl-alt">
+        <div class="dl-wrap">
+          <div class="dl-head dl-head-c">
+            <p class="dl-eyebrow">{s("Fitur", "Features")}</p>
+            <h2 class="dl-h2">{s("Dibuat untuk kerja dengan ", "Built for working with ")}<span class="dl-hl">{s("banyak agen.", "many agents.")}</span></h2>
           </div>
-          <ul class="feat">
+          <ul class="dl-feats">
             {features.map((f) => <li class="dl-reveal"><h3>{f.t}</h3><p>{f.d}</p></li>)}
           </ul>
         </div>
       </section>
 
-      <section id="aman" class="sec sec-tight">
-        <div class="wrap">
-          <div class="safe dl-reveal">
+      <section id="aman" class="dl-sec">
+        <div class="dl-wrap">
+          <div class="safe dl-featured dl-reveal">
             <div>
-              <p class="kick">{s("Keamanan", "Safety")}</p>
+              <p class="safe-k">{s("Keamanan", "Safety")}</p>
               <h2>{s("Semuanya tetap di Mac Anda.", "Everything stays on your Mac.")}</h2>
             </div>
-            <ul>{safe.map((x) => <li>{x}</li>)}</ul>
+            <ul class="dl-list">{safe.map((x) => <li>{x}</li>)}</ul>
           </div>
         </div>
       </section>
@@ -144,55 +148,22 @@ const safe = [
 </Base>
 
 <style>
-  :global(body) { margin: 0; background: #14110f; }
-  .os {
-    --bg: #14110f; --card: #1d1814; --ink: #f6efe8; --muted: #a79d92; --line: #2e2721; --accent: #ea6a1f; --accent-s: #3a2314;
-    --pb-bg: rgba(20, 17, 15, 0.85); --pb-fg: var(--ink); --pb-muted: var(--muted); --pb-line: var(--line); --pb-hover: var(--accent-s);
-    --pb-btn-bg: var(--accent); --pb-btn-fg: #fff; --pb-radius: 999px; --pb-font: "Plus Jakarta Sans", sans-serif;
-    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--ink); --pf-card: var(--card); --pf-hover: #5a3a22; --pf-radius: 22px; --pf-font: "Plus Jakarta Sans", sans-serif;
-    background: var(--bg); color: var(--ink); font: 400 16px/1.6 "Plus Jakarta Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;
-  }
-  .wrap { width: min(1140px, calc(100% - 32px)); margin: 0 auto; }
-  h1, h2, h3 { margin: 0; letter-spacing: -0.035em; line-height: 1.05; }
-  .hero { position: relative; padding: 72px 0 40px; }
-  .hero::before { content: ""; position: absolute; left: 50%; top: -30%; width: 900px; height: 700px; transform: translateX(-50%); background: radial-gradient(closest-side, rgba(234, 106, 31, 0.28), transparent); pointer-events: none; }
-  .hero .wrap { position: relative; text-align: center; }
-  .pill { display: inline-flex; align-items: center; gap: 10px; margin: 0; padding: 5px 14px 5px 5px; border-radius: 999px; background: var(--card); box-shadow: 0 0 0 1px var(--line); font-size: 13.5px; color: var(--muted); }
-  .pill span { padding: 3px 10px; border-radius: 999px; background: var(--accent); color: #fff; font-weight: 700; font-size: 12.5px; }
-  h1 { margin-top: 24px; font-size: clamp(40px, 6vw, 76px); font-weight: 800; }
-  .hl { color: var(--accent); }
-  .lede { margin: 22px auto 0; max-width: 640px; font-size: 18px; color: var(--muted); }
-  .workers { list-style: none; margin: 26px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-  .workers li { padding: 7px 14px; border-radius: 999px; background: var(--card); box-shadow: 0 0 0 1px var(--line); font-size: 13.5px; font-weight: 600; }
-  .note { margin: 18px 0 0; font-size: 13.5px; color: var(--muted); }
-  .shot { border-radius: 16px; overflow: hidden; background: var(--card); box-shadow: 0 0 0 1px var(--line), 0 50px 100px -50px rgba(234, 106, 31, 0.35); }
-  .hero-shot { margin-top: 44px; text-align: left; }
-  .bar { display: flex; gap: 7px; padding: 11px 14px; background: #0f0c0a; }
-  .bar i { width: 11px; height: 11px; border-radius: 50%; background: #3a332c; }
-  .bar i:first-child { background: #ff6b5e; } .bar i:nth-child(2) { background: #ffc130; } .bar i:nth-child(3) { background: #2bd15a; }
-  .shot img { display: block; width: 100%; height: auto; }
-  .sec { padding: 100px 0; }
-  .sec-tight { padding-top: 40px; }
-  .head { max-width: 640px; }
-  .kick { margin: 0 0 12px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
-  h2 { font-size: clamp(30px, 4vw, 48px); font-weight: 800; }
-  .grid { margin-top: 40px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .card { margin: 0; padding: 14px; border-radius: 24px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
-  .card figcaption { padding: 16px 6px 6px; color: var(--muted); font-size: 15px; }
+  .hero { padding: 64px 0 24px; }
+  .note { margin: 16px 0 0; font-size: 13.5px; color: var(--muted); }
+  .hero-shot { margin-top: 56px; }
+  .grid { margin-top: 44px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .card { margin: 0; padding: 14px; }
+  .card .dl-shot { box-shadow: none; }
+  .card figcaption { padding: 16px 6px 6px; font-size: 15px; }
   .card figcaption b { display: block; margin-bottom: 4px; color: var(--ink); font-size: 17px; }
   .phone { display: flex; flex-direction: column; align-items: center; }
   .phone img { width: auto; max-width: 100%; max-height: 420px; border-radius: 16px; }
   .phone figcaption { align-self: stretch; }
-  .feat { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .feat li { padding: 24px; border-radius: 22px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
-  .feat h3 { font-size: 19px; letter-spacing: -0.02em; }
-  .feat p { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
-  .safe { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 40px; border-radius: 28px; background: var(--accent-s); box-shadow: 0 0 0 1px #5a3a22; }
-  .safe ul { margin: 0; padding-left: 20px; display: grid; gap: 12px; color: var(--ink); }
+  .safe { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 48px; border-radius: 24px; }
+  .safe-k { margin: 0 0 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255, 255, 255, 0.75); }
+  .safe h2 { font-size: clamp(28px, 3.6vw, 42px); font-weight: 800; }
   @media (max-width: 860px) {
     .grid, .safe { grid-template-columns: 1fr; }
-    .feat { grid-template-columns: 1fr; }
-    .sec { padding: 64px 0; }
     .safe { padding: 28px; gap: 20px; }
   }
 </style>

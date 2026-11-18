@@ -1,12 +1,15 @@
 ---
 /*
-  DyskLab home, products first. The four open-source products lead (hero dock, then one
-  showcase panel each in the product's own colour); custom software for companies is a
-  secondary section further down. Bilingual through `lang`; logo palette (ink #14161a,
-  off-white #f7f7f4, blue #4d7cff) with a saved light/dark toggle.
+  DyskLab home, products first, in the shared JasaWeb-style layout (styles/site.css):
+  centred grid-lined hero with floating product icons and a product strip, an interactive
+  product showcase (list on the left, the chosen product on the right, accordion on
+  phones), why open source as numbered steps, support, then custom software for companies
+  and the FAQ. Bilingual through `lang`; DyskLab colours (ink #14161a, off-white #f7f7f4,
+  blue #4d7cff), dark by default with a saved light/dark toggle.
 */
 import Base from "../layouts/Base.astro";
-import Logo from "../components/Logo.astro";
+import SiteNav from "../components/SiteNav.astro";
+import SiteFooter from "../components/SiteFooter.astro";
 import Faq from "../components/Faq.astro";
 import content from "../data/content";
 import { mask, waNumber } from "../lib/mask";
@@ -242,6 +245,12 @@ const testimonials = content.testimonials.filter((q) => !q.draft || showDrafts).
   quoteL: lang === "id" ? q.quote : quoteEn[i] ?? q.quote,
   roleL: lang === "id" ? q.role : roleEn[q.role] ?? q.role,
 }));
+const whyIcons = [
+  '<path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z"/>',
+  '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6M3 3l18 18"/>',
+  '<path d="M4 7h16v12H4zM4 7l2-3h12l2 3M9 12h6"/>',
+  '<path d="m8 8-5 4 5 4M16 8l5 4-5 4M14 5l-4 14"/>',
+];
 const waHello = `https://wa.me/${wa}?text=${encodeURIComponent(T.waText)}`;
 const mail = `mailto:${content.email}?subject=${encodeURIComponent(T.mailSubject)}`;
 
@@ -262,150 +271,143 @@ const jsonLd = {
   description={T.description}
   path={Astro.url.pathname}
   ogTitle="DyskLab"
-  fonts="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap"
-  toggle
   jsonLd={jsonLd}
 >
-  <div class="dl" id="top">
-    <header class="nav" data-nav>
-      <div class="wrap nav-in">
-        <a class="brand" href={href(lang, "/")}><Logo size={30} /><span>DyskLab</span></a>
-        <nav class="nav-links" aria-label="DyskLab">
-          {T.nav.map(([h, l]) => <a href={h}>{l}</a>)}
-        </nav>
-        <div class="nav-act">
-          <a class="chip" href={github} target="_blank" rel="noopener" aria-label={`GitHub${t.newTab}`}>
-            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .2a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.3 1.9.9 2.4.7 0-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8a7.4 7.4 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.1 0 3.1-1.9 3.8-3.6 4 .3.3.5.7.5 1.4v2.2c0 .2.1.5.6.4A8 8 0 0 0 8 .2Z" /></svg>
-            {showStars && <b>★ {starTotal}</b>}
-          </a>
-          <a class="chip" href={alternate(Astro.url.pathname, other)} data-lang={other} hreflang={other} lang={other} aria-label={t.switchLabel}>{other.toUpperCase()}</a>
-          <button class="chip theme" type="button" data-theme-toggle aria-label={T.themeLabel}>
-            <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
-            <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5Z" /></svg>
-          </button>
-          <a class="btn btn-ink nav-cta" href="#produk">{T.cta}</a>
-        </div>
-      </div>
-    </header>
+  <div id="top">
+    <SiteNav lang={lang} links={T.nav.map(([h, l]) => ({ href: h, label: l }))} cta={{ href: "#produk", label: T.cta }} github={github} stars={showStars ? starTotal : null} />
 
     <main>
       <!-- hero -->
-      <section class="hero">
-        <div class="wrap hero-grid">
-          <div class="hero-copy">
-            <p class="badge"><span class="dot"></span>{T.badge}</p>
-            <h1>{T.h1a}<br /><span class="blue">{T.h1b}</span></h1>
-            <p class="lede">{T.lede}</p>
-            <div class="cta">
-              <a class="btn btn-blue" href="#produk">{T.explore} <span aria-hidden="true">↓</span></a>
-              <a class="btn btn-line" href={github} target="_blank" rel="noopener">{T.gh} ↗<span class="sr">{t.newTab}</span></a>
-            </div>
+      <section class="hero dl-gridbg">
+        <ul class="float" aria-hidden="true">
+          {products.map((p, i) => <li class={`f${i}`} style={`--c:${p.color}`}><img src={p.icon} width="64" height="64" alt="" /></li>)}
+        </ul>
+        <div class="dl-wrap dl-head-c hero-copy">
+          <p class="dl-eyebrow">{T.badge}</p>
+          <h1 class="dl-h1">{T.h1a}<br /><span class="dl-hl">{T.h1b}</span></h1>
+          <p class="dl-lede">{T.lede}</p>
+          <div class="dl-actions">
+            <a class="dl-btn dl-btn-primary" href="#produk">{T.explore}<span class="dl-arr" aria-hidden="true">↓</span></a>
+            <a class="dl-btn dl-btn-ghost" href={github} target="_blank" rel="noopener">{T.gh}<span class="dl-arr" aria-hidden="true">↗</span><span class="dl-sr">{t.newTab}</span></a>
           </div>
-          <ul class="dock" aria-label={T.prodK}>
-            {products.map((p) => (
-              <li style={`--c:${p.color}`}>
-                <a href={p.url}>
-                  <img class="dock-ic" src={p.icon} width="56" height="56" alt="" />
-                  <span class="dock-n">{p.name}</span>
-                  <span class="dock-k">{p.kindL}</span>
-                  <span class="dock-p">{p.platforms.join(" · ")}</span>
-                  <span class="dock-go" aria-hidden="true">→</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div class="wrap">
-          <ul class="strip">
+          <ul class="dl-checks">
             {T.strip.map((s) => <li>{s}</li>)}
             {showStars && <li>★ {T.starsLabel(starTotal!)}</li>}
+          </ul>
+        </div>
+        <a class="scroll" href="#produk" aria-label={T.explore}><span aria-hidden="true">↓</span></a>
+      </section>
+
+      <!-- product strip -->
+      <section class="strip" aria-label={T.prodK}>
+        <div class="dl-wrap">
+          <ul>
+            {products.map((p) => (
+              <li style={`--c:${p.color}`}>
+                <a href={p.url} title={p.kindL}><img src={p.icon} width="28" height="28" alt="" /><b>{p.name}</b></a>
+              </li>
+            ))}
           </ul>
         </div>
       </section>
 
       <!-- products -->
-      <section id="produk" class="sec">
-        <div class="wrap">
-          <div class="head dl-reveal">
-            <p class="kick">{T.prodK}</p>
-            <h2>{T.prodH}<br /><span class="muted">{T.prodH2}</span></h2>
+      <section id="produk" class="dl-sec prod">
+        <div class="dl-wrap">
+          <div class="dl-head dl-head-c dl-reveal">
+            <p class="dl-eyebrow">{T.prodK}</p>
+            <h2 class="dl-h2">{T.prodH}<br /><span class="dl-hl">{T.prodH2}</span></h2>
           </div>
-          <div class="panels">
+          <div class="pr dl-reveal" data-pr>
             {products.map((p, i) => (
-              <article class={`panel dl-reveal${i % 2 ? " flip" : ""}`} style={`--c:${p.color}`}>
-                <div class="panel-copy">
-                  <div class="panel-id">
-                    <img src={p.icon} width="48" height="48" alt="" loading="lazy" />
-                    <div><h3>{p.name}</h3><span>{p.kindL}</span></div>
+              <div class="pr-item dl-accent" style={`--accent:${p.color}`}>
+                <button class="pr-tab" type="button" id={`pr-t-${p.slug}`} aria-expanded={i === 0 ? "true" : "false"} aria-controls={`pr-p-${p.slug}`}>
+                  <span class="pr-n">{String(i + 1).padStart(2, "0")}</span>
+                  <img src={p.icon} width="40" height="40" alt="" loading="lazy" />
+                  <span class="pr-name"><b>{p.name}</b><small>{p.kindL}</small></span>
+                  <span class="pr-plus" aria-hidden="true"></span>
+                </button>
+                <article class="pr-panel" id={`pr-p-${p.slug}`} aria-labelledby={`pr-t-${p.slug}`} data-open={i === 0 ? "" : undefined}>
+                  <div class="pr-copy">
+                    <p class="pr-tag">{L(p.tag)}</p>
+                    <p class="pr-text">{L(p.text)}</p>
+                    <ul class="dl-list pr-pts">{L(p.points).map((x) => <li>{x}</li>)}</ul>
+                    <p class="pr-k">{lang === "id" ? "Platform" : "Platforms"}</p>
+                    <ul class="dl-chips">
+                      {p.platforms.map((x) => <li>{x}</li>)}
+                      {p.version && <li class="ver">{T.latest} v{p.version}</li>}
+                    </ul>
+                    <div class="pr-cta">
+                      <a class="dl-btn dl-btn-primary dl-btn-sm" href={p.url}>{T.see(p.name)}<span class="dl-arr" aria-hidden="true">→</span></a>
+                      {p.repo && (
+                        <a class="pr-star" href={`https://github.com/${p.repo}`} target="_blank" rel="noopener">
+                          ★ {t.star}{p.star !== null && p.star >= 10 && ` · ${p.star}`}<span class="dl-sr">{t.newTab}</span>
+                        </a>
+                      )}
+                    </div>
                   </div>
-                  <p class="panel-tag">{L(p.tag)}</p>
-                  <p class="panel-text">{L(p.text)}</p>
-                  <ul class="panel-pts">{L(p.points).map((x) => <li>{x}</li>)}</ul>
-                  <div class="panel-meta">
-                    {p.platforms.map((x) => <span>{x}</span>)}
-                    {p.version && <span class="ver">{T.latest} v{p.version}</span>}
-                  </div>
-                  <div class="panel-cta">
-                    <a class="btn btn-c" href={p.url}>{T.see(p.name)} →</a>
-                    {p.repo && (
-                      <a class="btn btn-line" href={`https://github.com/${p.repo}`} target="_blank" rel="noopener">
-                        ★ {t.star}{p.star !== null && p.star >= 10 && ` · ${p.star}`}<span class="sr">{t.newTab}</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-                <a class="panel-shot" href={p.url} tabindex="-1" aria-hidden="true">
-                  <span class="bar"><i></i><i></i><i></i></span>
-                  {p.shot ? (
-                    <img src={p.shot} alt="" loading="lazy" decoding="async" />
-                  ) : (
-                    <span class="panel-art"><img src={p.icon} width="128" height="128" alt="" loading="lazy" /></span>
-                  )}
-                </a>
-              </article>
+                  <a class="pr-shot" href={p.url} tabindex="-1" aria-hidden="true">
+                    <span class="dl-shot">
+                      <span class="dl-bar"><i></i><i></i><i></i></span>
+                      {p.shot ? (
+                        <img src={p.shot} alt="" loading="lazy" decoding="async" />
+                      ) : (
+                        <span class="pr-art"><img src={p.icon} width="112" height="112" alt="" loading="lazy" /></span>
+                      )}
+                    </span>
+                  </a>
+                </article>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       <!-- why open source -->
-      <section id="kenapa" class="sec sec-ink">
-        <div class="wrap">
-          <div class="head dl-reveal">
-            <p class="kick">{T.whyK}</p>
-            <h2>{T.whyH}</h2>
+      <section id="kenapa" class="dl-sec dl-alt">
+        <div class="dl-wrap">
+          <div class="dl-head dl-head-c dl-reveal">
+            <p class="dl-label">{T.whyK}</p>
+            <h2 class="dl-h2">{T.whyH}</h2>
           </div>
-          <ul class="why">
+          <ol class="why">
             {T.why.map(([h, d], i) => (
-              <li class="dl-reveal"><span class="why-n">0{i + 1}</span><h3>{h}</h3><p>{d}</p></li>
+              <li class="dl-reveal">
+                <span class="why-node" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={whyIcons[i]} /><b>{i + 1}</b></span>
+                <div class="why-card">
+                  <small>{lang === "id" ? "Alasan" : "Reason"} 0{i + 1}</small>
+                  <h3>{h}</h3>
+                  <p>{d}</p>
+                </div>
+              </li>
             ))}
-          </ul>
+          </ol>
         </div>
       </section>
 
       <!-- support -->
-      <section id="dukung" class="sec">
-        <div class="wrap">
+      <section id="dukung" class="dl-sec">
+        <div class="dl-wrap">
           <div class="support dl-reveal">
-            <div>
-              <p class="kick">{T.supK}</p>
+            <div class="support-copy dl-featured">
+              <p class="support-k">{T.supK}</p>
               <h2>{T.supH}</h2>
-              <p class="support-p">{T.supP}</p>
+              <p>{T.supP}</p>
+              <a class="dl-btn dl-btn-coffee" href={BMC} target="_blank" rel="noopener"><span aria-hidden="true">☕</span>{t.coffee}<span class="dl-arr" aria-hidden="true">→</span><span class="dl-sr">{t.newTab}</span></a>
             </div>
-            <div class="support-act">
-              <a class="btn btn-coffee" href={BMC} target="_blank" rel="noopener"><span aria-hidden="true">☕</span> {t.coffee}<span class="sr">{t.newTab}</span></a>
-              <p class="support-k">{T.starEach}</p>
+            <div class="support-stars dl-card">
+              <p class="dl-label">{T.starEach}</p>
               <ul class="star-list">
                 {products.filter((p) => p.repo).map((p) => (
                   <li><a href={`https://github.com/${p.repo}`} target="_blank" rel="noopener" style={`--c:${p.color}`}>
-                    <img src={p.icon} width="22" height="22" alt="" />{p.name}<span class="s">★</span><span class="sr">{t.newTab}</span>
+                    <img src={p.icon} width="24" height="24" alt="" />{p.name}<span class="s">★</span><span class="dl-sr">{t.newTab}</span>
                   </a></li>
                 ))}
                 <li><a href="https://github.com/DyskLab/dysklink-desktop" target="_blank" rel="noopener" style="--c:#2dd4a7">
-                  <img src="/images/apps/dysklink.png" width="22" height="22" alt="" />DyskLink Windows/Linux<span class="s">★</span><span class="sr">{t.newTab}</span>
+                  <img src="/images/apps/dysklink.png" width="24" height="24" alt="" />DyskLink Windows/Linux<span class="s">★</span><span class="dl-sr">{t.newTab}</span>
                 </a></li>
                 <li><a href="https://github.com/DyskLab/dysklink-android" target="_blank" rel="noopener" style="--c:#2dd4a7">
-                  <img src="/images/apps/dysklink.png" width="22" height="22" alt="" />DyskLink Android<span class="s">★</span><span class="sr">{t.newTab}</span>
+                  <img src="/images/apps/dysklink.png" width="24" height="24" alt="" />DyskLink Android<span class="s">★</span><span class="dl-sr">{t.newTab}</span>
                 </a></li>
               </ul>
             </div>
@@ -414,32 +416,37 @@ const jsonLd = {
       </section>
 
       <!-- client work (secondary) -->
-      <section id="layanan" class="sec sec-soft">
-        <div class="wrap">
-          <div class="head dl-reveal">
-            <p class="kick">{T.svcK}</p>
-            <h2>{T.svcH}</h2>
-            <p class="head-p">{T.svcP}</p>
+      <section id="layanan" class="dl-sec dl-alt dl-gridbg">
+        <div class="dl-wrap">
+          <div class="dl-head-row dl-reveal">
+            <div class="dl-head">
+              <p class="dl-label">{T.svcK}</p>
+              <h2 class="dl-h2">{T.svcH}</h2>
+              <p class="dl-sub">{T.svcP}</p>
+            </div>
           </div>
-          <div class="svc dl-reveal">
-            {groups.map((g) => (
-              <div class="svc-g">
+          <div class="svc">
+            {groups.map((g, gi) => (
+              <div class:list={["svc-g", "dl-card", "dl-reveal", { "dl-featured": gi === 0 }]}>
+                <span class="svc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={gi === 0 ? '<path d="M4 20h16M6 16l4-10 4 6 2-3 3 7"/>' : '<path d="M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/>'} /></span>
                 <h3>{g.title}</h3>
                 <ul>{g.items.map(([n, d]) => <li><b>{n}</b><span>{d}</span></li>)}</ul>
               </div>
             ))}
           </div>
 
-          <h3 class="sub dl-reveal">{T.casesH}</h3>
+          <div class="dl-head-row sub-row dl-reveal">
+            <h3 class="sub">{T.casesH}</h3>
+          </div>
           <ul class="cases">
             {cases.map((c) => (
-              <li class="case dl-reveal">
+              <li class="case dl-card dl-card-hover dl-reveal">
                 {c.image && <img src={c.image} width="1200" height="750" alt="" loading="lazy" decoding="async" />}
                 <div class="case-b">
-                  <p class="case-k">{c.client} · {c.sectorL}</p>
+                  <p class="case-k"><span>{c.client}</span>{c.sectorL}</p>
                   <h4>{c.titleL}</h4>
                   <p class="case-s">{c.stack.join(" · ")}</p>
-                  {c.demo && <a href={c.demo} target="_blank" rel="noopener">{T.visit} {c.host} ↗<span class="sr">{t.newTab}</span></a>}
+                  {c.demo && <a href={c.demo} target="_blank" rel="noopener">{T.visit} {c.host} →<span class="dl-sr">{t.newTab}</span></a>}
                 </div>
               </li>
             ))}
@@ -447,260 +454,217 @@ const jsonLd = {
 
           <h3 class="sub dl-reveal">{T.quotesH}</h3>
           <ul class="quotes">
-            {testimonials.map((q) => (
-              <li class="dl-reveal">
-                <blockquote>“{q.quoteL}”</blockquote>
+            {testimonials.map((q, i) => (
+              <li class:list={["dl-card", "dl-reveal", { "dl-featured": i === 1 }]}>
+                <svg class="q-mark" viewBox="0 0 32 24" aria-hidden="true"><path d="M0 24V14C0 6 4 1 12 0l1 4c-4 1-6 4-6 8h6v12zm19 0V14c0-8 4-13 12-14l1 4c-4 1-6 4-6 8h6v12z" /></svg>
+                <blockquote>{q.quoteL}</blockquote>
                 <p><b>{mask(q.name)}</b>{q.roleL}</p>
               </li>
             ))}
           </ul>
           {T.quoteNote && <p class="note">{T.quoteNote}</p>}
 
-          <div class="contact dl-reveal" id="mulai">
-            <div>
-              <h3>{T.contactH}</h3>
-              <p>{T.contactP}</p>
-            </div>
-            <div class="contact-act">
-              <a class="btn btn-wa" href={waHello} target="_blank" rel="noopener">WhatsApp<span class="sr">{t.newTab}</span></a>
-              <a class="btn btn-line" href={mail}>{content.email}</a>
+          <div class="contact dl-featured dl-reveal" id="mulai">
+            <h3>{T.contactH}</h3>
+            <p>{T.contactP}</p>
+            <div class="dl-actions dl-actions-c">
+              <a class="dl-btn dl-btn-light" href={waHello} target="_blank" rel="noopener">WhatsApp<span class="dl-arr wa" aria-hidden="true">→</span><span class="dl-sr">{t.newTab}</span></a>
+              <a class="dl-btn dl-btn-outline-light dl-btn-plain" href={mail}>{content.email}</a>
             </div>
           </div>
         </div>
       </section>
 
-      <Faq lang={lang} items={T.faq} />
+      <Faq lang={lang} items={T.faq} help={{ href: waHello, label: lang === "id" ? "Tanya lewat WhatsApp" : "Ask on WhatsApp", external: true }} />
     </main>
 
-    <footer class="foot">
-      <div class="wrap foot-in">
-        <div class="foot-brand">
-          <a class="brand" href={href(lang, "/")}><Logo size={28} /><span>DyskLab</span></a>
-          <p>{T.footP}</p>
-        </div>
-        <div>
-          <p class="foot-h">{T.prodK}</p>
-          <ul>{products.map((p) => <li><a href={p.url}>{p.name}</a></li>)}</ul>
-        </div>
-        <div>
-          <p class="foot-h">DyskLab</p>
-          <ul>
-            <li><a href={github} target="_blank" rel="noopener">GitHub</a></li>
-            <li><a href={BMC} target="_blank" rel="noopener">Buy Me a Coffee</a></li>
-            <li><a href="#layanan">{T.svcK}</a></li>
-            <li><a href="#faq">FAQ</a></li>
-          </ul>
-        </div>
-        <div>
-          <p class="foot-h">{lang === "id" ? "Kontak" : "Contact"}</p>
-          <ul>
-            <li><a href={mail}>{content.email}</a></li>
-            <li><a href={waHello} target="_blank" rel="noopener">WhatsApp</a></li>
-            <li><a href={alternate(Astro.url.pathname, other)} data-lang={other} hreflang={other} lang={other}>{t.switchTo}</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="wrap foot-bottom">© {year} DyskLab · MIT License</div>
-    </footer>
+    <SiteFooter lang={lang} />
   </div>
-  <script src="../scripts/reveal.js"></script>
   <script>
-    // Theme toggle (light by default; the choice is saved) and the sticky nav shadow.
-    const root = document.documentElement;
-    document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
-      const next = root.dataset.theme === "dark" ? "light" : "dark";
-      root.dataset.theme = next;
-      try { localStorage.setItem("dysklab-theme", next); } catch {}
+    // Product showcase: one product open at a time (list + stage on desktop, accordion on phones).
+    document.querySelectorAll<HTMLElement>("[data-pr]").forEach((box) => {
+      const tabs = Array.from(box.querySelectorAll<HTMLButtonElement>(".pr-tab"));
+      const open = (tab: HTMLButtonElement, focusPanel = false) => {
+        tabs.forEach((t) => {
+          const on = t === tab;
+          t.setAttribute("aria-expanded", String(on));
+          const panel = document.getElementById(t.getAttribute("aria-controls")!);
+          if (panel) on ? panel.setAttribute("data-open", "") : panel.removeAttribute("data-open");
+        });
+        if (focusPanel && matchMedia("(max-width: 900px)").matches) tab.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      };
+      tabs.forEach((t) => t.addEventListener("click", () => open(t, true)));
+      box.classList.add("is-js");
     });
-    const nav = document.querySelector<HTMLElement>("[data-nav]");
-    const onScroll = () => nav?.classList.toggle("is-stuck", scrollY > 8);
-    addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
   </script>
 </Base>
 
 <style>
-  :global(html) { background: #fbfbf9; }
-  :global(html[data-theme="dark"]) { background: #14161a; }
-  :global(body) { margin: 0; }
-  .dl {
-    --bg: #fbfbf9; --bg-2: #f2f2ee; --card: #fff; --fg: #14161a; --muted: #5c6068; --line: #e6e5df; --blue: #4d7cff; --blue-2: #3b63e6; --ink: #14161a; --paper: #f7f7f4;
-    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--fg); --pf-card: var(--card); --pf-radius: 16px;
-    --pb-btn-bg: var(--blue); --pb-btn-fg: #fff; --pb-radius: 12px;
-    background: var(--bg); color: var(--fg); font: 400 16px/1.6 Geist, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;
-  }
-  :global([data-theme="dark"]) .dl { --bg: #14161a; --bg-2: #191c21; --card: #1b1e23; --fg: #f7f7f4; --muted: #a2a6ad; --line: #2a2e35; }
-  .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
-  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  h1, h2, h3, h4 { margin: 0; letter-spacing: -0.035em; line-height: 1.05; }
-  a { color: inherit; }
-  .muted { color: var(--muted); }
-  .blue { color: var(--blue); }
-
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 20px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; transition: transform 0.15s, background 0.2s, box-shadow 0.2s; white-space: nowrap; }
-  .btn:hover { transform: translateY(-1px); }
-  .btn-ink { background: var(--fg); color: var(--bg); height: 38px; padding: 0 14px; font-size: 14px; }
-  .btn-blue { background: var(--blue); color: #fff; box-shadow: 0 10px 24px -12px rgba(77, 124, 255, 0.8); }
-  .btn-line { border: 1px solid var(--line); background: var(--card); color: var(--fg); }
-  .btn-line:hover { border-color: var(--muted); }
-  .btn-c { background: var(--c); color: #fff; }
-  .btn-coffee { background: #ffdd00; color: #1a1a1a; height: 54px; font-size: 16px; }
-  .btn-wa { background: #25d366; color: #052e16; }
-
-  /* nav */
-  .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 82%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid transparent; transition: border-color 0.2s; }
-  .nav:global(.is-stuck) { border-color: var(--line); }
-  .nav-in { height: 66px; display: flex; align-items: center; gap: 22px; }
-  .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: -0.02em; text-decoration: none; }
-  .brand :global(svg) { border-radius: 9px; box-shadow: 0 0 0 1px var(--line); }
-  .nav-links { display: flex; gap: 4px; }
-  .nav-links a { padding: 7px 11px; border-radius: 8px; font-size: 14.5px; color: var(--muted); text-decoration: none; }
-  .nav-links a:hover { color: var(--fg); background: var(--bg-2); }
-  .nav-act { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-  .chip { display: inline-flex; align-items: center; gap: 6px; height: 38px; min-width: 38px; justify-content: center; padding: 0 10px; box-sizing: border-box; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--fg); font: 600 13px Geist, sans-serif; text-decoration: none; cursor: pointer; }
-  .chip:hover { border-color: var(--muted); }
-  .chip svg { width: 16px; height: 16px; fill: currentColor; }
-  .theme svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
-  .theme .moon { display: none; }
-  :global([data-theme="dark"]) .theme .sun { display: none; }
-  :global([data-theme="dark"]) .theme .moon { display: block; }
-
   /* hero */
-  .hero { position: relative; padding: 72px 0 40px; }
-  .hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(50% 60% at 80% 20%, rgba(77, 124, 255, 0.14), transparent 70%), linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 44px; mask: linear-gradient(#000, transparent 85%); opacity: 0.6; pointer-events: none; }
-  .hero-grid { position: relative; display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
-  .badge { display: inline-flex; align-items: center; gap: 9px; margin: 0; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-size: 13.5px; font-weight: 500; color: var(--muted); }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 4px rgba(77, 124, 255, 0.18); }
-  h1 { margin-top: 22px; font-size: clamp(44px, 6.4vw, 82px); font-weight: 800; }
-  .lede { margin: 22px 0 0; max-width: 560px; font-size: 18.5px; color: var(--muted); }
-  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-  .dock { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .dock a { position: relative; display: grid; gap: 2px; padding: 22px; border-radius: 22px; background: var(--card); border: 1px solid var(--line); text-decoration: none; overflow: hidden; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; }
-  .dock a::before { content: ""; position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; border-radius: 50%; background: var(--c); opacity: 0.14; transition: transform 0.3s; }
-  .dock a:hover { transform: translateY(-3px); border-color: var(--c); box-shadow: 0 24px 50px -30px var(--c); }
-  .dock a:hover::before { transform: scale(1.3); }
-  .dock-ic { border-radius: 14px; margin-bottom: 14px; box-shadow: 0 10px 24px -12px var(--c); }
-  .dock-n { font-weight: 700; font-size: 19px; letter-spacing: -0.02em; }
-  .dock-k { font-size: 14px; color: var(--muted); }
-  .dock-p { margin-top: 10px; font: 500 12px "Geist Mono", monospace; color: var(--c); filter: brightness(0.85); }
-  :global([data-theme="dark"]) .dock-p { filter: none; }
-  .dock-go { position: absolute; right: 20px; bottom: 18px; font-size: 18px; color: var(--muted); transition: transform 0.2s, color 0.2s; }
-  .dock a:hover .dock-go { transform: translateX(3px); color: var(--c); }
-  .strip { list-style: none; margin: 56px 0 0; padding: 18px 0 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; border-top: 1px solid var(--line); font: 500 13.5px "Geist Mono", monospace; color: var(--muted); }
+  .hero { padding: 88px 0 56px; overflow: hidden; }
+  .hero-copy { position: relative; max-width: 860px; }
+  .hero .dl-h1 { font-size: clamp(40px, 6.6vw, 76px); }
+  .float { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; pointer-events: none; }
+  .float li { position: absolute; padding: 10px; border-radius: 22px; background: color-mix(in srgb, var(--card) 80%, transparent); border: 1px solid var(--line); box-shadow: 0 30px 50px -24px color-mix(in srgb, var(--c) 70%, transparent); animation: bob 7s ease-in-out infinite; }
+  .float img { display: block; border-radius: 15px; }
+  .float .f0 { left: 6%; top: 16%; transform: rotate(-10deg); }
+  .float .f1 { left: 13%; top: 48%; transform: rotate(6deg); animation-delay: -1s; }
+  .float .f2 { left: 4%; top: 74%; transform: rotate(-4deg); animation-delay: -2s; }
+  .float .f3 { left: 18%; top: 82%; transform: rotate(9deg); scale: 0.75; animation-delay: -3s; }
+  .float .f4 { right: 6%; top: 14%; transform: rotate(10deg); animation-delay: -4s; }
+  .float .f5 { right: 14%; top: 44%; transform: rotate(-7deg); animation-delay: -5s; }
+  .float .f6 { right: 4%; top: 68%; transform: rotate(5deg); animation-delay: -6s; }
+  .float .f7 { right: 18%; top: 82%; transform: rotate(-9deg); scale: 0.75; animation-delay: -2.5s; }
+  .float .f8 { left: 22%; top: 8%; transform: rotate(4deg); scale: 0.7; animation-delay: -4.5s; }
+  @keyframes bob { 50% { translate: 0 -10px; } }
+  @media (prefers-reduced-motion: reduce) { .float li { animation: none; } }
+  .scroll { position: relative; display: grid; place-items: center; width: 30px; height: 46px; margin: 48px auto 0; border-radius: 999px; border: 1.5px solid var(--line-2); color: var(--muted); text-decoration: none; font-size: 14px; }
+  .scroll span { animation: bob 2.4s ease-in-out infinite; }
 
-  /* sections */
-  .sec { padding: 104px 0; }
-  .head { max-width: 760px; }
-  .kick { margin: 0 0 14px; font: 500 13px "Geist Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; color: var(--blue); }
-  h2 { font-size: clamp(32px, 4.4vw, 54px); font-weight: 800; }
-  .head-p { margin: 18px 0 0; font-size: 17.5px; color: var(--muted); }
+  /* product strip */
+  .strip { border-block: 1px solid var(--line); background: var(--bg-2); }
+  .strip ul { list-style: none; margin: 0; padding: 16px 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+  .strip li { flex: none; }
+  .strip a { display: flex; align-items: center; gap: 8px; padding: 6px 10px 6px 6px; border-radius: 14px; text-decoration: none; white-space: nowrap; transition: background 0.2s; }
+  .strip a:hover { background: var(--card); }
+  .strip img { border-radius: 10px; filter: grayscale(0.5); opacity: 0.85; transition: filter 0.2s, opacity 0.2s; }
+  .strip a:hover img { filter: none; opacity: 1; }
+  .strip b { color: var(--ink); font-size: 14px; }
+  .strip img { border-radius: 8px !important; }
 
-  .panels { margin-top: 56px; display: grid; gap: 28px; }
-  .panel { display: grid; grid-template-columns: 1fr 1.15fr; gap: 44px; align-items: center; padding: 40px; border-radius: 30px; border: 1px solid var(--line); background: linear-gradient(135deg, color-mix(in srgb, var(--c) 9%, var(--card)), var(--card) 60%); overflow: hidden; }
-  .panel.flip { grid-template-columns: 1.15fr 1fr; }
-  .panel.flip .panel-copy { order: 2; }
-  .panel-id { display: flex; align-items: center; gap: 14px; }
-  .panel-id img { border-radius: 13px; box-shadow: 0 10px 24px -12px var(--c); }
-  .panel-id h3 { font-size: 28px; }
-  .panel-id span { font-size: 14px; color: var(--muted); }
-  .panel-tag { margin: 22px 0 0; font-size: clamp(22px, 2.4vw, 28px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; }
-  .panel-text { margin: 12px 0 0; color: var(--muted); }
-  .panel-pts { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 8px; }
-  .panel-pts li { position: relative; padding-left: 26px; font-weight: 500; font-size: 15px; }
-  .panel-pts li::before { content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: color-mix(in srgb, var(--c) 22%, transparent); box-shadow: inset 0 0 0 5px var(--c); }
-  .panel-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
-  .panel-meta span { padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font: 500 12.5px "Geist Mono", monospace; color: var(--muted); }
-  .panel-meta .ver { border-color: color-mix(in srgb, var(--c) 45%, transparent); color: var(--fg); }
-  .panel-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-  .panel-shot { display: block; border-radius: 16px; overflow: hidden; background: #0f1115; border: 1px solid rgba(0, 0, 0, 0.12); box-shadow: 0 40px 80px -40px rgba(20, 22, 26, 0.55); transform: rotate(0.6deg); transition: transform 0.3s; }
-  .panel.flip .panel-shot { transform: rotate(-0.6deg); }
-  .panel:hover .panel-shot { transform: none; }
-  .bar { display: flex; gap: 6px; padding: 10px 12px; background: #1b1e23; }
-  .bar i { width: 10px; height: 10px; border-radius: 50%; background: #3a3f47; }
-  .panel-shot img { width: 100%; height: auto; display: block; aspect-ratio: 16 / 9.4; object-fit: cover; object-position: top left; }
-  .panel-art { display: grid; place-items: center; aspect-ratio: 16 / 9.4; background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c) 45%, #0f1115), #0f1115 70%); }
-  .panel-shot .panel-art img { width: 128px; height: 128px; aspect-ratio: 1; border-radius: 30px; box-shadow: 0 30px 60px -20px var(--c); }
+  /* product showcase */
+  .pr {
+    position: relative; margin-top: 56px; display: grid; grid-template-columns: 340px 1fr; grid-auto-rows: min-content; column-gap: 28px; row-gap: 6px;
+    padding: 18px; border-radius: 28px; border: 1px solid var(--line); background:
+      radial-gradient(60% 50% at 85% 10%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 70%),
+      linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 48px 48px,
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 48px 48px, var(--card);
+  }
+  .pr-item { display: contents; }
+  .pr-tab {
+    grid-column: 1; display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border-radius: 16px; border: 1px solid transparent;
+    background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; transition: background 0.2s, border-color 0.2s;
+  }
+  .pr-tab:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+  .pr-tab[aria-expanded="true"] { background: var(--bg); border-color: var(--accent-line); box-shadow: 0 16px 30px -20px var(--accent); }
+  .pr-n { width: 22px; flex: none; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); }
+  .pr-tab[aria-expanded="true"] .pr-n { color: var(--accent-hi); }
+  .pr-tab img { border-radius: 10px; flex: none; }
+  .pr-name { display: grid; line-height: 1.25; flex: 1; }
+  .pr-name b { color: var(--ink); font-size: 16px; }
+  .pr-name small { color: var(--muted); font-size: 13px; }
+  .pr-plus { position: relative; width: 26px; height: 26px; flex: none; border-radius: 50%; background: var(--accent-soft); opacity: 0; transition: opacity 0.2s; }
+  .pr-plus::before { content: "→"; position: absolute; inset: 0; display: grid; place-items: center; font-size: 13px; color: var(--accent-hi); }
+  .pr-tab[aria-expanded="true"] .pr-plus { opacity: 1; }
+  .pr-panel { grid-column: 2; grid-row: 1 / span 9; display: grid; grid-template-rows: auto 1fr; gap: 24px; padding: 18px 10px 10px; }
+  .is-js .pr-panel:not([data-open]) { display: none; }
+  .pr-panel[data-open] { animation: fade 0.35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } }
+  .pr-copy { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; align-content: start; }
+  .pr-tag { grid-column: 1 / -1; margin: 0; color: var(--ink); font-size: clamp(22px, 2.4vw, 30px); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
+  .pr-text { grid-column: 1; margin: 12px 0 0; font-size: 15.5px; }
+  .pr-pts { grid-column: 2; grid-row: 2 / span 3; margin-top: 14px; font-size: 15px; gap: 10px; }
+  .pr-k { grid-column: 1; margin: 18px 0 8px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .pr-copy .dl-chips { grid-column: 1; }
+  .pr-copy .dl-chips li { font-size: 12.5px; padding: 4px 11px; }
+  .pr-copy .ver { border-color: var(--accent-line); color: var(--accent-hi); }
+  .pr-cta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 22px; }
+  .pr-star { font-size: 14.5px; font-weight: 600; color: var(--text); text-decoration: none; }
+  .pr-star:hover { color: var(--ink); }
+  .pr-shot { display: block; align-self: end; }
+  .pr-shot .dl-shot { display: block; }
+  .pr-shot img { aspect-ratio: 16 / 9; object-fit: cover; object-position: top left; }
+  .pr-art { display: grid; place-items: center; aspect-ratio: 16 / 9; background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--accent) 45%, var(--card)), var(--card) 70%); }
+  .pr-shot .pr-art img { width: 112px; height: 112px; aspect-ratio: 1; border-radius: 28px; box-shadow: 0 30px 60px -20px var(--accent); }
 
-  .sec-ink { background: var(--ink); color: var(--paper); }
-  .sec-ink .kick { color: #8aa6ff; }
-  .why { list-style: none; margin: 52px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .why li { padding: 26px; border-radius: 20px; border: 1px solid #2a2e35; background: #1b1e23; }
-  .why-n { font: 500 13px "Geist Mono", monospace; color: var(--blue); }
-  .why h3 { margin-top: 18px; font-size: 20px; letter-spacing: -0.02em; }
-  .why p { margin: 10px 0 0; color: #a2a6ad; font-size: 15px; }
+  /* why: numbered steps joined by a dashed line */
+  .why { list-style: none; margin: 64px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; position: relative; }
+  .why::before { content: ""; position: absolute; left: 12.5%; right: 12.5%; top: 31px; border-top: 1.5px dashed var(--line-2); }
+  .why li { position: relative; display: grid; justify-items: center; gap: 22px; text-align: center; }
+  .why-node { position: relative; width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-2); border: 1.5px solid var(--accent-line); box-shadow: 0 0 0 6px var(--bg-2); color: var(--accent-hi); }
+  .why-node svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .why-node b { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11.5px; background: var(--ink); color: var(--bg); }
+  .why-card { align-self: stretch; padding: 24px 22px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--card); }
+  .why-card small { font-size: 11.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-hi); }
+  .why-card h3 { margin-top: 8px; font-size: 18.5px; }
+  .why-card p { margin: 10px 0 0; font-size: 14.5px; }
 
-  .support { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; padding: 48px; border-radius: 30px; border: 1px solid var(--line); background: radial-gradient(60% 80% at 100% 0%, rgba(255, 221, 0, 0.16), transparent 70%), var(--card); }
-  .support h2 { font-size: clamp(28px, 3.4vw, 42px); }
-  .support-p { margin: 16px 0 0; color: var(--muted); font-size: 17px; }
-  .support-act { display: grid; gap: 14px; }
-  .support-k { margin: 6px 0 0; font: 500 13px "Geist Mono", monospace; color: var(--muted); }
-  .star-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .star-list a { display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); font-weight: 600; font-size: 14px; text-decoration: none; transition: border-color 0.2s; }
-  .star-list a:hover { border-color: var(--c); }
-  .star-list img { border-radius: 6px; }
+  /* support */
+  .support { display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; }
+  .support-copy { padding: 44px; border-radius: 24px; }
+  .support-k { margin: 0 0 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255, 255, 255, 0.75); }
+  .support-copy h2 { font-size: clamp(28px, 3.4vw, 40px); font-weight: 800; }
+  .support-copy > p:not(.support-k) { margin: 16px 0 28px; color: rgba(255, 255, 255, 0.85); font-size: 17px; }
+  .support-stars { padding: 32px; border-radius: 24px; }
+  .star-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .star-list a { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-weight: 600; font-size: 14px; text-decoration: none; transition: border-color 0.2s, transform 0.2s; }
+  .star-list a:hover { border-color: var(--c); transform: translateY(-2px); }
+  .star-list img { border-radius: 7px; }
   .star-list .s { margin-left: auto; color: #f5a524; }
 
-  .sec-soft { background: var(--bg-2); border-top: 1px solid var(--line); }
-  .svc { margin-top: 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .svc-g { padding: 28px; border-radius: 22px; background: var(--card); border: 1px solid var(--line); }
-  .svc-g h3 { font-size: 19px; letter-spacing: -0.02em; }
-  .svc-g ul { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 14px; }
-  .svc-g b { display: block; font-size: 15.5px; }
-  .svc-g span { display: block; margin-top: 2px; font-size: 14.5px; color: var(--muted); }
-  .sub { margin: 64px 0 0; font-size: 24px; letter-spacing: -0.03em; }
-  .cases { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .case { border-radius: 20px; overflow: hidden; background: var(--card); border: 1px solid var(--line); display: flex; flex-direction: column; }
+  /* services */
+  .svc { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .svc-g { padding: 34px; border-radius: 24px; }
+  .svc-ic { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-hi); }
+  .dl-featured .svc-ic { background: rgba(255, 255, 255, 0.14); color: #fff; }
+  .svc-ic svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .svc-g h3 { margin-top: 20px; font-size: 22px; font-weight: 800; }
+  .svc-g ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 16px; }
+  .svc-g li { position: relative; padding-left: 32px; }
+  .svc-g li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 21px; height: 21px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; background: var(--accent-soft); color: var(--accent-hi); }
+  .dl-featured.svc-g li::before { background: rgba(255, 255, 255, 0.16); color: #fff; }
+  .svc-g b { display: block; color: var(--ink); font-size: 15.5px; }
+  .dl-featured.svc-g b { color: #fff; }
+  .svc-g span { display: block; margin-top: 2px; font-size: 14.5px; }
+  .dl-featured.svc-g span { color: rgba(255, 255, 255, 0.8); }
+  .sub { margin: 72px 0 0; font-size: clamp(24px, 2.6vw, 30px); font-weight: 800; }
+  .sub-row .sub { margin-top: 72px; }
+  .cases { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .case { overflow: hidden; display: flex; flex-direction: column; }
   .case img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; display: block; border-bottom: 1px solid var(--line); }
-  .case-b { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
-  .case-k { margin: 0; font: 500 12.5px "Geist Mono", monospace; color: var(--muted); }
-  .case h4 { margin-top: 8px; font-size: 17px; letter-spacing: -0.02em; line-height: 1.25; }
+  .case-b { padding: 20px 22px 22px; display: flex; flex-direction: column; flex: 1; }
+  .case-k { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .case-k span { padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line-2); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); }
+  .case h4 { margin-top: 12px; font-size: 18px; line-height: 1.3; }
   .case-s { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
-  .case a { margin-top: auto; padding-top: 14px; font-size: 14px; font-weight: 600; color: var(--blue); text-decoration: none; }
-  .quotes { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .quotes li { padding: 24px; border-radius: 20px; background: var(--card); border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: space-between; gap: 18px; }
-  blockquote { margin: 0; font-size: 15.5px; line-height: 1.6; }
+  .case a { margin-top: auto; padding-top: 16px; font-size: 14px; font-weight: 600; color: var(--accent-hi); text-decoration: none; }
+  .quotes { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .quotes li { padding: 28px; border-radius: 22px; display: flex; flex-direction: column; gap: 18px; }
+  .q-mark { width: 34px; height: 26px; fill: var(--accent-soft); }
+  .dl-featured .q-mark { fill: rgba(255, 255, 255, 0.2); }
+  blockquote { margin: 0; flex: 1; color: var(--ink); font-size: 15.5px; line-height: 1.65; }
+  .dl-featured blockquote { color: #fff; }
   .quotes p { margin: 0; font-size: 13.5px; color: var(--muted); }
-  .quotes p b { display: block; color: var(--fg); font-size: 14.5px; }
+  .dl-featured p { color: rgba(255, 255, 255, 0.75); }
+  .quotes p b { display: block; color: var(--ink); font-size: 14.5px; }
+  .dl-featured p b { color: #fff; }
   .note { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
-  .contact { margin-top: 64px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; padding: 36px 40px; border-radius: 26px; background: var(--ink); color: var(--paper); }
-  .contact h3 { font-size: clamp(24px, 2.8vw, 32px); }
-  .contact p { margin: 8px 0 0; color: #a2a6ad; }
-  .contact-act { display: flex; flex-wrap: wrap; gap: 10px; }
-  .contact .btn-line { background: transparent; color: var(--paper); border-color: #3a3f47; }
+  .contact { margin-top: 72px; padding: 56px 32px; border-radius: 28px; text-align: center; }
+  .contact h3 { font-size: clamp(26px, 3.4vw, 40px); font-weight: 800; color: #fff; }
+  .contact p { margin: 10px 0 0; color: rgba(255, 255, 255, 0.82); }
+  .contact .dl-actions { margin-top: 28px; }
+  .contact .wa { background: #16a34a; color: #fff; }
 
-  .foot { border-top: 1px solid var(--line); padding: 56px 0 28px; font-size: 14.5px; color: var(--muted); }
-  .foot-in { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 32px; }
-  .foot-brand p { margin: 14px 0 0; max-width: 280px; }
-  .foot-h { margin: 0 0 12px; font-weight: 600; color: var(--fg); }
-  .foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-  .foot a { text-decoration: none; }
-  .foot a:hover { color: var(--fg); }
-  .foot .brand { color: var(--fg); }
-  .foot-bottom { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13.5px; }
-
-  :global(.dl-motion) .dl-reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.2,.8,.2,1); }
-  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
-
+  @media (max-width: 1240px) { .float { display: none; } }
   @media (max-width: 1060px) {
-    .nav-links { display: none; }
-    .hero-grid, .panel, .panel.flip, .support { grid-template-columns: 1fr; }
-    .panel.flip .panel-copy { order: 0; }
-    .why { grid-template-columns: 1fr 1fr; }
+    .why { grid-template-columns: 1fr 1fr; row-gap: 40px; }
+    .why::before { display: none; }
     .cases, .quotes { grid-template-columns: 1fr 1fr; }
-    .foot-in { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 900px) {
+    .pr { grid-template-columns: 1fr; padding: 10px; }
+    .pr-panel { grid-column: 1; grid-row: auto; padding: 8px 8px 22px; }
+    .pr-tab .pr-plus { opacity: 1; }
+    .pr-plus::before { content: "+"; font-size: 16px; }
+    .pr-tab[aria-expanded="true"] .pr-plus::before { content: "−"; }
+    .pr-copy { grid-template-columns: 1fr; }
+    .pr-pts, .pr-text, .pr-k, .pr-copy .dl-chips { grid-column: 1; grid-row: auto; }
+    .support, .svc { grid-template-columns: 1fr; }
   }
   @media (max-width: 640px) {
-    .sec { padding: 72px 0; }
-    .hero { padding-top: 44px; }
-    .nav-cta { display: none; }
-    .dock a { padding: 16px; }
-    .dock-ic { width: 44px; height: 44px; margin-bottom: 10px; }
-    .dock-n { font-size: 16.5px; }
-    .dock-go { display: none; }
-    .panel { padding: 22px; border-radius: 22px; gap: 26px; }
-    .why, .svc, .cases, .quotes, .star-list { grid-template-columns: 1fr; }
-    .support { padding: 26px; }
-    .contact { padding: 26px; }
-    .strip { justify-content: flex-start; }
+    .hero { padding: 56px 0 40px; }
+    .why, .cases, .quotes, .star-list { grid-template-columns: 1fr; }
+    .support-copy, .support-stars, .svc-g { padding: 24px; }
+    .contact { padding: 36px 20px; }
   }
 </style>

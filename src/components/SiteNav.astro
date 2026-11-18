@@ -1,0 +1,185 @@
+---
+/*
+  Top bar for every page (JasaWeb layout, DyskLab colours): brand (plus the product on a
+  product page), section links, ID/EN segmented switch, GitHub, primary pill action, a
+  hamburger drawer under 1020px, and the hanging round theme "lamp" under the bar.
+  Transparent at the top, blurred once the page scrolls.
+*/
+import Logo from "./Logo.astro";
+import { alternate, href, ui, type Lang } from "../i18n";
+interface Props {
+  lang: Lang;
+  links: { href: string; label: string }[];
+  cta: { href: string; label: string; external?: boolean };
+  product?: { name: string; icon: string };
+  github: string; // full URL (org or repo)
+  stars?: number | null; // shown from 10 up
+}
+const { lang, links, cta, product, github, stars } = Astro.props;
+const t = ui[lang];
+const path = Astro.url.pathname;
+const showStars = typeof stars === "number" && stars >= 10;
+const themeLabel = lang === "id" ? "Ganti tema terang atau gelap" : "Switch light or dark theme";
+const menuLabel = lang === "id" ? "Menu" : "Menu";
+---
+<header class="sn" data-nav>
+  <div class="dl-wrap sn-in">
+    <a class="sn-brand" href={href(lang, "/")} aria-label={product ? `DyskLab, ${t.home}` : "DyskLab"}>
+      <Logo size={36} />
+      <span class="sn-name"><b>DyskLab</b><small>{product ? (lang === "id" ? "Beranda" : "Home") : "open source"}</small></span>
+    </a>
+    {product && (
+      <>
+        <span class="sn-sep" aria-hidden="true">/</span>
+        <a class="sn-prod" href="#top"><img src={product.icon} width="28" height="28" alt="" />{product.name}</a>
+      </>
+    )}
+    <nav class="sn-links" id="sn-links" aria-label={product ? t.navLabel(product.name) : "DyskLab"}>
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      <a class="sn-drawer-only" href={alternate(path, lang === "id" ? "en" : "id")} data-lang={lang === "id" ? "en" : "id"}>{t.switchTo}</a>
+      <button class="sn-drawer-only" type="button" data-theme-toggle>{themeLabel}</button>
+    </nav>
+    <div class="sn-act">
+      <div class="sn-seg" aria-label={lang === "id" ? "Bahasa" : "Language"}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" /></svg>
+        {lang === "id" ? <span class="is-on" aria-current="true">ID</span> : <a href={alternate(path, "id")} data-lang="id" hreflang="id" lang="id" aria-label={ui.en.switchLabel}>ID</a>}
+        <i aria-hidden="true">/</i>
+        {lang === "en" ? <span class="is-on" aria-current="true">EN</span> : <a href={alternate(path, "en")} data-lang="en" hreflang="en" lang="en" aria-label={ui.id.switchLabel}>EN</a>}
+      </div>
+      <a class="sn-gh" href={github} target="_blank" rel="noopener" aria-label={`GitHub${showStars ? `, ${t.stars(stars!)}` : ""}${t.newTab}`}>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .2a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.3 1.9.9 2.4.7 0-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8a7.4 7.4 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.1 0 3.1-1.9 3.8-3.6 4 .3.3.5.7.5 1.4v2.2c0 .2.1.5.6.4A8 8 0 0 0 8 .2Z" /></svg>
+        {showStars && <span>★ {stars}</span>}
+      </a>
+      <a class="sn-cta" href={cta.href} {...(cta.external ? { target: "_blank", rel: "noopener" } : {})}>
+        {cta.label}<span aria-hidden="true">→</span>{cta.external && <span class="dl-sr">{t.newTab}</span>}
+      </a>
+      <button class="sn-burger" type="button" aria-expanded="false" aria-controls="sn-links" aria-label={menuLabel} data-burger>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <button class="sn-lamp" type="button" data-theme-toggle aria-label={themeLabel}>
+    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5Z" /></svg>
+  </button>
+</header>
+
+<script>
+  const root = document.documentElement;
+  document.querySelectorAll("[data-theme-toggle]").forEach((b) =>
+    b.addEventListener("click", () => {
+      const next = root.dataset.theme === "light" ? "dark" : "light";
+      root.dataset.theme = next;
+      try { localStorage.setItem("dysklab-theme", next); } catch {}
+    }),
+  );
+  const nav = document.querySelector<HTMLElement>("[data-nav]");
+  const onScroll = () => nav?.classList.toggle("is-scrolled", scrollY > 8);
+  addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  const burger = nav?.querySelector<HTMLButtonElement>("[data-burger]");
+  burger?.addEventListener("click", () => {
+    const open = burger.getAttribute("aria-expanded") !== "true";
+    burger.setAttribute("aria-expanded", String(open));
+    nav!.classList.toggle("is-open", open);
+  });
+  nav?.querySelectorAll(".sn-links a").forEach((a) =>
+    a.addEventListener("click", () => {
+      burger?.setAttribute("aria-expanded", "false");
+      nav.classList.remove("is-open");
+    }),
+  );
+</script>
+
+<style>
+  .sn { position: sticky; top: 0; z-index: 60; transition: background 0.25s, box-shadow 0.25s; }
+  .sn:global(.is-scrolled), .sn:global(.is-open) {
+    background: color-mix(in srgb, var(--bg) 82%, transparent); box-shadow: 0 1px 0 var(--line);
+    -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px);
+  }
+  .sn-in { height: 72px; display: flex; align-items: center; gap: 12px; }
+  .sn a { text-decoration: none; }
+  .sn-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); flex: none; }
+  .sn-brand :global(svg) { border-radius: 10px; box-shadow: 0 0 0 1px var(--line-2); }
+  .sn-name { display: grid; line-height: 1.1; }
+  .sn-name b { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+  .sn-name small { font-size: 11.5px; color: var(--muted); }
+  .sn-sep { color: var(--line-2); font-size: 22px; font-weight: 300; }
+  .sn-prod { display: inline-flex; align-items: center; gap: 9px; font-weight: 800; font-size: 15.5px; color: var(--ink); white-space: nowrap; }
+  .sn-prod img { border-radius: 8px; }
+  .sn-links { display: flex; gap: 2px; margin: 0 auto; }
+  .sn-links a, .sn-links button { padding: 8px 12px; border-radius: 10px; font-size: 14.5px; font-weight: 500; color: var(--text); white-space: nowrap; transition: color 0.2s, background 0.2s; }
+  .sn-links a:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 7%, transparent); }
+  .sn-drawer-only { display: none; }
+  .sn-act { display: flex; align-items: center; gap: 8px; flex: none; }
+  .sn-seg, .sn-gh {
+    display: inline-flex; align-items: center; gap: 7px; height: 40px; padding: 0 13px; border-radius: 999px;
+    border: 1px solid var(--line-2); background: color-mix(in srgb, var(--ink) 4%, transparent); color: var(--text); font-size: 12.5px; font-weight: 700;
+  }
+  .sn-seg svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+  .sn-seg .is-on { color: var(--ink); box-shadow: 0 2px 0 var(--accent); }
+  .sn-seg a { color: var(--muted); }
+  .sn-seg a:hover { color: var(--ink); }
+  .sn-seg i { font-style: normal; color: var(--line-2); }
+  .sn-gh { color: var(--ink); }
+  .sn-gh:hover { border-color: var(--accent-line); }
+  .sn-gh svg { width: 16px; height: 16px; fill: currentColor; }
+  .sn-cta {
+    display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 18px; border-radius: 12px;
+    background: var(--accent); color: var(--on-accent); font-size: 14.5px; font-weight: 700; white-space: nowrap;
+    box-shadow: 0 10px 24px -14px var(--accent); transition: transform 0.15s, background 0.2s;
+  }
+  .sn-cta:hover { transform: translateY(-1px); background: color-mix(in srgb, var(--accent) 88%, #fff); }
+  .sn-burger { display: none; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line-2); background: transparent; cursor: pointer; padding: 0; place-content: center; gap: 4px; }
+  .sn-burger span { display: block; width: 18px; height: 2px; border-radius: 2px; background: var(--ink); transition: transform 0.2s, opacity 0.2s; }
+  .sn:global(.is-open) .sn-burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .sn:global(.is-open) .sn-burger span:nth-child(2) { opacity: 0; }
+  .sn:global(.is-open) .sn-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  .sn-lamp {
+    position: absolute; right: max(16px, calc((100% - var(--wrap)) / 2)); top: calc(100% + 22px);
+    width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+    border: 1px solid var(--accent-line); background: color-mix(in srgb, var(--bg) 70%, transparent); color: var(--accent-hi);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 0 0 4px var(--accent-soft);
+    transition: transform 0.2s;
+  }
+  .sn-lamp::before { content: ""; position: absolute; bottom: 100%; left: 50%; height: 22px; border-left: 1.5px dotted var(--accent-line); }
+  .sn-lamp { transition: transform 0.2s, opacity 0.2s; }
+  .sn-lamp:hover { transform: translateY(2px); }
+  .sn-lamp svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+  .sn-lamp .moon { display: none; }
+  :global(html[data-theme="light"]) .sn-lamp .sun { display: none; }
+  :global(html[data-theme="light"]) .sn-lamp .moon { display: block; }
+
+  @media (max-width: 1100px) {
+    .sn-gh span { display: none; }
+  }
+  @media (max-width: 1020px) {
+    .sn-burger { display: grid; }
+    .sn-links {
+      position: absolute; left: 0; right: 0; top: 100%; margin: 0; padding: 12px 16px 20px; display: none; flex-direction: column; gap: 2px;
+      background: var(--bg); box-shadow: 0 1px 0 var(--line), 0 30px 40px -30px rgba(0, 0, 0, 0.5);
+    }
+    .sn:global(.is-open) .sn-links { display: flex; }
+    .sn-links a, .sn-links button { padding: 12px; font-size: 16px; }
+    .sn-links button { border: 0; background: none; font: inherit; text-align: left; cursor: pointer; }
+    .sn-drawer-only { display: block; }
+    .sn:global(.is-scrolled) .sn-lamp { opacity: 0; pointer-events: none; }
+    .sn-act { margin-left: auto; }
+    .sn:global(.is-open) .sn-lamp { display: none; }
+  }
+  @media (max-width: 720px) {
+    .sn-seg, .sn-gh { display: none; }
+    .sn-cta { height: 40px; padding: 0 13px; font-size: 13.5px; }
+    .sn-burger { width: 40px; height: 40px; }
+  }
+  @media (max-width: 520px) {
+    .sn-name small { display: none; }
+    .sn-cta span[aria-hidden] { display: none; }
+    .sn-in { gap: 8px; }
+  }
+  @media (max-width: 460px) {
+    .sn:has(.sn-prod) .sn-name { display: none; }
+    .sn-cta { display: none; }
+  }
+</style>

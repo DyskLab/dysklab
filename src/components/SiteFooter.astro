@@ -1,0 +1,102 @@
+---
+/*
+  Footer for every page (JasaWeb layout): a call-to-action band, four columns (brand,
+  products, DyskLab, contact), the bottom line with "back to top", and a large faint
+  DyskLab wordmark. `license` is shown in the bottom line (product pages pass their own).
+*/
+import content from "../data/content";
+import Logo from "./Logo.astro";
+import { waNumber } from "../lib/mask";
+import { BMC, alternate, href, ui, type Lang } from "../i18n";
+interface Props { lang: Lang; license?: string }
+const { lang, license = "MIT License" } = Astro.props;
+const t = ui[lang];
+const s = (id: string, en: string) => (lang === "id" ? id : en);
+const other: Lang = lang === "id" ? "en" : "id";
+const year = new Date().getFullYear();
+const home = href(lang, "/");
+const wa = `https://wa.me/${waNumber(content.whatsapp)}?text=${encodeURIComponent(s("Halo DyskLab, saya ingin konsultasi pembuatan sistem.", "Hello DyskLab, I'd like to talk about a custom system."))}`;
+const mail = `mailto:${content.email}?subject=${encodeURIComponent(s("Konsultasi DyskLab", "DyskLab consultation"))}`;
+---
+<footer class="sf">
+  <div class="dl-wrap">
+    <div class="sf-band">
+      <div>
+        <h2>{t.customSoftware}</h2>
+        <p>{s("DyskLab juga membangun dan merawat website, aplikasi web, dan aplikasi Android untuk perusahaan. Konsultasi awal gratis.", "DyskLab also builds and maintains websites, web apps and Android apps for companies. The first consultation is free.")}</p>
+      </div>
+      <a class="dl-btn dl-btn-primary" href={`${home}#layanan`}>{s("Mulai konsultasi", "Start a consultation")}<span class="dl-arr" aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="sf-cols">
+      <div class="sf-brand">
+        <a class="sf-logo" href={home}><Logo size={38} /><span><b>DyskLab</b><small>open source</small></span></a>
+        <p>{s("Software open source gratis untuk Mac, Windows, Linux, Android, dan web. Dibuat di Gresik, Indonesia.", "Free, open-source software for Mac, Windows, Linux, Android and the web. Made in Gresik, Indonesia.")}</p>
+      </div>
+      <div>
+        <p class="sf-h">{s("Produk", "Products")}</p>
+        <ul class="sf-two">{content.apps.map((a) => <li><a href={href(lang, a.page)}>{a.name}</a></li>)}</ul>
+      </div>
+      <div>
+        <p class="sf-h">DyskLab</p>
+        <ul>
+          <li><a href="https://github.com/DyskLab" target="_blank" rel="noopener">GitHub<span class="dl-sr">{t.newTab}</span></a></li>
+          <li><a href={BMC} target="_blank" rel="noopener">Buy Me a Coffee<span class="dl-sr">{t.newTab}</span></a></li>
+          <li><a href={`${home}#layanan`}>{s("Untuk perusahaan", "For companies")}</a></li>
+          <li><a href={`${home}#faq`}>FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="sf-h">{s("Kontak", "Contact")}</p>
+        <ul class="sf-contact">
+          <li><a href={mail}><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>{content.email}</a></li>
+          <li><a href={wa} target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z" /></svg>WhatsApp<span class="dl-sr">{t.newTab}</span></a></li>
+          <li><a href={alternate(Astro.url.pathname, other)} data-lang={other} hreflang={other} lang={other}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" /></svg>{t.switchTo}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sf-bottom">
+      <span>© {year} DyskLab · {license} · <a href={BMC} target="_blank" rel="noopener">☕ {t.coffee}<span class="dl-sr">{t.newTab}</span></a></span>
+      <a href="#top">{s("Kembali ke atas", "Back to top")} ↑</a>
+    </div>
+  </div>
+  <p class="sf-mark" aria-hidden="true">DyskLab</p>
+</footer>
+
+<style>
+  .sf { position: relative; overflow: hidden; padding: 40px 0 0; border-top: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-2), var(--bg)); font-size: 14.5px; }
+  .sf a { text-decoration: none; }
+  .sf-band {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px 32px; padding: 32px 36px; border-radius: 22px;
+    border: 1px solid var(--line); background: radial-gradient(60% 120% at 100% 0%, var(--accent-soft), transparent 70%), var(--card);
+  }
+  .sf-band h2 { font-size: clamp(24px, 2.8vw, 32px); font-weight: 800; }
+  .sf-band p { margin: 8px 0 0; max-width: 620px; color: var(--text); }
+  .sf-cols { display: grid; grid-template-columns: 1.5fr 1.2fr 1fr 1.2fr; gap: 36px; padding: 56px 0 40px; }
+  .sf-logo { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); }
+  .sf-logo :global(svg) { border-radius: 10px; box-shadow: 0 0 0 1px var(--line-2); }
+  .sf-logo span { display: grid; line-height: 1.1; }
+  .sf-logo b { font-size: 17px; font-weight: 800; }
+  .sf-logo small { font-size: 11.5px; color: var(--muted); }
+  .sf-brand p { margin: 16px 0 0; max-width: 300px; color: var(--muted); }
+  .sf-h { margin: 0 0 16px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-hi); }
+  .sf ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .sf-two { grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  .sf li a { color: var(--text); transition: color 0.2s; }
+  .sf li a:hover, .sf-bottom a:hover { color: var(--ink); }
+  .sf-contact a { display: inline-flex; align-items: center; gap: 10px; }
+  .sf-contact svg { width: 17px; height: 17px; flex: none; fill: none; stroke: var(--accent-hi); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .sf-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding: 22px 0 28px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
+  .sf-bottom a { color: var(--muted); }
+  .sf-mark {
+    margin: -10px 0 0; text-align: center; font-size: clamp(80px, 19vw, 260px); font-weight: 900; line-height: 0.78; letter-spacing: -0.05em;
+    color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--ink) 9%, transparent); user-select: none; pointer-events: none;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--ink) 6%, transparent), transparent 85%); -webkit-background-clip: text; background-clip: text;
+  }
+  @media (max-width: 900px) { .sf-cols { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) {
+    .sf-cols { grid-template-columns: 1fr; gap: 28px; }
+    .sf-band { padding: 24px; }
+  }
+</style>
