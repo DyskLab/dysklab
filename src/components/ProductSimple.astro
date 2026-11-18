@@ -1,0 +1,220 @@
+---
+/*
+  Shared product page for the smaller DyskLab products (DyskAdmin, DyskMedia, DyskStream,
+  DyskPOS). Same shape as DyskOS: dark page in the product's accent, hero, optional
+  screenshots, features, a highlighted panel, and for open products a "get it" block plus
+  ReportBug and Support. A product with no `repo` is shown, not distributed: no star,
+  download or issue links. Views pass copy already picked for the current language.
+*/
+import Base from "../layouts/Base.astro";
+import ProductBar from "./ProductBar.astro";
+import ProductFooter from "./ProductFooter.astro";
+import ReportBug from "./ReportBug.astro";
+import Support from "./Support.astro";
+import { ui, type Lang } from "../i18n";
+
+interface Shot { src: string; t: string; d: string; alt: string }
+interface Props {
+  lang: Lang;
+  slug: string;
+  name: string;
+  repo?: string;
+  accent: string;
+  title: string;
+  description: string;
+  ogImage?: string;
+  pill: string;
+  pillTag: string;
+  h1: [string, string];
+  lede: string;
+  chips: string[];
+  note?: string;
+  hero?: Shot;
+  shots?: Shot[];
+  views?: { kick: string; h: string };
+  features: { t: string; d: string }[];
+  featH: string;
+  panel: { kick: string; h: string; items: string[] };
+  get?: { h: string; p: string; code: string };
+  platforms: string[];
+  license?: string;
+  credit?: string;
+}
+const p = Astro.props;
+const lang = p.lang;
+const s = (id: string, en: string) => (lang === "id" ? id : en);
+const nt = ui[lang].newTab;
+const links = [
+  ...(p.shots?.length ? [{ href: "#tampilan", label: s("Tampilan", "Views") }] : []),
+  { href: "#fitur", label: s("Fitur", "Features") },
+  { href: "#sorotan", label: p.panel.kick },
+  ...(p.repo ? [{ href: "#pakai", label: s("Pasang", "Get it") }] : []),
+];
+const cta = p.repo
+  ? { href: "#pakai", label: s("Pasang", "Get it") }
+  : { href: "#fitur", label: s("Lihat fitur", "See features") };
+---
+
+<Base
+  title={p.title}
+  description={p.description}
+  path={Astro.url.pathname}
+  ogImage={p.ogImage ?? p.hero?.src ?? "/og.jpg"}
+  ogTitle={p.name}
+  fonts="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist+Mono:wght@500&display=swap"
+  theme="dark"
+  themeColor="#111214"
+>
+  <div class="ps" id="top" style={`--accent:${p.accent}`}>
+    <ProductBar lang={lang} name={p.name} icon={`/images/apps/${p.slug}.png`} repo={p.repo} links={links} cta={cta} />
+
+    <main>
+      <header class="hero">
+        <div class="wrap">
+          <p class="pill"><span>{p.pillTag}</span>{p.pill}</p>
+          <h1>{p.h1[0]}<br /><span class="hl">{p.h1[1]}</span></h1>
+          <p class="lede">{p.lede}</p>
+          <ul class="chips">{p.chips.map((c) => <li>{c}</li>)}</ul>
+          {p.note && <p class="note">{p.note}</p>}
+          {p.hero ? (
+            <div class="shot hero-shot dl-reveal">
+              <span class="bar"><i></i><i></i><i></i></span>
+              <img src={p.hero.src} alt={p.hero.alt} width="1600" height="1000" decoding="async" />
+            </div>
+          ) : (
+            <div class="hero-art dl-reveal">
+              <img src={`/images/apps/${p.slug}.png`} width="160" height="160" alt="" />
+            </div>
+          )}
+        </div>
+      </header>
+
+      {p.shots && p.shots.length > 0 && (
+        <section id="tampilan" class="sec">
+          <div class="wrap">
+            <div class="head">
+              <p class="kick">{p.views?.kick ?? s("Tampilan", "Views")}</p>
+              <h2>{p.views?.h}</h2>
+            </div>
+            <div class="grid">
+              {p.shots.map((x) => (
+                <figure class="card dl-reveal">
+                  <div class="shot"><span class="bar"><i></i><i></i><i></i></span><img src={x.src} alt={x.alt} loading="lazy" decoding="async" /></div>
+                  <figcaption><b>{x.t}</b>{x.d}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section id="fitur" class={`sec${p.shots?.length ? " sec-tight" : ""}`}>
+        <div class="wrap">
+          <div class="head">
+            <p class="kick">{s("Fitur", "Features")}</p>
+            <h2>{p.featH}</h2>
+          </div>
+          <ul class="feat">
+            {p.features.map((f) => <li class="dl-reveal"><h3>{f.t}</h3><p>{f.d}</p></li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section id="sorotan" class="sec sec-tight">
+        <div class="wrap">
+          <div class="safe dl-reveal">
+            <div>
+              <p class="kick">{p.panel.kick}</p>
+              <h2>{p.panel.h}</h2>
+            </div>
+            <ul>{p.panel.items.map((x) => <li>{x}</li>)}</ul>
+          </div>
+        </div>
+      </section>
+
+      {p.repo && p.get && (
+        <section id="pakai" class="sec sec-tight">
+          <div class="wrap">
+            <div class="get dl-reveal">
+              <div>
+                <p class="kick">{s("Pasang", "Get it")}</p>
+                <h2>{p.get.h}</h2>
+                <p class="get-p">{p.get.p}</p>
+                <a class="btn" href={`https://github.com/${p.repo}`} target="_blank" rel="noopener">{s("Buka di GitHub", "Open on GitHub")} ↗<span class="sr">{nt}</span></a>
+              </div>
+              <pre><code>{p.get.code}</code></pre>
+            </div>
+            {p.credit && <p class="credit" set:html={p.credit} />}
+          </div>
+        </section>
+      )}
+
+      {p.repo && <ReportBug lang={lang} product={p.name} repo={p.repo} platforms={p.platforms} />}
+      {p.repo && <Support lang={lang} product={p.name} repos={[{ repo: p.repo }]} />}
+    </main>
+
+    <ProductFooter lang={lang} current={p.slug} license={p.license} />
+  </div>
+</Base>
+
+<style>
+  :global(body) { margin: 0; background: #111214; }
+  .ps {
+    --bg: #111214; --card: #1a1b1f; --ink: #f4f4f5; --muted: #a1a1aa; --line: #2a2b31;
+    --accent-s: color-mix(in srgb, var(--accent) 16%, #111214); --accent-l: color-mix(in srgb, var(--accent) 40%, #111214);
+    --pb-bg: rgba(17, 18, 20, 0.85); --pb-fg: var(--ink); --pb-muted: var(--muted); --pb-line: var(--line); --pb-hover: var(--accent-s);
+    --pb-btn-bg: var(--accent); --pb-btn-fg: #fff; --pb-radius: 999px; --pb-font: "Plus Jakarta Sans", sans-serif;
+    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--ink); --pf-card: var(--card); --pf-hover: var(--accent-l); --pf-radius: 22px; --pf-font: "Plus Jakarta Sans", sans-serif;
+    background: var(--bg); color: var(--ink); font: 400 16px/1.6 "Plus Jakarta Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .wrap { width: min(1140px, calc(100% - 32px)); margin: 0 auto; }
+  h1, h2, h3 { margin: 0; letter-spacing: -0.035em; line-height: 1.05; }
+  .hero { position: relative; padding: 72px 0 40px; }
+  .hero::before { content: ""; position: absolute; left: 50%; top: -30%; width: 900px; max-width: 100%; height: 700px; transform: translateX(-50%); background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 30%, transparent), transparent); pointer-events: none; }
+  .hero .wrap { position: relative; text-align: center; }
+  .pill { display: inline-flex; align-items: center; gap: 10px; margin: 0; padding: 5px 14px 5px 5px; border-radius: 999px; background: var(--card); box-shadow: 0 0 0 1px var(--line); font-size: 13.5px; color: var(--muted); }
+  .pill span { padding: 3px 10px; border-radius: 999px; background: var(--accent); color: #fff; font-weight: 700; font-size: 12.5px; }
+  h1 { margin-top: 24px; font-size: clamp(38px, 6vw, 72px); font-weight: 800; }
+  .hl { color: color-mix(in srgb, var(--accent) 70%, #fff); }
+  .lede { margin: 22px auto 0; max-width: 660px; font-size: 18px; color: var(--muted); }
+  .chips { list-style: none; margin: 26px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .chips li { padding: 7px 14px; border-radius: 999px; background: var(--card); box-shadow: 0 0 0 1px var(--line); font-size: 13.5px; font-weight: 600; }
+  .note { margin: 18px 0 0; font-size: 13.5px; color: var(--muted); }
+  .shot { border-radius: 16px; overflow: hidden; background: var(--card); box-shadow: 0 0 0 1px var(--line), 0 50px 100px -50px color-mix(in srgb, var(--accent) 45%, transparent); }
+  .hero-shot { margin-top: 44px; text-align: left; }
+  .hero-art { margin: 48px auto 0; width: min(560px, 100%); aspect-ratio: 16 / 9; display: grid; place-items: center; border-radius: 28px; background: radial-gradient(circle at 50% 45%, var(--accent-l), var(--card) 70%); box-shadow: 0 0 0 1px var(--line); }
+  .hero-art img { border-radius: 36px; box-shadow: 0 40px 80px -30px var(--accent); }
+  .bar { display: flex; gap: 7px; padding: 11px 14px; background: #0c0d0f; }
+  .bar i { width: 11px; height: 11px; border-radius: 50%; background: #34353b; }
+  .bar i:first-child { background: #ff6b5e; } .bar i:nth-child(2) { background: #ffc130; } .bar i:nth-child(3) { background: #2bd15a; }
+  .shot img { display: block; width: 100%; height: auto; }
+  .sec { padding: 100px 0; }
+  .sec-tight { padding-top: 40px; }
+  .head { max-width: 660px; }
+  .kick { margin: 0 0 12px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: color-mix(in srgb, var(--accent) 75%, #fff); }
+  h2 { font-size: clamp(30px, 4vw, 46px); font-weight: 800; }
+  .grid { margin-top: 40px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .card { margin: 0; padding: 14px; border-radius: 24px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
+  .card figcaption { padding: 16px 6px 6px; color: var(--muted); font-size: 15px; }
+  .card figcaption b { display: block; margin-bottom: 4px; color: var(--ink); font-size: 17px; }
+  .feat { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .feat li { padding: 24px; border-radius: 22px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
+  .feat h3 { font-size: 19px; letter-spacing: -0.02em; }
+  .feat p { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
+  .safe, .get { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 40px; border-radius: 28px; background: var(--accent-s); box-shadow: 0 0 0 1px var(--accent-l); }
+  .safe ul { margin: 0; padding-left: 20px; display: grid; gap: 12px; color: var(--ink); }
+  .get { background: var(--card); box-shadow: 0 0 0 1px var(--line); }
+  .get-p { margin: 14px 0 22px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 999px; background: var(--accent); color: #fff; font-weight: 600; text-decoration: none; }
+  .btn:hover { filter: brightness(1.08); }
+  pre { margin: 0; padding: 20px; border-radius: 16px; background: #0c0d0f; box-shadow: 0 0 0 1px var(--line); overflow-x: auto; font: 500 13.5px/1.7 "Geist Mono", ui-monospace, monospace; color: #e4e4e7; }
+  .credit { margin: 18px 4px 0; font-size: 14px; color: var(--muted); }
+  .credit :global(a) { color: var(--ink); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 860px) {
+    .grid, .safe, .get { grid-template-columns: 1fr; }
+    .feat { grid-template-columns: 1fr; }
+    .sec { padding: 64px 0; }
+    .safe, .get { padding: 26px; gap: 20px; }
+  }
+</style>

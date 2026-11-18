@@ -195,6 +195,71 @@ const content: Content =
         "TypeScript",
         "React"
       ]
+    },
+    {
+      "slug": "dyskstream",
+      "page": "/produk/dyskstream/",
+      "name": "DyskStream",
+      "kind": "Asisten live streaming",
+      "kind_en": "Live stream assistant",
+      "platform": "Web, macOS, Windows",
+      "icon": "/images/apps/dyskstream.png",
+      "text": "Bot YouTube Live yang dijalankan sendiri: penonton dapat point dari chat dan menukarnya jadi alert di OBS, lengkap dengan overlay, scene, dan Nightbot.",
+      "stack": [
+        "Fastify",
+        "TypeScript",
+        "React",
+        "Electron"
+      ],
+      "repo": "https://github.com/DyskLab/dyskstream"
+    },
+    {
+      "slug": "dyskpos",
+      "page": "/produk/dyskpos/",
+      "name": "DyskPOS",
+      "kind": "Aplikasi kasir",
+      "kind_en": "Point of sale",
+      "platform": "Web, PWA",
+      "icon": "/images/apps/dyskpos.png",
+      "text": "Aplikasi kasir open source untuk toko dan UMKM: checkout, stok multi-gudang, pembelian, piutang, CRM, loyalty, dan mode offline.",
+      "stack": [
+        "Laravel",
+        "PHP",
+        "React",
+        "Inertia"
+      ],
+      "repo": "https://github.com/DyskLab/dyskpos"
+    },
+    {
+      "slug": "dyskmedia",
+      "page": "/produk/dyskmedia/",
+      "name": "DyskMedia",
+      "kind": "Perencana konten",
+      "kind_en": "Content planner",
+      "platform": "Web",
+      "icon": "/images/apps/dyskmedia.png",
+      "text": "Perencana konten untuk YouTube, TikTok, Instagram, Threads, X, dan Facebook: upload, jadwalkan post, dan balas komentar serta DM dari satu kalender.",
+      "stack": [
+        "Laravel",
+        "PHP",
+        "Alpine.js",
+        "Tailwind"
+      ]
+    },
+    {
+      "slug": "dyskadmin",
+      "page": "/produk/dyskadmin/",
+      "name": "DyskAdmin",
+      "kind": "Admin dev environment",
+      "kind_en": "Dev environment admin",
+      "platform": "macOS",
+      "icon": "/images/apps/dyskadmin.png",
+      "text": "Dasbor lokal untuk mengelola dev environment Mac: Homebrew, Docker, Herd, versi bahasa, file konfigurasi, statistik sistem, dan terminal di browser.",
+      "stack": [
+        "Go",
+        "JavaScript",
+        "Swift"
+      ]
     }
   ],
   "cases": [

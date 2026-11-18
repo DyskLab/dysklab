@@ -1,0 +1,50 @@
+---
+/* DyskMedia product page: pink. Shown, not distributed (private repo), like DyskOS. No screenshots yet. */
+import ProductSimple from "../components/ProductSimple.astro";
+import { pick, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+
+const features = [
+  { t: s("Kalender dan jadwal", "Calendar and schedule"), d: s("Semua post yang direncanakan per hari, dengan status di tiap akun.", "Every planned post by day, with its status on each account.") },
+  { t: s("Satu post, banyak akun", "One post, many accounts"), d: s("Video, gambar, atau teks dengan thumbnail dan caption, dikirim ke beberapa akun sekaligus.", "Video, images or text with a thumbnail and caption, sent to several accounts at once.") },
+  { t: s("Banyak akun per platform", "Several accounts per platform"), d: s("Setiap post memilih akun tujuannya sendiri.", "Each post picks its own target accounts.") },
+  { t: s("Komentar dan DM", "Comments and DMs"), d: s("Komentar dan DM dari semua akun di satu inbox, lengkap dengan balasan.", "Comments and DMs from every account in one inbox, with replies.") },
+  { t: s("Otomatisasi", "Automation"), d: s("Balasan otomatis berdasarkan kata kunci dan DM terjadwal.", "Keyword-based auto replies and scheduled DMs.") },
+  { t: s("Akun demo", "Demo accounts"), d: s("Coba seluruh alur tanpa mengirim apa pun ke platform.", "Try the whole flow without sending anything to a platform.") },
+];
+---
+<ProductSimple
+  lang={lang}
+  slug="dyskmedia"
+  name="DyskMedia"
+  accent="#ec4899"
+  title={s("DyskMedia: perencana konten untuk semua platform | DyskLab", "DyskMedia: a content planner for every platform | DyskLab")}
+  description={s(
+    "DyskMedia merencanakan dan menjadwalkan konten ke YouTube, TikTok, Instagram, Threads, X, dan Facebook, lalu membalas komentar dan DM dari satu inbox.",
+    "DyskMedia plans and schedules content to YouTube, TikTok, Instagram, Threads, X and Facebook, then answers comments and DMs from one inbox.",
+  )}
+  pillTag={s("Baru", "New")}
+  pill="Web · Laravel"
+  h1={s(["Semua platform,", "satu kalender."], ["Every platform,", "one calendar."])}
+  lede={s(
+    "Upload video, tulis post sekali, pilih akun tujuannya, lalu jadwalkan. Komentar dan DM dari semua akun masuk ke satu inbox.",
+    "Upload videos, write a post once, pick which accounts it goes to and schedule it. Comments and DMs from every account land in one inbox.",
+  )}
+  chips={["YouTube", "TikTok", "Instagram", "Threads", "X", "Facebook"]}
+  note={s("DyskMedia dipakai sendiri dan belum dirilis.", "DyskMedia is used in-house and not released yet.")}
+  featH={s("Dibuat untuk yang posting di banyak tempat.", "Built for posting in many places.")}
+  features={features}
+  panel={{
+    kick: s("Aman dipakai", "Safe by design"),
+    h: s("Tidak pernah posting dua kali.", "It never posts twice."),
+    items: [
+      s("Publikasi tidak diulang otomatis. Koneksi putus ditandai “perlu dicek”, bukan gagal, karena kontennya bisa saja sudah terbit.", "Publishing never retries on its own. A dropped connection is marked “needs checking”, not failed, since the post may already be live."),
+      s("Balasan otomatis hanya untuk pesan yang masuk setelah aturan aktif, dan tiap pesan hanya dibalas sekali.", "Auto replies only answer messages that arrive after a rule is on, and each one only once."),
+      s("Fitur yang tidak didukung API resmi platform disembunyikan, bukan dipaksakan.", "Features a platform's official API doesn't support are hidden, not forced."),
+    ],
+  }}
+  platforms={["Web"]}
+  license={s("Belum dirilis", "Not released yet")}
+/>

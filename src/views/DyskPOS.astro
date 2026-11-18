@@ -1,0 +1,75 @@
+---
+/* DyskPOS product page: green, open source under AGPL-3.0, based on Point of Sales by Arya Dwi Putra. */
+import ProductSimple from "../components/ProductSimple.astro";
+import { pick, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+const img = (n: string) => `/images/products/dyskpos/${n}.jpg`;
+
+const shots = [
+  { src: img("01-dashboard"), t: s("Dasbor", "Dashboard"), d: s("Penjualan, laba, dan stok menipis sekilas pandang.", "Sales, profit and low stock at a glance."), alt: s("Dasbor DyskPOS", "The DyskPOS dashboard") },
+  { src: img("06-stock-opnames"), t: s("Stock opname", "Stock counts"), d: s("Hitung stok per gudang dan lihat selisihnya.", "Count stock per warehouse and see the differences."), alt: s("Stock opname di DyskPOS", "A stock count in DyskPOS") },
+  { src: img("15-sales-report"), t: s("Laporan penjualan", "Sales report"), d: s("Filter per periode, kasir, dan gudang, lalu ekspor ke Excel atau PDF.", "Filter by period, cashier and warehouse, then export to Excel or PDF."), alt: s("Laporan penjualan DyskPOS", "The DyskPOS sales report") },
+  { src: img("12-receivables"), t: s("Piutang", "Receivables"), d: s("Pembayaran sebagian, umur piutang, dan catatan penagihan.", "Partial payments, aging and collection notes."), alt: s("Piutang di DyskPOS", "Receivables in DyskPOS") },
+];
+
+const features = [
+  { t: s("Kasir cepat", "Fast checkout"), d: s("Cari dengan barcode atau kata kunci, scan lewat kamera, tahan dan lanjutkan keranjang, lalu bayar tunai, transfer, Midtrans, Xendit, atau bayar nanti.", "Search by barcode or keyword, scan with the camera, hold and resume carts, then pay by cash, transfer, Midtrans, Xendit or pay later.") },
+  { t: s("Mode offline", "Offline mode"), d: s("Transaksi tetap jalan saat internet putus dan disinkron saat kembali online.", "Sales keep going when the connection drops and sync when it's back.") },
+  { t: s("Multi-gudang", "Multi-warehouse"), d: s("Stok per gudang atau cabang, transfer stok, batch dengan tanggal kedaluwarsa (FEFO), dan saran PO dari reorder point.", "Stock per warehouse or branch, transfers, batches with expiry dates (FEFO) and suggested purchase orders from reorder points.") },
+  { t: s("Harga dan promo", "Pricing and promotions"), d: s("Multi-satuan, price list per kelompok pelanggan, diskon bertingkat, bundle, buy X get Y, dan PPN 11%.", "Multiple units, price lists per customer group, quantity breaks, bundles, buy X get Y and 11% VAT.") },
+  { t: s("Pembelian dan keuangan", "Purchasing and finance"), d: s("Purchase order, penerimaan barang, retur supplier, hutang dan piutang dengan aging, serta portal pelanggan untuk bayar online.", "Purchase orders, goods receiving, supplier returns, payables and receivables with aging, and a customer portal to pay online.") },
+  { t: s("CRM dan WhatsApp", "CRM and WhatsApp"), d: s("Member bertingkat, poin, voucher, segmen, kampanye, dan pesan otomatis lewat WhatsApp.", "Member tiers, points, vouchers, segments, campaigns and automatic WhatsApp messages.") },
+];
+---
+<ProductSimple
+  lang={lang}
+  slug="dyskpos"
+  name="DyskPOS"
+  repo="DyskLab/dyskpos"
+  accent="#10b981"
+  title={s("DyskPOS: aplikasi kasir open source untuk toko dan UMKM | DyskLab", "DyskPOS: an open-source point of sale for shops | DyskLab")}
+  description={s(
+    "DyskPOS adalah aplikasi kasir open source: checkout, stok multi-gudang, pembelian, piutang, CRM, loyalty, WhatsApp, dan mode offline.",
+    "DyskPOS is an open-source point of sale: checkout, multi-warehouse stock, purchasing, receivables, CRM, loyalty, WhatsApp and an offline mode.",
+  )}
+  pillTag="AGPL-3.0"
+  pill="Web · PWA"
+  h1={s(["Kasir, stok, dan pembukuan,", "dalam satu aplikasi."], ["Checkout, stock and the books,", "in one app."])}
+  lede={s(
+    "Aplikasi kasir untuk warung, toko, dan UMKM: dari meja kasir sampai laporan keuangan, dengan stok per gudang dan tetap bisa jualan saat offline.",
+    "A point of sale for small shops: from the till to the financial reports, with stock per warehouse and sales that keep going offline.",
+  )}
+  chips={["Laravel", "React", "PWA", s("Mode offline", "Offline mode")]}
+  hero={{ src: img("02-pos-checkout"), t: "POS", d: "", alt: s("Halaman kasir DyskPOS", "The DyskPOS checkout") }}
+  shots={shots}
+  views={{ kick: s("Tampilan", "Views"), h: s("Dari kasir sampai laporan.", "From the till to the reports.") }}
+  featH={s("Lengkap untuk toko sehari-hari.", "Everything a shop needs day to day.")}
+  features={features}
+  panel={{
+    kick: s("Untuk developer", "For developers"),
+    h: s("Bisa disambungkan ke mana saja.", "Connects to anything."),
+    items: [
+      s("REST API berbasis token (Sanctum) di /api/v1, dengan dokumentasi interaktif di /docs/api.", "A token-based REST API (Sanctum) at /api/v1, with interactive docs at /docs/api."),
+      s("Hak akses per peran dan audit log dengan snapshot sebelum dan sesudah.", "Role-based permissions and an audit log with before and after snapshots."),
+      s("Data demo lengkap dengan satu perintah: php artisan seed:demo.", "Full demo data with one command: php artisan seed:demo."),
+    ],
+  }}
+  get={{
+    h: s("Pasang di server Anda sendiri.", "Install it on your own server."),
+    p: s("Butuh PHP 8.3+, Composer, Node.js, dan MySQL atau SQLite. Kunjungan pertama membuka wizard untuk membuat akun admin dan profil toko.", "Needs PHP 8.3+, Composer, Node.js and MySQL or SQLite. The first visit opens a wizard to create the admin account and store profile."),
+    code: `git clone https://github.com/DyskLab/dyskpos.git
+cd dyskpos && cp .env.example .env
+composer install && npm install
+php artisan key:generate
+php artisan migrate --seed
+composer run dev`,
+  }}
+  platforms={["Web (Laravel)", "PWA"]}
+  license="AGPL-3.0"
+  credit={s(
+    'DyskPOS dikembangkan dari <a href="https://github.com/aryadwiputra/point-of-sales" target="_blank" rel="noopener">Point of Sales</a> karya Arya Dwi Putra, dengan lisensi GNU AGPL-3.0.',
+    'DyskPOS is based on <a href="https://github.com/aryadwiputra/point-of-sales" target="_blank" rel="noopener">Point of Sales</a> by Arya Dwi Putra, under the GNU AGPL-3.0.',
+  )}
+/>

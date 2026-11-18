@@ -1,0 +1,61 @@
+---
+/* DyskAdmin product page: slate. Shown, not distributed (private repo), like DyskOS. */
+import ProductSimple from "../components/ProductSimple.astro";
+import { pick, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+const img = (n: string) => `/images/products/dyskadmin/${n}.jpg`;
+
+const shots = [
+  { src: img("terminal-claude"), t: s("Terminal", "Terminal"), d: s("Terminal zsh sungguhan di browser. Claude Code, vim, dan htop jalan normal, dan sesinya tetap hidup saat halaman di-refresh.", "A real zsh terminal in the browser. Claude Code, vim and htop run normally, and sessions survive a reload."), alt: s("Claude Code di terminal DyskAdmin", "Claude Code in the DyskAdmin terminal") },
+  { src: img("paket-service"), t: "Homebrew", d: s("Paket, aplikasi, dan brew services dalam satu halaman, dengan 100 rekomendasi paket development.", "Packages, casks and brew services on one page, with 100 recommended dev packages."), alt: s("Paket dan service Homebrew di DyskAdmin", "Homebrew packages and services in DyskAdmin") },
+  { src: img("docker-compose-builder"), t: "Docker", d: s("Statistik container, console, dan pembuat compose dari 16 template.", "Container stats, a console, and a Compose builder with 16 templates."), alt: s("Pembuat compose di DyskAdmin", "The Compose builder in DyskAdmin") },
+  { src: img("herd-laravel-baru"), t: "Laravel Herd", d: s("Situs, HTTPS, versi PHP per situs, dan formulir aplikasi Laravel baru.", "Sites, HTTPS, PHP per site, and a new Laravel app form."), alt: s("Aplikasi Laravel baru di DyskAdmin", "A new Laravel app in DyskAdmin") },
+];
+
+const features = [
+  { t: s("Statistik Mac", "Mac stats"), d: s("CPU per core, RAM, memory pressure, suhu, GPU, baterai, jaringan, dan disk, tanpa sudo.", "CPU per core, RAM, memory pressure, temperatures, GPU, battery, network and disk, without sudo.") },
+  { t: s("Versi bahasa", "Language versions"), d: s("Pilih default PHP, Node.js, Python, Go, Ruby, atau Java, dan pasang atau hapus versi.", "Pick the default PHP, Node.js, Python, Go, Ruby or Java, and install or remove versions.") },
+  { t: s("File konfigurasi", "Config files"), d: s(".zshrc, /etc/hosts, SSH, Git, php.ini, dan .env semua project, divalidasi sebelum disimpan dengan 20 backup.", ".zshrc, /etc/hosts, SSH, Git, php.ini and every project's .env, validated before saving with 20 backups.") },
+  { t: s("Port dan uptime", "Ports and uptime"), d: s("Port yang sedang listen dan cara mematikannya, plus pantauan web dan server dengan notifikasi macOS.", "Listening ports and how to stop them, plus website and server monitoring with macOS notifications.") },
+  { t: s("Aplikasi Mac dan Tailscale", "Mac apps and Tailscale"), d: s("Update, karantina, izin privasi, perangkat tailnet, exit node, serta Serve dan Funnel.", "Updates, quarantine, privacy permissions, tailnet devices, exit nodes, and Serve and Funnel.") },
+  { t: s("Pembersih", "Cleaner"), d: s("Cache aplikasi, log, browser, Trash, dan cache developer, plus file besar dan item startup.", "App, log, browser, Trash and developer caches, plus large files and startup items.") },
+];
+---
+<ProductSimple
+  lang={lang}
+  slug="dyskadmin"
+  name="DyskAdmin"
+  accent="#64748b"
+  title={s("DyskAdmin: dasbor dev environment untuk Mac | DyskLab", "DyskAdmin: a dev environment dashboard for the Mac | DyskLab")}
+  description={s(
+    "DyskAdmin mengelola Homebrew, Docker, Laravel Herd, versi bahasa, file konfigurasi, dan statistik sistem Mac dari satu dasbor lokal, plus terminal di browser.",
+    "DyskAdmin manages Homebrew, Docker, Laravel Herd, language versions, config files and Mac system stats from one local dashboard, plus a terminal in the browser.",
+  )}
+  pillTag="2.0"
+  pill="macOS · Apple Silicon"
+  h1={s(["Dev environment Mac,", "satu dasbor."], ["Your Mac dev setup,", "one dashboard."])}
+  lede={s(
+    "Kelola Homebrew, Docker, Laravel Herd, versi bahasa, dan file konfigurasi dari satu tempat, lengkap dengan statistik sistem dan terminal sungguhan di browser.",
+    "Manage Homebrew, Docker, Laravel Herd, language versions and config files from one place, with system stats and a real terminal in the browser.",
+  )}
+  chips={["Homebrew", "Docker", "Laravel Herd", "Tailscale"]}
+  note={s("DyskAdmin dipakai sendiri dan belum dirilis.", "DyskAdmin is used in-house and not released yet.")}
+  hero={{ src: img("dashboard"), t: "", d: "", alt: s("Dasbor statistik DyskAdmin", "The DyskAdmin stats dashboard") }}
+  shots={shots}
+  views={{ kick: s("Tampilan", "Views"), h: s("Semua alat dev, di satu tab.", "Every dev tool, in one tab.") }}
+  featH={s("Yang biasanya tersebar di banyak aplikasi.", "What's usually spread across many apps.")}
+  features={features}
+  panel={{
+    kick: s("Keamanan", "Safety"),
+    h: s("Hanya bisa dibuka dari Mac Anda.", "Only reachable from your Mac."),
+    items: [
+      s("Server hanya mendengarkan 127.0.0.1 dan menolak Host selain localhost.", "The server listens on 127.0.0.1 only and refuses any Host but localhost."),
+      s("Perintah dijalankan tanpa shell dengan input yang divalidasi, dan file hanya bisa dibuka dari daftar tetap.", "Commands run without a shell on validated input, and only files from a fixed list can be opened."),
+      s("Satu binary Go tanpa dependensi; semua aset ikut di dalamnya.", "One Go binary with no dependencies; every asset ships inside it."),
+    ],
+  }}
+  platforms={["macOS"]}
+  license={s("Belum dirilis", "Not released yet")}
+/>

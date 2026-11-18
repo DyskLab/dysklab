@@ -61,6 +61,34 @@ const meta = {
     points: { id: ["Serahkan sesi ke agen lain saat kuota habis", "Model lain lewat 9router, plus hemat token dan Skills", "Hanya di Mac Anda, HP lewat Tailscale"], en: ["Hand a session to another agent when a quota runs out", "Other models through 9router, plus token saver and Skills", "Stays on your Mac, phone access through Tailscale"] },
     platforms: ["macOS", "Web", "PWA"],
   },
+  dyskstream: {
+    repo: "DyskLab/dyskstream", match: /\.dmg$/i, color: "#a855f7", shot: null,
+    tag: { id: "Chat jadi point, point jadi alert.", en: "Chat earns points, points buy alerts." },
+    text: { id: "Bot YouTube Live yang Anda jalankan sendiri. Penonton dapat point dari setiap komentar dan menukarnya dengan alert ala Saweria di OBS, tanpa login dan tanpa API key.", en: "A YouTube Live bot you run yourself. Viewers earn points for every comment and spend them on Saweria-style alerts in OBS, with no login and no API key." },
+    points: { id: ["Overlay OBS: alert, chat, leaderboard, goal, avatar", "Scene segera mulai, istirahat, dan selesai", "Command !point dan !rank lewat Nightbot"], en: ["OBS overlays: alerts, chat, leaderboard, goal, avatars", "Starting soon, be right back and ended scenes", "!point and !rank through Nightbot"] },
+    platforms: ["Web", "macOS", "Windows"],
+  },
+  dyskpos: {
+    repo: "DyskLab/dyskpos", match: /./, color: "#10b981", shot: "/images/products/dyskpos/02-pos-checkout.jpg",
+    tag: { id: "Kasir, stok, dan pembukuan toko.", en: "Checkout, stock and the books." },
+    text: { id: "Aplikasi kasir open source untuk toko dan UMKM: checkout dengan barcode, stok per gudang, pembelian, piutang dan hutang, PPN, member, dan poin.", en: "An open-source point of sale for shops: barcode checkout, stock per warehouse, purchasing, receivables and payables, VAT, members and points." },
+    points: { id: ["Tetap jualan saat offline, sinkron saat online", "Multi-gudang, batch, dan kedaluwarsa", "WhatsApp, Midtrans, Xendit, dan REST API"], en: ["Keeps selling offline, syncs when back", "Multi-warehouse, batches and expiry dates", "WhatsApp, Midtrans, Xendit and a REST API"] },
+    platforms: ["Web", "PWA"],
+  },
+  dyskmedia: {
+    repo: null, match: /./, color: "#ec4899", shot: null,
+    tag: { id: "Satu kalender untuk semua platform.", en: "One calendar for every platform." },
+    text: { id: "Perencana konten yang Anda host sendiri: upload video, jadwalkan post ke YouTube, TikTok, Instagram, Threads, X, dan Facebook, lalu balas komentar dan DM dari satu inbox.", en: "A content planner you host yourself: upload videos, schedule posts to YouTube, TikTok, Instagram, Threads, X and Facebook, then answer comments and DMs from one inbox." },
+    points: { id: ["Banyak akun per platform", "Balasan otomatis berdasarkan kata kunci", "Akun demo untuk mencoba tanpa mengirim apa pun"], en: ["Several accounts per platform", "Keyword-based auto replies", "Demo accounts to try it without posting anything"] },
+    platforms: ["Web"],
+  },
+  dyskadmin: {
+    repo: null, match: /./, color: "#475569", shot: "/images/products/dyskadmin/dashboard.jpg",
+    tag: { id: "Dev environment Mac, satu dasbor.", en: "Your Mac dev environment, one dashboard." },
+    text: { id: "Dasbor lokal untuk Homebrew, Docker, Laravel Herd, versi bahasa, file konfigurasi, dan statistik sistem, plus terminal sungguhan di browser.", en: "A local dashboard for Homebrew, Docker, Laravel Herd, language versions, config files and system stats, plus a real terminal in the browser." },
+    points: { id: ["Satu binary Go, tanpa dependensi", "Pilih versi PHP, Node, Python, Go, Java, Ruby", "Suhu, GPU, dan baterai tanpa sudo"], en: ["One Go binary, no dependencies", "Pick PHP, Node, Python, Go, Java or Ruby versions", "Temperatures, GPU and battery without sudo"] },
+    platforms: ["macOS"],
+  },
 } as const;
 
 const products = await Promise.all(
@@ -70,7 +98,7 @@ const products = await Promise.all(
     return { ...a, ...m, version: dl.version, star, url: href(lang, a.page), kindL: lang === "id" ? a.kind : a.kind_en };
   })
 );
-const allRepos = ["DyskLab/dyskfiles", "DyskLab/dyskfocus", "DyskLab/dyskflow", "DyskLab/dysklink-mac", "DyskLab/dysklink-desktop", "DyskLab/dysklink-android"];
+const allRepos = ["DyskLab/dyskfiles", "DyskLab/dyskfocus", "DyskLab/dyskflow", "DyskLab/dysklink-mac", "DyskLab/dysklink-desktop", "DyskLab/dysklink-android", "DyskLab/dyskstream", "DyskLab/dyskpos"];
 const starTotal = await totalStars(allRepos);
 const showStars = starTotal !== null && starTotal >= 25;
 
@@ -78,21 +106,21 @@ const showStars = starTotal !== null && starTotal >= 25;
 const T = L({
   id: {
     title: "DyskLab: software open source untuk Mac, Windows, Linux, Android, dan web",
-    description: "DyskLab membuat software gratis dan open source: DyskFiles, DyskFocus, DyskFlow, DyskLink, dan DyskOS. Juga menerima pembuatan sistem untuk perusahaan.",
+    description: "DyskLab membuat software gratis dan open source: DyskFiles, DyskFocus, DyskFlow, DyskLink, DyskStream, DyskPOS, dan lainnya. Juga menerima pembuatan sistem untuk perusahaan.",
     nav: [["#produk", "Produk"], ["#kenapa", "Open source"], ["#layanan", "Untuk perusahaan"], ["#faq", "FAQ"]],
     cta: "Lihat produk",
     badge: "Gratis · MIT License · tanpa akun",
     h1a: "Software open source", h1b: "untuk kerja sehari-hari.",
-    lede: "DyskLab membuat aplikasi gratis untuk Mac, Windows, Linux, Android, dan web. Kelola aset, tugas, dan situs, lalu hubungkan HP ke komputer. Tanpa iklan, tanpa akun, dan kodenya terbuka untuk siapa saja.",
+    lede: "DyskLab membuat aplikasi gratis untuk Mac, Windows, Linux, Android, dan web. Kelola aset, tugas, situs, konten, live stream, dan kasir toko, lalu hubungkan HP ke komputer. Tanpa iklan, tanpa akun, dan kodenya terbuka untuk siapa saja.",
     explore: "Jelajahi produk", gh: "DyskLab di GitHub",
-    strip: ["5 produk", "macOS · Windows · Linux · Android · Web", "Data tetap milik Anda", "Dibuat di Gresik, Indonesia"],
+    strip: ["9 produk", "macOS · Windows · Linux · Android · Web", "Data tetap milik Anda", "Dibuat di Gresik, Indonesia"],
     starsLabel: (n: number) => `${n} star di GitHub`,
-    prodK: "Produk", prodH: "Lima aplikasi, satu cara kerja:", prodH2: "sederhana, jujur, dan terbuka.",
+    prodK: "Produk", prodH: "Sembilan aplikasi, satu cara kerja:", prodH2: "sederhana, jujur, dan terbuka.",
     latest: "Versi terbaru", see: (n: string) => `Lihat ${n}`, code: "Kode",
     whyK: "Kenapa open source",
     whyH: "Software yang bisa Anda periksa, ubah, dan simpan sendiri.",
     why: [
-      ["Gratis, sungguhan", "Tanpa versi berbayar, langganan, atau fitur yang dikunci. Lisensi MIT."],
+      ["Gratis, sungguhan", "Tanpa versi berbayar, langganan, atau fitur yang dikunci. Lisensi MIT (DyskPOS: AGPL-3.0)."],
       ["Tanpa akun dan pelacakan", "Tidak ada login ke server DyskLab. Data Anda tidak pernah kami lihat."],
       ["Data dalam format terbuka", "Folder biasa, JSON, SQLite, atau database Anda sendiri. Mudah dicadangkan dan dipindahkan."],
       ["Kode terbuka", "Semua kode ada di GitHub. Siapa pun bisa memeriksa, melaporkan bug, atau ikut memperbaiki."],
@@ -114,7 +142,7 @@ const T = L({
     waText: "Halo DyskLab, saya ingin konsultasi pembuatan sistem.",
     mailSubject: "Konsultasi DyskLab",
     faq: [
-      { q: "Apakah produk DyskLab benar-benar gratis?", a: "<p>Ya. Semua produk gratis dan open source dengan lisensi MIT. Tidak ada versi berbayar atau fitur yang dikunci. Kalau mau mendukung, Anda bisa memberi star di GitHub atau traktir kopi.</p>" },
+      { q: "Apakah produk DyskLab benar-benar gratis?", a: "<p>Ya. Semua produk gratis. Yang open source memakai lisensi MIT, kecuali DyskPOS yang memakai AGPL-3.0. Tidak ada versi berbayar atau fitur yang dikunci. Kalau mau mendukung, Anda bisa memberi star di GitHub atau traktir kopi.</p>" },
       { q: "Siapa di balik DyskLab?", a: "<p>DyskLab dijalankan oleh Fanny, developer di Gresik, Jawa Timur. Produknya dibangun di waktu luang dan dari kebutuhan sehari-hari sendiri.</p>" },
       { q: "Bagaimana cara melaporkan bug atau meminta fitur?", a: "<p>Buka <em>issue</em> di repository GitHub produk yang bersangkutan. Laporan yang menyertakan versi, sistem operasi, dan langkah untuk mengulang masalahnya paling cepat ditangani.</p>" },
       { q: "Apakah bisa dipakai untuk usaha atau dimodifikasi?", a: "<p>Bisa. Lisensi MIT mengizinkan pemakaian komersial, modifikasi, dan distribusi ulang, selama pemberitahuan lisensinya tetap disertakan.</p>" },
@@ -126,21 +154,21 @@ const T = L({
   },
   en: {
     title: "DyskLab: open-source software for Mac, Windows, Linux, Android and the web",
-    description: "DyskLab makes free, open-source software: DyskFiles, DyskFocus, DyskFlow, DyskLink and DyskOS. Custom systems for companies, too.",
+    description: "DyskLab makes free, open-source software: DyskFiles, DyskFocus, DyskFlow, DyskLink, DyskStream, DyskPOS and more. Custom systems for companies, too.",
     nav: [["#produk", "Products"], ["#kenapa", "Open source"], ["#layanan", "For companies"], ["#faq", "FAQ"]],
     cta: "See products",
     badge: "Free · MIT License · no account",
     h1a: "Open-source software", h1b: "for everyday work.",
-    lede: "DyskLab makes free apps for Mac, Windows, Linux, Android and the web. Manage assets, tasks and websites, then link your phone to your computer. No ads, no accounts, and the code is open to everyone.",
+    lede: "DyskLab makes free apps for Mac, Windows, Linux, Android and the web. Manage assets, tasks, websites, content, live streams and a shop till, then link your phone to your computer. No ads, no accounts, and the code is open to everyone.",
     explore: "Explore the products", gh: "DyskLab on GitHub",
-    strip: ["5 products", "macOS · Windows · Linux · Android · Web", "Your data stays yours", "Made in Gresik, Indonesia"],
+    strip: ["9 products", "macOS · Windows · Linux · Android · Web", "Your data stays yours", "Made in Gresik, Indonesia"],
     starsLabel: (n: number) => `${n} stars on GitHub`,
-    prodK: "Products", prodH: "Five apps, one way of working:", prodH2: "simple, honest and open.",
+    prodK: "Products", prodH: "Nine apps, one way of working:", prodH2: "simple, honest and open.",
     latest: "Latest version", see: (n: string) => `See ${n}`, code: "Code",
     whyK: "Why open source",
     whyH: "Software you can inspect, change and keep.",
     why: [
-      ["Actually free", "No paid tier, subscription or locked features. MIT licensed."],
+      ["Actually free", "No paid tier, subscription or locked features. MIT licensed (DyskPOS: AGPL-3.0)."],
       ["No accounts, no tracking", "Nothing logs in to a DyskLab server. We never see your data."],
       ["Open data formats", "Plain folders, JSON, SQLite or your own database. Easy to back up and move."],
       ["Open code", "All the code is on GitHub. Anyone can read it, report bugs or help fix them."],
@@ -162,7 +190,7 @@ const T = L({
     waText: "Hello DyskLab, I'd like to talk about a custom system.",
     mailSubject: "DyskLab consultation",
     faq: [
-      { q: "Are DyskLab's products really free?", a: "<p>Yes. Every product is free and open source under the MIT License, with no paid tier or locked features. To support the work, star it on GitHub or buy a coffee.</p>" },
+      { q: "Are DyskLab's products really free?", a: "<p>Yes. Every product is free. The open-source ones use the MIT License, except DyskPOS, which uses AGPL-3.0. There is no paid tier or locked features. To support the work, star it on GitHub or buy a coffee.</p>" },
       { q: "Who is behind DyskLab?", a: "<p>DyskLab is run by Fanny, a developer in Gresik, East Java, Indonesia. The products are built in spare time, out of day-to-day needs.</p>" },
       { q: "How do I report a bug or ask for a feature?", a: "<p>Open an issue on the product's GitHub repository. Reports with the version, operating system and steps to reproduce get fixed fastest.</p>" },
       { q: "Can I use it at work or modify it?", a: "<p>Yes. The MIT License allows commercial use, modification and redistribution, as long as the license notice stays included.</p>" },
@@ -328,7 +356,11 @@ const jsonLd = {
                 </div>
                 <a class="panel-shot" href={p.url} tabindex="-1" aria-hidden="true">
                   <span class="bar"><i></i><i></i><i></i></span>
-                  <img src={p.shot} alt="" loading="lazy" decoding="async" />
+                  {p.shot ? (
+                    <img src={p.shot} alt="" loading="lazy" decoding="async" />
+                  ) : (
+                    <span class="panel-art"><img src={p.icon} width="128" height="128" alt="" loading="lazy" /></span>
+                  )}
                 </a>
               </article>
             ))}
@@ -586,6 +618,8 @@ const jsonLd = {
   .bar { display: flex; gap: 6px; padding: 10px 12px; background: #1b1e23; }
   .bar i { width: 10px; height: 10px; border-radius: 50%; background: #3a3f47; }
   .panel-shot img { width: 100%; height: auto; display: block; aspect-ratio: 16 / 9.4; object-fit: cover; object-position: top left; }
+  .panel-art { display: grid; place-items: center; aspect-ratio: 16 / 9.4; background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c) 45%, #0f1115), #0f1115 70%); }
+  .panel-shot .panel-art img { width: 128px; height: 128px; aspect-ratio: 1; border-radius: 30px; box-shadow: 0 30px 60px -20px var(--c); }
 
   .sec-ink { background: var(--ink); color: var(--paper); }
   .sec-ink .kick { color: #8aa6ff; }

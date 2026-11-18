@@ -1,0 +1,58 @@
+---
+/* DyskStream product page: purple, open source, no screenshots yet (hero shows the icon). */
+import ProductSimple from "../components/ProductSimple.astro";
+import { pick, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+
+const features = [
+  { t: s("Baca live chat tanpa login", "Reads live chat with no login"), d: s("Tempel URL atau ID video live dari channel publik mana pun. Tanpa OAuth, API key, atau kuota.", "Paste the URL or ID of any public live video. No OAuth, API key or quota.") },
+  { t: s("Sistem point", "Points"), d: s("+1 point per komentar dengan cooldown supaya spam tidak dihitung, bonus command, dan leaderboard.", "+1 point per comment with a cooldown so spam doesn't count, bonus commands and a leaderboard.") },
+  { t: "!alert", d: s("Penonton menukar point jadi alert ala Saweria di OBS, dengan gambar, suara, atau TTS sendiri. Antriannya satu per satu, jadi tidak menumpuk.", "Viewers spend points on Saweria-style alerts in OBS with your own image, sound or TTS, queued one at a time so they never pile up.") },
+  { t: s("Overlay OBS", "OBS overlays"), d: s("Alert, live chat, leaderboard, ticker, antrian request, running text, goal bar, dan avatar penonton.", "Alerts, live chat, leaderboard, ticker, request queue, running text, a goal bar and viewer avatars.") },
+  { t: s("Scene layar penuh", "Full-screen scenes"), d: s("Segera dimulai, istirahat sebentar, dan stream selesai.", "Starting soon, be right back and stream ended.") },
+  { t: s("Dasbor dan soundboard", "Dashboard and soundboard"), d: s("Monitor, leaderboard, aturan, editor template dengan Test Alert, dan soundboard dengan hotkey. Bisa dibuka di HP lewat QR.", "Monitor, leaderboard, rules, a template editor with Test Alert, and a soundboard with hotkeys. Open it on your phone with a QR code.") },
+];
+---
+<ProductSimple
+  lang={lang}
+  slug="dyskstream"
+  name="DyskStream"
+  repo="DyskLab/dyskstream"
+  accent="#a855f7"
+  title={s("DyskStream: asisten YouTube Live dengan point dan alert OBS | DyskLab", "DyskStream: a YouTube Live assistant with points and OBS alerts | DyskLab")}
+  description={s(
+    "DyskStream membaca live chat YouTube tanpa login, memberi point ke penonton yang komen, dan menukarnya jadi alert di OBS. Gratis dan open source.",
+    "DyskStream reads YouTube live chat with no login, gives viewers points for chatting and turns them into alerts in OBS. Free and open source.",
+  )}
+  pillTag={s("Baru", "New")}
+  pill="Web · macOS · Windows"
+  h1={s(["Chat jadi point,", "point jadi alert."], ["Chat earns points,", "points buy alerts."])}
+  lede={s(
+    "Bot YouTube Live yang Anda jalankan sendiri. Penonton dapat point dari setiap komentar dan menukarnya dengan alert yang muncul di OBS. Balasan command dan moderasi diserahkan ke Nightbot.",
+    "A YouTube Live bot you run yourself. Viewers earn points for every comment and spend them on alerts that pop up in OBS. Command replies and moderation are left to Nightbot.",
+  )}
+  chips={["YouTube Live", "OBS", "Nightbot", s("Aplikasi desktop", "Desktop app")]}
+  featH={s("Semua yang dibutuhkan stream interaktif.", "Everything an interactive stream needs.")}
+  features={features}
+  panel={{
+    kick: s("Cara kerja", "How it works"),
+    h: s("Tidak pernah posting ke chat.", "It never posts to chat."),
+    items: [
+      s("Chat dibaca lewat masterchat, tanpa akun YouTube.", "Chat is read through masterchat, with no YouTube account."),
+      s("Command yang butuh balasan (!point, !rank) dijalankan Nightbot lewat $(urlfetch).", "Commands that need a reply (!point, !rank) run in Nightbot through $(urlfetch)."),
+      s("Dasbor dilindungi password; overlay dan endpoint Nightbot tetap publik karena OBS dan Nightbot membutuhkannya.", "The dashboard is password protected; overlays and Nightbot endpoints stay public because OBS and Nightbot need them."),
+    ],
+  }}
+  get={{
+    h: s("Jalan 24/7 di satu port.", "Runs 24/7 on one port."),
+    p: s("Pakai Docker atau PM2 di server, atau build aplikasi desktop untuk Mac dan Windows. Butuh Node.js 25 atau lebih baru.", "Use Docker or PM2 on a server, or build the desktop app for Mac and Windows. Needs Node.js 25 or later."),
+    code: `git clone https://github.com/DyskLab/dyskstream.git
+cd dyskstream
+echo "ADMIN_PASSWORD=your-password" > .env
+docker compose up -d --build
+# open http://localhost:4300`,
+  }}
+  platforms={["Web (Docker/PM2)", "macOS", "Windows"]}
+/>
