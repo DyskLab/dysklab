@@ -1,69 +1,320 @@
 ---
-/* DyskStream product page: purple, open source. Screenshots from the repo's docs/screenshots. */
-import ProductSimple from "../components/ProductSimple.astro";
-import { pick, type Lang } from "../i18n";
+/*
+  DyskStream product page, in the app's own neo-brutalist look: cream dotted paper, thick
+  black borders, hard offset shadows, yellow/cyan/pink/green panels and uppercase labels.
+  Open source, so it ends with ReportBug and Support. Bilingual through s(id, en).
+*/
+import Base from "../layouts/Base.astro";
+import ProductBar from "../components/ProductBar.astro";
+import ProductFooter from "../components/ProductFooter.astro";
+import ReportBug from "../components/ReportBug.astro";
+import Support from "../components/Support.astro";
+import { pick, ui, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+const nt = ui[lang].newTab;
 const img = (n: string) => `/images/products/dyskstream/${n}.jpg`;
+const repo = "DyskLab/dyskstream";
 
 const shots = [
-  { src: img("overlay"), t: s("Overlay dan scene", "Overlays and scenes"), d: s("URL Browser Source untuk OBS, plus scene segera mulai, istirahat, dan selesai.", "Browser Source URLs for OBS, plus starting soon, be right back and ended scenes."), alt: s("Halaman overlay DyskStream", "The DyskStream overlay page") },
-  { src: img("templates"), t: s("Template alert", "Alert templates"), d: s("Command, biaya point, animasi, posisi, warna, gambar, suara, dan TTS per alert, dengan Test Alert.", "Command, point cost, animation, position, colours, image, sound and TTS per alert, with Test Alert."), alt: s("Editor template alert DyskStream", "The DyskStream alert template editor") },
-  { src: img("giveaway"), t: s("Giveaway dan kuis", "Giveaways and quizzes"), d: s("Penonton yang mengetik kata syarat jadi peserta undian. Yang pertama menjawab kuis dengan benar dapat point.", "Viewers who type the keyword enter the draw. The first right answer to a quiz earns points."), alt: s("Giveaway dan kuis di DyskStream", "Giveaways and quizzes in DyskStream") },
-  { src: img("overlays"), t: s("Di atas stream", "On the stream"), d: s("Alert yang ditukar penonton muncul satu per satu, dan avatar penonton yang sedang chat berjalan di bawah.", "Alerts viewers buy appear one at a time, and avatars of viewers who are chatting walk along the bottom."), alt: s("Alert dan avatar penonton DyskStream di OBS", "A DyskStream alert and viewer avatars in OBS") },
+  { src: img("overlay"), c: "cyan", t: s("Overlay dan scene", "Overlays and scenes"), d: s("URL Browser Source untuk OBS, plus scene segera mulai, istirahat, dan selesai.", "Browser Source URLs for OBS, plus starting soon, be right back and ended scenes."), alt: s("Halaman overlay DyskStream", "The DyskStream overlay page") },
+  { src: img("templates"), c: "pink", t: s("Template alert", "Alert templates"), d: s("Command, biaya point, animasi, posisi, warna, gambar, suara, dan TTS per alert, dengan Test Alert.", "Command, point cost, animation, position, colours, image, sound and TTS per alert, with Test Alert."), alt: s("Editor template alert DyskStream", "The DyskStream alert template editor") },
+  { src: img("giveaway"), c: "yellow", t: s("Giveaway dan kuis", "Giveaways and quizzes"), d: s("Penonton yang mengetik kata syarat jadi peserta undian. Yang pertama menjawab kuis dengan benar dapat point.", "Viewers who type the keyword enter the draw. The first right answer to a quiz earns points."), alt: s("Giveaway dan kuis di DyskStream", "Giveaways and quizzes in DyskStream") },
+  { src: img("overlays"), c: "green", t: s("Di atas stream", "On the stream"), d: s("Alert yang ditukar penonton muncul satu per satu, dan avatar penonton yang sedang chat berjalan di bawah.", "Alerts viewers buy appear one at a time, and avatars of viewers who are chatting walk along the bottom."), alt: s("Alert dan avatar penonton DyskStream di OBS", "A DyskStream alert and viewer avatars in OBS") },
 ];
 
 const features = [
-  { t: s("Baca live chat tanpa login", "Reads live chat with no login"), d: s("Tempel URL atau ID video live dari channel publik mana pun. Tanpa OAuth, API key, atau kuota.", "Paste the URL or ID of any public live video. No OAuth, API key or quota.") },
-  { t: s("Sistem point", "Points"), d: s("+1 point per komentar dengan cooldown supaya spam tidak dihitung, bonus command, dan leaderboard.", "+1 point per comment with a cooldown so spam doesn't count, bonus commands and a leaderboard.") },
-  { t: "!alert", d: s("Penonton menukar point jadi alert ala Saweria di OBS, dengan gambar, suara, atau TTS sendiri. Antriannya satu per satu, jadi tidak menumpuk.", "Viewers spend points on Saweria-style alerts in OBS with your own image, sound or TTS, queued one at a time so they never pile up.") },
-  { t: s("Overlay OBS", "OBS overlays"), d: s("Alert, live chat, leaderboard, ticker, antrian request, running text, goal bar, dan avatar penonton.", "Alerts, live chat, leaderboard, ticker, request queue, running text, a goal bar and viewer avatars.") },
-  { t: s("Scene layar penuh", "Full-screen scenes"), d: s("Segera dimulai, istirahat sebentar, dan stream selesai.", "Starting soon, be right back and stream ended.") },
-  { t: s("Dasbor dan soundboard", "Dashboard and soundboard"), d: s("Monitor, leaderboard, aturan, editor template dengan Test Alert, dan soundboard dengan hotkey. Bisa dibuka di HP lewat QR.", "Monitor, leaderboard, rules, a template editor with Test Alert, and a soundboard with hotkeys. Open it on your phone with a QR code.") },
+  { e: "💬", t: s("Baca live chat tanpa login", "Reads live chat with no login"), d: s("Tempel URL atau ID video live dari channel publik mana pun. Tanpa OAuth, API key, atau kuota.", "Paste the URL or ID of any public live video. No OAuth, API key or quota.") },
+  { e: "🏆", t: s("Sistem point", "Points"), d: s("+1 point per komentar dengan cooldown supaya spam tidak dihitung, bonus command, dan leaderboard.", "+1 point per comment with a cooldown so spam doesn't count, bonus commands and a leaderboard.") },
+  { e: "🚨", t: "!alert", d: s("Penonton menukar point jadi alert ala Saweria di OBS, dengan gambar, suara, atau TTS sendiri. Antriannya satu per satu, jadi tidak menumpuk.", "Viewers spend points on Saweria-style alerts in OBS with your own image, sound or TTS, queued one at a time so they never pile up.") },
+  { e: "🖥️", t: s("Overlay OBS", "OBS overlays"), d: s("Alert, live chat, leaderboard, ticker, antrian request, running text, goal bar, dan avatar penonton.", "Alerts, live chat, leaderboard, ticker, request queue, running text, a goal bar and viewer avatars.") },
+  { e: "🎬", t: s("Scene layar penuh", "Full-screen scenes"), d: s("Segera dimulai, istirahat sebentar, dan stream selesai.", "Starting soon, be right back and stream ended.") },
+  { e: "🔊", t: s("Dasbor dan soundboard", "Dashboard and soundboard"), d: s("Monitor, leaderboard, aturan, editor template dengan Test Alert, dan soundboard dengan hotkey. Bisa dibuka di HP lewat QR.", "Monitor, leaderboard, rules, a template editor with Test Alert, and a soundboard with hotkeys. Open it on your phone with a QR code.") },
 ];
+
+const how = [
+  s("Chat dibaca lewat masterchat, tanpa akun YouTube.", "Chat is read through masterchat, with no YouTube account."),
+  s("Command yang butuh balasan (!point, !rank) dijalankan Nightbot lewat $(urlfetch).", "Commands that need a reply (!point, !rank) run in Nightbot through $(urlfetch)."),
+  s("Dasbor dilindungi password; overlay dan endpoint Nightbot tetap publik karena OBS dan Nightbot membutuhkannya.", "The dashboard is password protected; overlays and Nightbot endpoints stay public because OBS and Nightbot need them."),
+];
+
+const ticker = ["!alert", "+1 POINT", "LEADERBOARD", "OBS OVERLAY", "GIVEAWAY", "KUIS", "SOUNDBOARD", "NIGHTBOT", "TTS", "GOAL BAR"];
+const code = `git clone https://github.com/DyskLab/dyskstream.git
+cd dyskstream
+echo "ADMIN_PASSWORD=your-password" > .env
+docker compose up -d --build
+# open http://localhost:4300`;
 ---
-<ProductSimple
-  lang={lang}
-  slug="dyskstream"
-  name="DyskStream"
-  repo="DyskLab/dyskstream"
-  accent="#a855f7"
+
+<Base
   title={s("DyskStream: asisten YouTube Live dengan point dan alert OBS | DyskLab", "DyskStream: a YouTube Live assistant with points and OBS alerts | DyskLab")}
   description={s(
     "DyskStream membaca live chat YouTube tanpa login, memberi point ke penonton yang komen, dan menukarnya jadi alert di OBS. Gratis dan open source.",
     "DyskStream reads YouTube live chat with no login, gives viewers points for chatting and turns them into alerts in OBS. Free and open source.",
   )}
-  pillTag={s("Baru", "New")}
-  pill="Web · macOS · Windows"
-  h1={s(["Chat jadi point,", "point jadi alert."], ["Chat earns points,", "points buy alerts."])}
-  lede={s(
-    "Bot YouTube Live yang Anda jalankan sendiri. Penonton dapat point dari setiap komentar dan menukarnya dengan alert yang muncul di OBS. Balasan command dan moderasi diserahkan ke Nightbot.",
-    "A YouTube Live bot you run yourself. Viewers earn points for every comment and spend them on alerts that pop up in OBS. Command replies and moderation are left to Nightbot.",
-  )}
-  chips={["YouTube Live", "OBS", "Nightbot", s("Aplikasi desktop", "Desktop app")]}
-  hero={{ src: img("monitor"), t: "", d: "", alt: s("Dasbor monitor DyskStream", "The DyskStream monitor dashboard") }}
-  shots={shots}
-  views={{ kick: s("Tampilan", "Views"), h: s("Dari dasbor sampai OBS.", "From the dashboard to OBS.") }}
-  featH={s("Semua yang dibutuhkan stream interaktif.", "Everything an interactive stream needs.")}
-  features={features}
-  panel={{
-    kick: s("Cara kerja", "How it works"),
-    h: s("Tidak pernah posting ke chat.", "It never posts to chat."),
-    items: [
-      s("Chat dibaca lewat masterchat, tanpa akun YouTube.", "Chat is read through masterchat, with no YouTube account."),
-      s("Command yang butuh balasan (!point, !rank) dijalankan Nightbot lewat $(urlfetch).", "Commands that need a reply (!point, !rank) run in Nightbot through $(urlfetch)."),
-      s("Dasbor dilindungi password; overlay dan endpoint Nightbot tetap publik karena OBS dan Nightbot membutuhkannya.", "The dashboard is password protected; overlays and Nightbot endpoints stay public because OBS and Nightbot need them."),
-    ],
-  }}
-  get={{
-    h: s("Jalan 24/7 di satu port.", "Runs 24/7 on one port."),
-    p: s("Pakai Docker atau PM2 di server, atau build aplikasi desktop untuk Mac dan Windows. Butuh Node.js 25 atau lebih baru.", "Use Docker or PM2 on a server, or build the desktop app for Mac and Windows. Needs Node.js 25 or later."),
-    code: `git clone https://github.com/DyskLab/dyskstream.git
-cd dyskstream
-echo "ADMIN_PASSWORD=your-password" > .env
-docker compose up -d --build
-# open http://localhost:4300`,
-  }}
-  platforms={["Web (Docker/PM2)", "macOS", "Windows"]}
-/>
+  path={Astro.url.pathname}
+  ogImage={img("monitor")}
+  ogTitle="DyskStream"
+  fonts="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@700&display=swap"
+  theme="light"
+  themeColor="#fdf3d8"
+>
+  <div class="bs" id="top">
+    <ProductBar
+      lang={lang}
+      name="DyskStream"
+      icon="/images/apps/dyskstream.png"
+      repo={repo}
+      links={[
+        { href: "#tampilan", label: s("Tampilan", "Views") },
+        { href: "#fitur", label: s("Fitur", "Features") },
+        { href: "#cara", label: s("Cara kerja", "How it works") },
+        { href: "#pakai", label: s("Pasang", "Get it") },
+      ]}
+      cta={{ href: "#pakai", label: s("Pasang", "Get it") }}
+    />
+
+    <main>
+      <header class="hero">
+        <div class="wrap hero-in">
+          <div class="hero-copy">
+            <p class="tag"><span>{s("Baru", "New")}</span>Web · macOS · Windows</p>
+            {lang === "id" ? (
+              <h1>Chat jadi <mark class="y">point</mark>,<br />point jadi <mark class="p">alert.</mark></h1>
+            ) : (
+              <h1>Chat earns <mark class="y">points</mark>,<br />points buy <mark class="p">alerts.</mark></h1>
+            )}
+            <p class="lede">{s(
+              "Bot YouTube Live yang Anda jalankan sendiri. Penonton dapat point dari setiap komentar dan menukarnya dengan alert yang muncul di OBS. Balasan command dan moderasi diserahkan ke Nightbot.",
+              "A YouTube Live bot you run yourself. Viewers earn points for every comment and spend them on alerts that pop up in OBS. Command replies and moderation are left to Nightbot.",
+            )}</p>
+            <div class="actions">
+              <a class="btn btn-y" href="#pakai">{s("Pasang gratis", "Install free")} →</a>
+              <a class="btn btn-w" href={`https://github.com/${repo}`} target="_blank" rel="noopener">GitHub ↗<span class="sr">{nt}</span></a>
+            </div>
+            <ul class="chips">
+              {["YouTube Live", "OBS", "Nightbot", s("Aplikasi desktop", "Desktop app")].map((c) => <li>{c}</li>)}
+            </ul>
+          </div>
+          <div class="hero-art">
+            <div class="frame">
+              <div class="frame-h"><span>📡 MONITOR</span><i>● LIVE</i></div>
+              <img src={img("monitor")} alt={s("Dasbor monitor DyskStream", "The DyskStream monitor dashboard")} width="1000" height="900" decoding="async" />
+            </div>
+            <span class="sticker st-1" aria-hidden="true">+1 POINT</span>
+            <span class="sticker st-2" aria-hidden="true">!alert</span>
+            <span class="sticker st-3" aria-hidden="true">🏆 #1</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+          {[0, 1].map(() => <span>{ticker.map((x) => <b>{x} ★</b>)}</span>)}
+        </div>
+      </div>
+
+      <section id="tampilan" class="sec">
+        <div class="wrap">
+          <div class="head">
+            <p class="label">{s("Tampilan", "Views")}</p>
+            <h2>{s("Dari dasbor sampai OBS.", "From the dashboard to OBS.")}</h2>
+          </div>
+          <div class="grid">
+            {shots.map((x) => (
+              <figure class={`panel dl-reveal c-${x.c}`}>
+                <figcaption class="panel-h">{x.t}</figcaption>
+                <img src={x.src} alt={x.alt} loading="lazy" decoding="async" />
+                <p>{x.d}</p>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="fitur" class="sec sec-dark">
+        <div class="wrap">
+          <div class="head">
+            <p class="label label-y">{s("Fitur", "Features")}</p>
+            <h2>{s("Semua yang dibutuhkan stream interaktif.", "Everything an interactive stream needs.")}</h2>
+          </div>
+          <ul class="feat">
+            {features.map((f, i) => (
+              <li class={`dl-reveal f-${i % 4}`}>
+                <span class="f-e" aria-hidden="true">{f.e}</span>
+                <h3>{f.t}</h3>
+                <p>{f.d}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="cara" class="sec">
+        <div class="wrap">
+          <div class="how dl-reveal">
+            <div>
+              <p class="label">{s("Cara kerja", "How it works")}</p>
+              <h2>{s("Tidak pernah posting ke chat.", "It never posts to chat.")}</h2>
+            </div>
+            <ol>{how.map((x) => <li>{x}</li>)}</ol>
+          </div>
+        </div>
+      </section>
+
+      <section id="pakai" class="sec sec-tight">
+        <div class="wrap">
+          <div class="get dl-reveal">
+            <div>
+              <p class="label">{s("Pasang", "Get it")}</p>
+              <h2>{s("Jalan 24/7 di satu port.", "Runs 24/7 on one port.")}</h2>
+              <p class="get-p">{s("Pakai Docker atau PM2 di server, atau build aplikasi desktop untuk Mac dan Windows. Butuh Node.js 25 atau lebih baru.", "Use Docker or PM2 on a server, or build the desktop app for Mac and Windows. Needs Node.js 25 or later.")}</p>
+              <a class="btn btn-y" href={`https://github.com/${repo}`} target="_blank" rel="noopener">{s("Buka di GitHub", "Open on GitHub")} ↗<span class="sr">{nt}</span></a>
+            </div>
+            <div class="term">
+              <div class="term-h"><span>TERMINAL</span><i></i><i></i><i></i></div>
+              <pre><code>{code}</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <ReportBug lang={lang} product="DyskStream" repo={repo} platforms={["Web (Docker/PM2)", "macOS", "Windows"]} />
+      <Support lang={lang} product="DyskStream" repos={[{ repo }]} />
+    </main>
+
+    <ProductFooter lang={lang} current="dyskstream" />
+  </div>
+  <script src="../scripts/reveal.js"></script>
+</Base>
+
+<style>
+  :global(body) { margin: 0; background: #fdf3d8; }
+  .bs {
+    --paper: #fdf3d8; --ink: #111; --muted: #3d3a33; --y: #ffd60a; --c: #4dd4e8; --p: #ff5c9a; --g: #7ce38b; --v: #a855f7;
+    --bd: 3px solid var(--ink); --sh: 6px 6px 0 var(--ink); --sh-s: 4px 4px 0 var(--ink);
+    --pb-bg: #fdf3d8; --pb-fg: var(--ink); --pb-muted: #3d3a33; --pb-line: var(--ink); --pb-hover: var(--y);
+    --pb-btn-bg: var(--y); --pb-btn-fg: var(--ink); --pb-radius: 0; --pb-font: "Space Grotesk", sans-serif;
+    --pf-line: var(--ink); --pf-muted: #3d3a33; --pf-fg: var(--ink); --pf-card: #fff; --pf-hover: var(--ink); --pf-radius: 0; --pf-font: "Space Grotesk", sans-serif;
+    background: var(--paper) radial-gradient(circle, rgba(17, 17, 17, 0.18) 1.2px, transparent 1.5px) 0 0 / 22px 22px;
+    color: var(--ink); font: 500 16px/1.6 "Space Grotesk", system-ui, sans-serif; overflow-x: hidden;
+  }
+  .wrap { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  h1, h2, h3 { margin: 0; font-family: "Archivo Black", "Space Grotesk", sans-serif; font-weight: 400; line-height: 1.02; text-transform: uppercase; letter-spacing: -0.01em; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* the shared bar and footer, made brutal */
+  .bs :global(.pb) { border-bottom: var(--bd); backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--paper); }
+  .bs :global(.pb-star), .bs :global(.pb-lang), .bs :global(.pb-cta) { border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); font-weight: 700; text-transform: uppercase; }
+  .bs :global(.pb-cta) { border: 2px solid var(--ink) !important; }
+  .bs :global(.pb-prod img) { border: 2px solid var(--ink); border-radius: 8px; }
+  .bs :global(.pf) { border-top: var(--bd); background: var(--y); }
+  .bs :global(.pf-grid a) { border: var(--bd); box-shadow: var(--sh-s); }
+  .bs :global(.pf-grid a:hover) { transform: translate(-2px, -2px); box-shadow: var(--sh); }
+  .bs :global(.pf-bottom) { border-top: var(--bd); }
+  .bs :global(.sp-in), .bs :global(.rb-in) { border: var(--bd); box-shadow: 8px 8px 0 var(--ink); }
+  .bs :global(.sp-card) { border: var(--bd); background: var(--c); }
+  .bs :global(.sp-card:last-child) { background: var(--p); }
+  .bs :global(.sp-card p) { color: var(--ink); }
+  .bs :global(.sp-btn), .bs :global(.rb-btn) { border: var(--bd); box-shadow: var(--sh-s); text-transform: uppercase; }
+  .bs :global(.rb input), .bs :global(.rb select), .bs :global(.rb textarea) { border: var(--bd); background: #fff; }
+  .bs :global(.sp h2), .bs :global(.rb h2) { font-family: "Archivo Black", sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0; }
+
+  /* hero */
+  .hero { padding: 64px 0 72px; }
+  .hero-in { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .tag { display: inline-flex; align-items: center; gap: 10px; margin: 0; padding: 4px 12px 4px 4px; border: var(--bd); background: #fff; box-shadow: var(--sh-s); font: 700 13px "Space Mono", monospace; text-transform: uppercase; }
+  .tag span { padding: 2px 8px; background: var(--g); border: 2px solid var(--ink); }
+  h1 { margin-top: 28px; font-size: clamp(40px, 5.6vw, 76px); }
+  mark { color: var(--ink); padding: 0 10px; border: var(--bd); box-shadow: var(--sh-s); display: inline-block; line-height: 1.05; margin: 4px 0; }
+  mark.y { background: var(--y); transform: rotate(-2deg); }
+  mark.p { background: var(--p); transform: rotate(1.5deg); }
+  .lede { margin: 26px 0 0; max-width: 540px; font-size: 18px; color: var(--muted); }
+  .actions { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 52px; padding: 0 22px; border: var(--bd); box-shadow: var(--sh);
+    font: 700 15px "Space Mono", monospace; text-transform: uppercase; color: var(--ink); text-decoration: none; transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
+  .btn:active { transform: translate(4px, 4px); box-shadow: 2px 2px 0 var(--ink); }
+  .btn-y { background: var(--y); }
+  .btn-w { background: #fff; }
+  .chips { list-style: none; margin: 28px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .chips li { padding: 4px 12px; border: 2px solid var(--ink); background: #fff; font-weight: 700; font-size: 13.5px; }
+  .chips li:nth-child(1) { background: #ff8a8a; } .chips li:nth-child(2) { background: var(--c); } .chips li:nth-child(3) { background: var(--g); }
+
+  .hero-art { position: relative; }
+  .frame { border: var(--bd); box-shadow: 10px 10px 0 var(--ink); background: #fff; transform: rotate(1.2deg); }
+  .frame-h { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: var(--bd); background: var(--c); font: 700 14px "Space Mono", monospace; }
+  .frame-h i { font-style: normal; padding: 1px 8px; background: #ff4d4d; color: #fff; border: 2px solid var(--ink); }
+  .frame img { display: block; width: 100%; height: auto; }
+  .sticker { position: absolute; padding: 6px 14px; border: var(--bd); box-shadow: var(--sh-s); font: 700 16px "Space Mono", monospace; white-space: nowrap; }
+  .st-1 { left: -26px; top: 18%; background: var(--g); transform: rotate(-8deg); }
+  .st-2 { right: -14px; bottom: 16%; background: var(--p); transform: rotate(6deg); }
+  .st-3 { left: 12%; bottom: -22px; background: var(--y); transform: rotate(-3deg); }
+
+  /* ticker, like the running-text overlay */
+  .ticker { overflow: hidden; border-block: var(--bd); background: var(--ink); color: var(--y); transform: rotate(-1deg); margin: 0 -10px; }
+  .ticker-track { display: flex; width: max-content; animation: tick 30s linear infinite; }
+  .ticker span { display: flex; }
+  .ticker b { padding: 12px 22px; font: 700 18px "Space Mono", monospace; white-space: nowrap; }
+  @keyframes tick { to { transform: translateX(-50%); } }
+
+  /* sections */
+  .sec { padding: 96px 0; }
+  .sec-tight { padding-top: 24px; }
+  .head { max-width: 760px; }
+  .label { display: inline-block; margin: 0 0 18px; padding: 4px 12px; border: var(--bd); background: var(--c); box-shadow: var(--sh-s); font: 700 13px "Space Mono", monospace; text-transform: uppercase; }
+  .label-y { background: var(--y); }
+  h2 { font-size: clamp(30px, 4.2vw, 52px); }
+
+  .grid { margin-top: 48px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .panel { margin: 0; border: var(--bd); background: #fff; box-shadow: 8px 8px 0 var(--ink); display: flex; flex-direction: column; }
+  .panel-h { padding: 10px 16px; border-bottom: var(--bd); font: 700 16px "Space Mono", monospace; text-transform: uppercase; }
+  .c-cyan .panel-h { background: var(--c); } .c-pink .panel-h { background: var(--p); } .c-yellow .panel-h { background: var(--y); } .c-green .panel-h { background: var(--g); }
+  .panel img { display: block; width: 100%; height: auto; border-bottom: var(--bd); }
+  .panel p { margin: 0; padding: 16px; font-size: 15.5px; }
+
+  .sec-dark { background: var(--ink); color: #fff; border-block: var(--bd); }
+  .sec-dark h2 { color: #fff; }
+  .feat { list-style: none; margin: 48px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .feat li { padding: 24px; border: var(--bd); border-color: #fff; color: var(--ink); box-shadow: 6px 6px 0 #fff; }
+  .f-0 { background: var(--y); } .f-1 { background: var(--c); } .f-2 { background: var(--p); } .f-3 { background: var(--g); }
+  .f-e { display: grid; place-items: center; width: 48px; height: 48px; border: var(--bd); background: #fff; font-size: 24px; box-shadow: 3px 3px 0 var(--ink); }
+  .feat h3 { margin-top: 18px; font-size: 21px; }
+  .feat p { margin: 10px 0 0; font-size: 15px; }
+
+  .how { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; padding: 40px; border: var(--bd); background: var(--v); color: #fff; box-shadow: 10px 10px 0 var(--ink); }
+  .how h2 { color: #fff; }
+  .how ol { margin: 0; padding: 0; list-style: none; counter-reset: n; display: grid; gap: 14px; }
+  .how li { counter-increment: n; display: flex; gap: 14px; align-items: flex-start; padding: 14px; border: var(--bd); background: #fff; color: var(--ink); box-shadow: var(--sh-s); }
+  .how li::before { content: counter(n); flex: none; display: grid; place-items: center; width: 30px; height: 30px; border: 2px solid var(--ink); background: var(--y); font: 700 15px "Space Mono", monospace; }
+
+  .get { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; padding: 40px; border: var(--bd); background: var(--g); box-shadow: 10px 10px 0 var(--ink); }
+  .get-p { margin: 16px 0 24px; }
+  .get > *, .how > *, .hero-in > * { min-width: 0; }
+  .term { border: var(--bd); background: var(--ink); box-shadow: var(--sh); }
+  .term-h { display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-bottom: var(--bd); background: var(--y); font: 700 13px "Space Mono", monospace; }
+  .term-h span { margin-right: auto; }
+  .term-h i { width: 12px; height: 12px; border: 2px solid var(--ink); background: #fff; }
+  pre { margin: 0; padding: 20px; overflow-x: auto; color: var(--g); font: 700 13.5px/1.75 "Space Mono", monospace; }
+
+  .dl-reveal { transition: transform 0.5s cubic-bezier(.2, .8, .2, 1), opacity 0.5s; }
+  :global(.dl-motion) .dl-reveal { opacity: 0; transform: translateY(24px) rotate(-1deg); }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .hero-in, .how, .get { grid-template-columns: 1fr; }
+    .feat { grid-template-columns: 1fr 1fr; }
+    .hero-art { margin: 0 12px; }
+  }
+  @media (max-width: 640px) {
+    .grid, .feat { grid-template-columns: 1fr; }
+    .sec { padding: 64px 0; }
+    .how, .get { padding: 22px; }
+    .st-1 { left: -8px; } .st-2 { right: -6px; }
+    .bs :global(.pb-star), .bs :global(.pb-lang), .bs :global(.pb-cta) { box-shadow: 2px 2px 0 var(--ink); }
+  }
+  @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }
+</style>

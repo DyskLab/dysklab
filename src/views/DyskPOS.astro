@@ -1,11 +1,21 @@
 ---
-/* DyskPOS product page: green, open source under AGPL-3.0, based on Point of Sales by Arya Dwi Putra. */
-import ProductSimple from "../components/ProductSimple.astro";
-import { pick, type Lang } from "../i18n";
+/*
+  DyskPOS product page, in the app's own look: a clean retail admin in white and emerald,
+  rounded product cards, category chips and a till receipt. Open source under AGPL-3.0,
+  based on Point of Sales by Arya Dwi Putra. Bilingual through s(id, en).
+*/
+import Base from "../layouts/Base.astro";
+import ProductBar from "../components/ProductBar.astro";
+import ProductFooter from "../components/ProductFooter.astro";
+import ReportBug from "../components/ReportBug.astro";
+import Support from "../components/Support.astro";
+import { pick, ui, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+const nt = ui[lang].newTab;
 const img = (n: string) => `/images/products/dyskpos/${n}.jpg`;
+const repo = "DyskLab/dyskpos";
 
 const shots = [
   { src: img("01-dashboard"), t: s("Dasbor", "Dashboard"), d: s("Penjualan, laba, dan stok menipis sekilas pandang.", "Sales, profit and low stock at a glance."), alt: s("Dasbor DyskPOS", "The DyskPOS dashboard") },
@@ -22,54 +32,274 @@ const features = [
   { t: s("Pembelian dan keuangan", "Purchasing and finance"), d: s("Purchase order, penerimaan barang, retur supplier, hutang dan piutang dengan aging, serta portal pelanggan untuk bayar online.", "Purchase orders, goods receiving, supplier returns, payables and receivables with aging, and a customer portal to pay online.") },
   { t: s("CRM dan WhatsApp", "CRM and WhatsApp"), d: s("Member bertingkat, poin, voucher, segmen, kampanye, dan pesan otomatis lewat WhatsApp.", "Member tiers, points, vouchers, segments, campaigns and automatic WhatsApp messages.") },
 ];
+
+const icons = [
+  "M3 7h18M6 7l1.5 12h9L18 7M9 7V5a3 3 0 0 1 6 0v2",
+  "M2 12h4l3-8 4 16 3-8h6",
+  "M3 21V8l9-5 9 5v13M9 21v-6h6v6",
+  "M7 7h.01M3 12l9-9h9v9l-9 9z",
+  "M4 4h16v16H4zM4 10h16M10 10v10",
+  "M21 12a8 8 0 0 1-12 7l-5 1 1-4A8 8 0 1 1 21 12Z",
+];
+const cats = [s("Semua", "All"), s("Kasir", "Checkout"), s("Stok", "Stock"), s("Pembelian", "Purchasing"), s("Keuangan", "Finance"), s("Pelanggan", "Customers"), "API"];
+const dev = [
+  s("REST API berbasis token (Sanctum) di /api/v1, dengan dokumentasi interaktif di /docs/api.", "A token-based REST API (Sanctum) at /api/v1, with interactive docs at /docs/api."),
+  s("Hak akses per peran dan audit log dengan snapshot sebelum dan sesudah.", "Role-based permissions and an audit log with before and after snapshots."),
+  s("Data demo lengkap dengan satu perintah: php artisan seed:demo.", "Full demo data with one command: php artisan seed:demo."),
+];
+const code = `git clone https://github.com/DyskLab/dyskpos.git
+cd dyskpos && cp .env.example .env
+composer install && npm install
+php artisan key:generate
+php artisan migrate --seed
+composer run dev`;
+const receipt = [
+  [s("Tunai, transfer, QRIS", "Cash, transfer, QRIS"), "✓"],
+  ["Midtrans · Xendit", "✓"],
+  [s("Bayar nanti (piutang)", "Pay later"), "✓"],
+  [s("PPN 11%", "11% VAT"), "✓"],
+  [s("Mode offline", "Offline mode"), "✓"],
+];
 ---
-<ProductSimple
-  lang={lang}
-  slug="dyskpos"
-  name="DyskPOS"
-  repo="DyskLab/dyskpos"
-  accent="#10b981"
+
+<Base
   title={s("DyskPOS: aplikasi kasir open source untuk toko dan UMKM | DyskLab", "DyskPOS: an open-source point of sale for shops | DyskLab")}
   description={s(
     "DyskPOS adalah aplikasi kasir open source: checkout, stok multi-gudang, pembelian, piutang, CRM, loyalty, WhatsApp, dan mode offline.",
     "DyskPOS is an open-source point of sale: checkout, multi-warehouse stock, purchasing, receivables, CRM, loyalty, WhatsApp and an offline mode.",
   )}
-  pillTag="AGPL-3.0"
-  pill="Web · PWA"
-  h1={s(["Kasir, stok, dan pembukuan,", "dalam satu aplikasi."], ["Checkout, stock and the books,", "in one app."])}
-  lede={s(
-    "Aplikasi kasir untuk warung, toko, dan UMKM: dari meja kasir sampai laporan keuangan, dengan stok per gudang dan tetap bisa jualan saat offline.",
-    "A point of sale for small shops: from the till to the financial reports, with stock per warehouse and sales that keep going offline.",
-  )}
-  chips={["Laravel", "React", "PWA", s("Mode offline", "Offline mode")]}
-  hero={{ src: img("02-pos-checkout"), t: "POS", d: "", alt: s("Halaman kasir DyskPOS", "The DyskPOS checkout") }}
-  shots={shots}
-  views={{ kick: s("Tampilan", "Views"), h: s("Dari kasir sampai laporan.", "From the till to the reports.") }}
-  featH={s("Lengkap untuk toko sehari-hari.", "Everything a shop needs day to day.")}
-  features={features}
-  panel={{
-    kick: s("Untuk developer", "For developers"),
-    h: s("Bisa disambungkan ke mana saja.", "Connects to anything."),
-    items: [
-      s("REST API berbasis token (Sanctum) di /api/v1, dengan dokumentasi interaktif di /docs/api.", "A token-based REST API (Sanctum) at /api/v1, with interactive docs at /docs/api."),
-      s("Hak akses per peran dan audit log dengan snapshot sebelum dan sesudah.", "Role-based permissions and an audit log with before and after snapshots."),
-      s("Data demo lengkap dengan satu perintah: php artisan seed:demo.", "Full demo data with one command: php artisan seed:demo."),
-    ],
-  }}
-  get={{
-    h: s("Pasang di server Anda sendiri.", "Install it on your own server."),
-    p: s("Butuh PHP 8.3+, Composer, Node.js, dan MySQL atau SQLite. Kunjungan pertama membuka wizard untuk membuat akun admin dan profil toko.", "Needs PHP 8.3+, Composer, Node.js and MySQL or SQLite. The first visit opens a wizard to create the admin account and store profile."),
-    code: `git clone https://github.com/DyskLab/dyskpos.git
-cd dyskpos && cp .env.example .env
-composer install && npm install
-php artisan key:generate
-php artisan migrate --seed
-composer run dev`,
-  }}
-  platforms={["Web (Laravel)", "PWA"]}
-  license="AGPL-3.0"
-  credit={s(
-    'DyskPOS dikembangkan dari <a href="https://github.com/aryadwiputra/point-of-sales" target="_blank" rel="noopener">Point of Sales</a> karya Arya Dwi Putra, dengan lisensi GNU AGPL-3.0.',
-    'DyskPOS is based on <a href="https://github.com/aryadwiputra/point-of-sales" target="_blank" rel="noopener">Point of Sales</a> by Arya Dwi Putra, under the GNU AGPL-3.0.',
-  )}
-/>
+  path={Astro.url.pathname}
+  ogImage={img("02-pos-checkout")}
+  ogTitle="DyskPOS"
+  fonts="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap"
+  theme="light"
+  themeColor="#ffffff"
+>
+  <div class="ps" id="top">
+    <ProductBar
+      lang={lang}
+      name="DyskPOS"
+      icon="/images/apps/dyskpos.png"
+      repo={repo}
+      links={[
+        { href: "#tampilan", label: s("Tampilan", "Views") },
+        { href: "#fitur", label: s("Fitur", "Features") },
+        { href: "#developer", label: "Developer" },
+        { href: "#pakai", label: s("Pasang", "Get it") },
+      ]}
+      cta={{ href: "#pakai", label: s("Pasang gratis", "Install free") }}
+    />
+
+    <main>
+      <header class="hero">
+        <div class="wrap hero-in">
+          <div class="hero-copy">
+            <p class="badge"><span>AGPL-3.0</span>Web · PWA</p>
+            {lang === "id" ? (
+              <h1>Kasir, stok, dan pembukuan, <span>dalam satu aplikasi.</span></h1>
+            ) : (
+              <h1>Checkout, stock and the books, <span>in one app.</span></h1>
+            )}
+            <p class="lede">{s(
+              "Aplikasi kasir untuk warung, toko, dan UMKM: dari meja kasir sampai laporan keuangan, dengan stok per gudang dan tetap bisa jualan saat offline.",
+              "A point of sale for small shops: from the till to the financial reports, with stock per warehouse and sales that keep going offline.",
+            )}</p>
+            <div class="actions">
+              <a class="btn btn-g" href="#pakai">{s("Pasang gratis", "Install free")}</a>
+              <a class="btn btn-o" href="#tampilan">{s("Lihat tampilan", "See the views")}</a>
+            </div>
+            <ul class="ticks">
+              {["Laravel", "React", "PWA", s("Mode offline", "Offline mode")].map((c) => <li>{c}</li>)}
+            </ul>
+          </div>
+          <div class="hero-art">
+            <div class="screen">
+              <img src={img("02-pos-checkout")} alt={s("Halaman kasir DyskPOS", "The DyskPOS checkout")} width="1600" height="1000" decoding="async" />
+            </div>
+            <div class="receipt" aria-label={s("Cara bayar", "Ways to pay")}>
+              <p class="r-shop">DyskPOS</p>
+              <p class="r-sub">{s("Struk · cara bayar", "Receipt · ways to pay")}</p>
+              <dl>{receipt.map(([a, b]) => <div><dt>{a}</dt><dd>{b}</dd></div>)}</dl>
+              <p class="r-tot"><span>{s("Lisensi", "Licence")}</span><b>{s("Gratis", "Free")}</b></p>
+              <p class="r-thanks">{s("Terima kasih!", "Thank you!")}</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section id="tampilan" class="sec">
+        <div class="wrap">
+          <div class="head">
+            <p class="kick">{s("Tampilan", "Views")}</p>
+            <h2>{s("Dari kasir sampai laporan.", "From the till to the reports.")}</h2>
+          </div>
+          <ul class="cats" aria-hidden="true">{cats.map((c, i) => <li class:list={{ on: i === 0 }}>{c}</li>)}</ul>
+          <div class="grid">
+            {shots.map((x) => (
+              <figure class="card dl-reveal">
+                <img src={x.src} alt={x.alt} loading="lazy" decoding="async" />
+                <figcaption><b>{x.t}</b>{x.d}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="fitur" class="sec sec-alt">
+        <div class="wrap">
+          <div class="head">
+            <p class="kick">{s("Fitur", "Features")}</p>
+            <h2>{s("Lengkap untuk toko sehari-hari.", "Everything a shop needs day to day.")}</h2>
+          </div>
+          <ul class="feat">
+            {features.map((f, i) => (
+              <li class="dl-reveal">
+                <span class="f-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={icons[i % icons.length]} /></svg></span>
+                <h3>{f.t}</h3>
+                <p>{f.d}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="developer" class="sec sec-tight">
+        <div class="wrap">
+          <div class="dev dl-reveal">
+            <div>
+              <p class="kick kick-l">{s("Untuk developer", "For developers")}</p>
+              <h2>{s("Bisa disambungkan ke mana saja.", "Connects to anything.")}</h2>
+            </div>
+            <ul>{dev.map((x) => <li>{x}</li>)}</ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="pakai" class="sec sec-tight">
+        <div class="wrap">
+          <div class="get dl-reveal">
+            <div>
+              <p class="kick">{s("Pasang", "Get it")}</p>
+              <h2>{s("Pasang di server Anda sendiri.", "Install it on your own server.")}</h2>
+              <p class="get-p">{s("Butuh PHP 8.3+, Composer, Node.js, dan MySQL atau SQLite. Kunjungan pertama membuka wizard untuk membuat akun admin dan profil toko.", "Needs PHP 8.3+, Composer, Node.js and MySQL or SQLite. The first visit opens a wizard to create the admin account and store profile.")}</p>
+              <a class="btn btn-g" href={`https://github.com/${repo}`} target="_blank" rel="noopener">{s("Buka di GitHub", "Open on GitHub")} ↗<span class="sr">{nt}</span></a>
+            </div>
+            <pre><code>{code}</code></pre>
+          </div>
+          <p class="credit" set:html={s(
+            'DyskPOS dikembangkan dari <a href="https://github.com/aryadwiputra/point-of-sales" target="_blank" rel="noopener">Point of Sales</a> karya Arya Dwi Putra, dengan lisensi GNU AGPL-3.0.',
+            'DyskPOS is based on <a href="https://github.com/aryadwiputra/point-of-sales" target="_blank" rel="noopener">Point of Sales</a> by Arya Dwi Putra, under the GNU AGPL-3.0.',
+          )} />
+        </div>
+      </section>
+
+      <ReportBug lang={lang} product="DyskPOS" repo={repo} platforms={["Web (Laravel)", "PWA"]} />
+      <Support lang={lang} product="DyskPOS" repos={[{ repo }]} />
+    </main>
+
+    <ProductFooter lang={lang} current="dyskpos" license="AGPL-3.0" />
+  </div>
+  <script src="../scripts/reveal.js"></script>
+</Base>
+
+<style>
+  :global(body) { margin: 0; background: #fff; }
+  .ps {
+    --bg: #fff; --bg-2: #f3f6f5; --card: #fff; --line: #e3e8e6; --ink: #13201b; --muted: #5d6b66; --g: #10b981; --g-d: #0b8f63; --g-s: #e7f8f1; --o: #f59e0b;
+    --pb-bg: #ffffff; --pb-fg: var(--ink); --pb-muted: var(--muted); --pb-line: var(--line); --pb-hover: var(--g-s);
+    --pb-btn-bg: var(--g); --pb-btn-fg: #fff; --pb-radius: 10px; --pb-font: "Plus Jakarta Sans", sans-serif;
+    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--ink); --pf-card: var(--card); --pf-hover: var(--g); --pf-radius: 14px; --pf-font: "Plus Jakarta Sans", sans-serif;
+    background: var(--bg); color: var(--ink); font: 400 16px/1.6 "Plus Jakarta Sans", system-ui, sans-serif; overflow-x: hidden;
+  }
+  .wrap { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.03em; line-height: 1.08; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  .hero { padding: 72px 0 88px; background: linear-gradient(180deg, var(--g-s), #fff 70%); }
+  .hero-in { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
+  .badge { display: inline-flex; align-items: center; gap: 10px; margin: 0; padding: 4px 12px 4px 4px; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-size: 13.5px; font-weight: 600; color: var(--muted); }
+  .badge span { padding: 2px 10px; border-radius: 999px; background: var(--g); color: #fff; }
+  h1 { margin-top: 22px; font-size: clamp(38px, 5vw, 62px); }
+  h1 span { color: var(--g-d); }
+  .lede { margin: 20px 0 0; max-width: 520px; font-size: 18px; color: var(--muted); }
+  .actions { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 22px; border-radius: 10px; font-weight: 700; font-size: 15px; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-g { background: var(--g); color: #fff; box-shadow: 0 10px 24px -10px var(--g); }
+  .btn-o { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .ticks { list-style: none; margin: 26px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14.5px; font-weight: 600; color: var(--muted); }
+  .ticks li::before { content: "✓"; margin-right: 6px; color: var(--g); }
+
+  .hero-art { position: relative; padding: 0 0 40px 0; }
+  .screen { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #fff; box-shadow: 0 40px 80px -40px rgba(16, 60, 45, 0.45); }
+  .screen img { display: block; width: 100%; height: auto; }
+  .receipt {
+    position: absolute; left: -36px; bottom: -8px; width: 230px; padding: 18px 18px 26px; background: #fff; color: #222;
+    font: 500 12.5px/1.5 "JetBrains Mono", ui-monospace, monospace; box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.35);
+    -webkit-mask: radial-gradient(circle 6px at 50% 100%, transparent 98%, #000) 0 0 / 14px 100%; mask: radial-gradient(circle 6px at 50% 100%, transparent 98%, #000) 0 0 / 14px 100%;
+    transform: rotate(-3deg);
+  }
+  .r-shop { margin: 0; text-align: center; font-weight: 700; font-size: 14px; letter-spacing: 0.1em; }
+  .r-sub { margin: 0 0 10px; text-align: center; color: #777; border-bottom: 1px dashed #bbb; padding-bottom: 8px; }
+  .receipt dl { margin: 0; display: grid; gap: 3px; }
+  .receipt dl div { display: flex; justify-content: space-between; gap: 8px; }
+  .receipt dt, .receipt dd { margin: 0; }
+  .receipt dd { color: var(--g-d); font-weight: 700; }
+  .r-tot { display: flex; justify-content: space-between; margin: 10px 0 0; padding-top: 8px; border-top: 1px dashed #bbb; font-size: 14px; }
+  .r-tot b { color: var(--g-d); }
+  .r-thanks { margin: 10px 0 0; text-align: center; color: #777; }
+
+  .sec { padding: 96px 0; }
+  .sec-tight { padding-top: 24px; }
+  .sec-alt { background: var(--bg-2); }
+  .head { max-width: 700px; }
+  .kick { margin: 0 0 10px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--g-d); }
+  .kick-l { color: #a7f3d0; }
+  h2 { font-size: clamp(30px, 4vw, 46px); }
+  .cats { list-style: none; margin: 32px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .cats li { padding: 8px 16px; border-radius: 10px; border: 1px solid var(--line); background: #fff; font-size: 14px; font-weight: 600; color: var(--muted); }
+  .cats li.on { background: var(--g); border-color: var(--g); color: #fff; }
+  .grid { margin-top: 24px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .card { margin: 0; border-radius: 16px; border: 1px solid var(--line); background: #fff; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 24px 48px -28px rgba(16, 60, 45, 0.45); }
+  .card img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--line); }
+  .card figcaption { padding: 16px 18px 18px; font-size: 15px; color: var(--muted); }
+  .card figcaption b { display: block; margin-bottom: 2px; font-size: 17px; color: var(--ink); }
+
+  .feat { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .feat li { padding: 24px; border-radius: 16px; background: #fff; border: 1px solid var(--line); }
+  .f-ic { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--g-s); color: var(--g-d); }
+  .f-ic svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .feat h3 { margin-top: 16px; font-size: 18.5px; }
+  .feat p { margin: 8px 0 0; font-size: 15px; color: var(--muted); }
+
+  .dev { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; padding: 44px; border-radius: 20px; color: #fff; background: linear-gradient(135deg, #0b8f63, #10b981); position: relative; overflow: hidden; }
+  .dev::after { content: ""; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; border: 30px solid rgba(255, 255, 255, 0.08); }
+  .dev h2 { color: #fff; }
+  .dev ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; position: relative; z-index: 1; }
+  .dev li { padding: 14px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.12); font-size: 15px; }
+
+  .get { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; padding: 40px; border-radius: 20px; border: 1px solid var(--line); background: var(--bg-2); }
+  .get-p { margin: 14px 0 22px; color: var(--muted); }
+  .get > *, .dev > *, .hero-in > * { min-width: 0; }
+  pre { margin: 0; padding: 20px; border-radius: 14px; background: #0f1a16; overflow-x: auto; color: #b9f5dc; font: 500 13.5px/1.75 "JetBrains Mono", ui-monospace, monospace; }
+  .credit { margin: 16px 4px 0; font-size: 14px; color: var(--muted); }
+  .credit :global(a) { color: var(--g-d); }
+
+  .dl-reveal { transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.2, .8, .2, 1); }
+  :global(.dl-motion) .dl-reveal { opacity: 0; transform: translateY(20px); }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .hero-in, .dev, .get { grid-template-columns: 1fr; }
+    .feat { grid-template-columns: 1fr 1fr; }
+    .receipt { left: auto; right: 8px; bottom: -24px; width: 200px; }
+  }
+  @media (max-width: 640px) {
+    .grid, .feat { grid-template-columns: 1fr; }
+    .sec { padding: 64px 0; }
+    .dev, .get { padding: 24px; }
+    .receipt { position: relative; right: auto; bottom: auto; margin: -30px auto 0; }
+    .hero-art { padding-bottom: 0; }
+  }
+</style>

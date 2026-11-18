@@ -1,12 +1,13 @@
 ---
 /*
-  DyskOS product page. Deliberately has no download or repository link: DyskOS is shown, not
-  distributed. Shared layout tinted orange (#ea6a1f). Bilingual through s(id, en). Static, no client script.
+  DyskOS product page, in the app's own look: warm paper, coral accents, mono labels and a
+  pixel-art town. Shown, not distributed: no download or repository link. Bilingual through
+  s(id, en). Static apart from the shared scroll reveal.
 */
 import Base from "../layouts/Base.astro";
 import ProductBar from "../components/ProductBar.astro";
 import ProductFooter from "../components/ProductFooter.astro";
-import { pick, ui, type Lang } from "../i18n";
+import { pick, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
@@ -39,6 +40,10 @@ const safe = [
   s("Akses dari HP lewat Tailscale di dalam tailnet Anda sendiri, tetap dengan PIN.", "Phone access goes through Tailscale inside your own tailnet, still behind a PIN."),
   s("Memakai login agen yang sudah ada di Mac. Tidak ada akun DyskOS.", "It uses the agent logins already on your Mac. There is no DyskOS account."),
 ];
+
+const agentColor: Record<string, string> = { "Claude Code": "#e5533d", Codex: "#2a2420", OpenCode: "#3fa34d", Hermes: "#8b5cf6" };
+const tabs = [["Inbox", "2"], ["Agents", "4"], ["Chat", "1"], ["Town", ""], ["Term", ""], ["Skills", ""]];
+const status = [s("Bekerja", "Working"), s("Bekerja", "Working"), s("Menunggu izin", "Needs permission"), s("Selesai", "Done")];
 ---
 
 <Base
@@ -50,14 +55,17 @@ const safe = [
   path={Astro.url.pathname}
   ogImage="/images/products/dyskos/og.jpg"
   ogTitle="DyskOS"
-  accent="#ea6a1f"
+  fonts="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap"
+  theme="light"
+  themeColor="#f6f1e7"
 >
-  <div id="top">
+  <div class="os" id="top">
     <ProductBar
       lang={lang}
       name="DyskOS"
       icon="/images/apps/dyskos.png"
       links={[
+        { href: "#town", label: "Town" },
         { href: "#tampilan", label: s("Tampilan", "Views") },
         { href: "#fitur", label: s("Fitur", "Features") },
         { href: "#aman", label: s("Keamanan", "Safety") },
@@ -66,104 +74,235 @@ const safe = [
     />
 
     <main>
-      <header class="hero dl-gridbg">
-        <div class="dl-wrap dl-head-c">
-          <p class="dl-eyebrow"><b>{s("Baru", "New")}</b>macOS · Web · PWA</p>
-          {lang === "id" ? (
-            <h1 class="dl-h1">Semua agen AI Anda,<br /><span class="dl-hl">satu dasbor.</span></h1>
-          ) : (
-            <h1 class="dl-h1">All your AI agents,<br /><span class="dl-hl">one dashboard.</span></h1>
-          )}
-          <p class="dl-lede">
-            {s(
-              "Jalankan Claude Code, Codex, OpenCode, dan Hermes berdampingan dari Mac atau HP. Lihat setiap langkahnya, setujui yang boleh dijalankan, dan serahkan pekerjaan ke agen lain saat kuota habis.",
-              "Run Claude Code, Codex, OpenCode and Hermes side by side from your Mac or phone. Watch every step, approve what may run, and hand work to another agent when a quota runs out.",
-            )}
-          </p>
-          <div class="dl-actions">
-            <a class="dl-btn dl-btn-primary" href="#tampilan">{s("Lihat tampilan", "See the views")}<span class="dl-arr" aria-hidden="true">→</span></a>
-            <a class="dl-btn dl-btn-ghost" href="#fitur">{s("Fitur", "Features")}<span class="dl-arr" aria-hidden="true">↓</span></a>
+      <header class="hero">
+        <div class="wrap">
+          <div class="appbar" aria-hidden="true">
+            <span class="appbar-name"><img src="/images/apps/dyskos.png" width="20" height="20" alt="" />DyskOS</span>
+            {tabs.map(([t, n], i) => <span class:list={["appbar-tab", { on: i === 2 }]}>{t}{n && <b>{n}</b>}</span>)}
+            <span class="appbar-clock">16:14:15</span>
           </div>
-          <ul class="dl-checks" aria-label={s("Agen yang didukung", "Supported agents")}>
-            {workers.map((w) => <li>{w}</li>)}
-          </ul>
-          <p class="note">{s("DyskOS masih tahap awal dan sedang dikembangkan.", "DyskOS is in early development.")}</p>
-        </div>
-        <div class="dl-wrap">
-          <div class="dl-shot hero-shot dl-reveal">
-            <span class="dl-bar"><i></i><i></i><i></i></span>
+          <div class="hero-in">
+            <div>
+              <p class="mono-k">{s("Baru", "New")} · macOS · Web · PWA</p>
+              {lang === "id" ? (
+                <h1>Semua agen AI Anda,<br /><span>satu dasbor.</span></h1>
+              ) : (
+                <h1>All your AI agents,<br /><span>one dashboard.</span></h1>
+              )}
+              <p class="lede">{s(
+                "Jalankan Claude Code, Codex, OpenCode, dan Hermes berdampingan dari Mac atau HP. Lihat setiap langkahnya, setujui yang boleh dijalankan, dan serahkan pekerjaan ke agen lain saat kuota habis.",
+                "Run Claude Code, Codex, OpenCode and Hermes side by side from your Mac or phone. Watch every step, approve what may run, and hand work to another agent when a quota runs out.",
+              )}</p>
+              <div class="actions">
+                <a class="px-btn" href="#tampilan">{s("Lihat tampilan", "See the views")} ▸</a>
+                <a class="px-btn px-btn-ghost" href="#town">{s("Masuk ke Town", "Enter the Town")}</a>
+              </div>
+              <p class="note">{s("DyskOS masih tahap awal dan sedang dikembangkan.", "DyskOS is in early development.")}</p>
+            </div>
+            <ul class="sessions" aria-label={s("Agen yang didukung", "Supported agents")}>
+              {workers.map((w, i) => (
+                <li style={`--a:${agentColor[w]}`}>
+                  <span class="avatar" aria-hidden="true"></span>
+                  <span class="who"><b>{w}</b><small>{status[i]}</small></span>
+                  <i class:list={["dot", { warn: i === 2, done: i === 3 }]} aria-hidden="true"></i>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="win hero-shot dl-reveal">
+            <div class="win-h"><i></i><i></i><i></i><span>{s("Chat · Tambah Stripe checkout", "Chat · Add Stripe checkout")}</span></div>
             <img src={img("01-chat")} alt={shots[0].alt} width="1600" height="1000" decoding="async" />
           </div>
         </div>
       </header>
 
-      <section id="tampilan" class="dl-sec">
-        <div class="dl-wrap">
-          <div class="dl-head">
-            <p class="dl-label">{s("Tampilan", "Views")}</p>
-            <h2 class="dl-h2">{s("Lihat apa yang ", "See what your ")}<span class="dl-hl">{s("dikerjakan agen.", "agents are doing.")}</span></h2>
+      <section id="town" class="town">
+        <div class="wrap">
+          <div class="town-head">
+            <p class="mono-k mono-k-l">Town</p>
+            <h2>{s("Setiap sesi adalah warga kota.", "Every session is a townsperson.")}</h2>
+            <p>{shots[1].d}</p>
+          </div>
+          <div class="town-shot dl-reveal">
+            <img src={img("02-town")} alt={shots[1].alt} loading="lazy" decoding="async" />
+            <span class="bubble b1" aria-hidden="true">Claude · {s("mengetik…", "typing…")}</span>
+            <span class="bubble b2" aria-hidden="true">! {s("butuh izin", "needs permission")}</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="tampilan" class="sec">
+        <div class="wrap">
+          <div class="head">
+            <p class="mono-k">{s("Tampilan", "Views")}</p>
+            <h2>{s("Lihat apa yang dikerjakan agen.", "See what your agents are doing.")}</h2>
           </div>
           <div class="grid">
-            {shots.slice(1).map((x) => (
-              <figure class="card dl-card dl-card-hover dl-reveal">
-                <div class="dl-shot"><span class="dl-bar"><i></i><i></i><i></i></span><img src={x.src} alt={x.alt} loading="lazy" decoding="async" /></div>
+            {shots.slice(2).map((x) => (
+              <figure class="card dl-reveal">
+                <div class="win"><div class="win-h"><i></i><i></i><i></i><span>{x.t}</span></div><img src={x.src} alt={x.alt} loading="lazy" decoding="async" /></div>
                 <figcaption><b>{x.t}</b>{x.d}</figcaption>
               </figure>
             ))}
-            <figure class="card dl-card dl-card-hover phone dl-reveal">
-              <img src={img("05-mobile")} alt={s("DyskOS dibuka dari HP", "DyskOS opened on a phone")} loading="lazy" decoding="async" />
+            <figure class="card phone dl-reveal">
+              <img src={img("05-mobile")} alt={s("DyskOS dibuka dari HP", "DyskOS opened on a phone")} width="554" height="1200" loading="lazy" decoding="async" />
               <figcaption><b>{s("Dari HP", "From your phone")}</b>{s("Pasang sebagai PWA dan pantau sesi dari mana saja di tailnet Anda.", "Install it as a PWA and follow your sessions from anywhere on your tailnet.")}</figcaption>
             </figure>
           </div>
         </div>
       </section>
 
-      <section id="fitur" class="dl-sec dl-alt">
-        <div class="dl-wrap">
-          <div class="dl-head dl-head-c">
-            <p class="dl-eyebrow">{s("Fitur", "Features")}</p>
-            <h2 class="dl-h2">{s("Dibuat untuk kerja dengan ", "Built for working with ")}<span class="dl-hl">{s("banyak agen.", "many agents.")}</span></h2>
+      <section id="fitur" class="sec sec-alt">
+        <div class="wrap">
+          <div class="head">
+            <p class="mono-k">{s("Fitur", "Features")}</p>
+            <h2>{s("Dibuat untuk kerja dengan banyak agen.", "Built for working with many agents.")}</h2>
           </div>
-          <ul class="dl-feats">
-            {features.map((f) => <li class="dl-reveal"><h3>{f.t}</h3><p>{f.d}</p></li>)}
-          </ul>
+          <ol class="feat">
+            {features.map((f, i) => (
+              <li class="dl-reveal">
+                <span class="feat-n" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                <div><h3>{f.t}</h3><p>{f.d}</p></div>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
-      <section id="aman" class="dl-sec">
-        <div class="dl-wrap">
-          <div class="safe dl-featured dl-reveal">
-            <div>
-              <p class="safe-k">{s("Keamanan", "Safety")}</p>
+      <section id="aman" class="sec">
+        <div class="wrap">
+          <div class="perm dl-reveal">
+            <div class="perm-h"><span class="perm-ic" aria-hidden="true">!</span>{s("Keamanan", "Safety")}</div>
+            <div class="perm-b">
               <h2>{s("Semuanya tetap di Mac Anda.", "Everything stays on your Mac.")}</h2>
+              <ul>{safe.map((x) => <li>{x}</li>)}</ul>
             </div>
-            <ul class="dl-list">{safe.map((x) => <li>{x}</li>)}</ul>
           </div>
         </div>
       </section>
     </main>
 
-    <ProductFooter lang={lang} current="dyskos" />
+    <ProductFooter lang={lang} current="dyskos" license={s("Belum dirilis", "Not released yet")} />
   </div>
+  <script src="../scripts/reveal.js"></script>
 </Base>
 
 <style>
-  .hero { padding: 64px 0 24px; }
-  .note { margin: 16px 0 0; font-size: 13.5px; color: var(--muted); }
-  .hero-shot { margin-top: 56px; }
-  .grid { margin-top: 44px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .card { margin: 0; padding: 14px; }
-  .card .dl-shot { box-shadow: none; }
-  .card figcaption { padding: 16px 6px 6px; font-size: 15px; }
-  .card figcaption b { display: block; margin-bottom: 4px; color: var(--ink); font-size: 17px; }
-  .phone { display: flex; flex-direction: column; align-items: center; }
-  .phone img { width: auto; max-width: 100%; max-height: 420px; border-radius: 16px; }
+  :global(body) { margin: 0; background: #f6f1e7; }
+  .os {
+    --paper: #f6f1e7; --paper-2: #efe8da; --card: #fffdf8; --line: #e2d9c7; --ink: #2a2420; --muted: #6f665c; --coral: #e5533d; --coral-s: #fbe3dc; --green: #3fa34d;
+    --px: 4px;
+    --pb-bg: #f6f1e7; --pb-fg: var(--ink); --pb-muted: var(--muted); --pb-line: var(--line); --pb-hover: var(--coral-s);
+    --pb-btn-bg: var(--coral); --pb-btn-fg: #fff; --pb-radius: 6px; --pb-font: "IBM Plex Sans", sans-serif;
+    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--ink); --pf-card: var(--card); --pf-hover: var(--coral); --pf-radius: 10px; --pf-font: "IBM Plex Sans", sans-serif;
+    background: var(--paper); color: var(--ink); font: 400 16px/1.6 "IBM Plex Sans", system-ui, sans-serif; overflow-x: hidden;
+  }
+  .wrap { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  h1, h2, h3 { margin: 0; font-family: "Pixelify Sans", "IBM Plex Sans", sans-serif; font-weight: 700; line-height: 1.05; letter-spacing: 0; }
+  .os :global(.pf-kicker), .os :global(.pb-cta) { font-family: "IBM Plex Mono", monospace; }
+
+  .mono-k { margin: 0 0 14px; font: 600 12.5px "IBM Plex Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--coral); }
+  .mono-k-l { color: #fff3c4; }
+
+  .hero { padding: 28px 0 40px; }
+  .appbar { display: flex; align-items: center; gap: 4px; padding: 6px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); font: 500 13px "IBM Plex Sans", sans-serif; color: var(--muted); overflow: hidden; white-space: nowrap; }
+  .appbar-name { display: inline-flex; align-items: center; gap: 6px; padding: 0 10px 0 4px; font-weight: 600; color: var(--ink); }
+  .appbar-name img { border-radius: 5px; }
+  .appbar-tab { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 6px; }
+  .appbar-tab b { padding: 0 6px; border-radius: 4px; background: #f3c74c; color: var(--ink); font-size: 11px; }
+  .appbar-tab.on { background: var(--coral); color: #fff; }
+  .appbar-tab.on b { background: rgba(255, 255, 255, 0.3); color: #fff; }
+  .appbar-clock { margin-left: auto; padding: 0 10px; font: 600 15px "IBM Plex Mono", monospace; color: var(--ink); }
+
+  .hero-in { margin-top: 64px; display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 56px; align-items: end; }
+  h1 { font-size: clamp(42px, 6.4vw, 82px); }
+  h1 span { color: var(--coral); }
+  .lede { margin: 24px 0 0; max-width: 600px; font-size: 18px; color: var(--muted); }
+  .actions { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 20px; }
+  /* pixel-cornered button: four stepped shadows instead of a border radius */
+  .px-btn {
+    display: inline-flex; align-items: center; min-height: 46px; padding: 0 22px; margin: var(--px);
+    background: var(--coral); color: #fff; text-decoration: none; font: 700 17px "Pixelify Sans", sans-serif;
+    box-shadow: 0 calc(-1 * var(--px)) 0 0 var(--ink), 0 var(--px) 0 0 var(--ink), calc(-1 * var(--px)) 0 0 0 var(--ink), var(--px) 0 0 0 var(--ink), 0 calc(var(--px) * 3) 0 0 rgba(42, 36, 32, 0.18);
+    transition: transform 0.1s;
+  }
+  .px-btn:hover { transform: translateY(-2px); }
+  .px-btn:active { transform: translateY(2px); }
+  .px-btn-ghost { background: var(--card); color: var(--ink); }
+  .note { margin: 22px 0 0; font: 500 13px "IBM Plex Mono", monospace; color: var(--muted); }
+
+  .sessions { list-style: none; margin: 0; padding: 10px; display: grid; gap: 6px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  .sessions li { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 8px; }
+  .sessions li:first-child { background: var(--coral-s); }
+  .avatar { flex: none; width: 34px; height: 34px; background: var(--a); image-rendering: pixelated;
+    clip-path: polygon(25% 0, 75% 0, 75% 12.5%, 87.5% 12.5%, 87.5% 25%, 100% 25%, 100% 75%, 87.5% 75%, 87.5% 100%, 12.5% 100%, 12.5% 75%, 0 75%, 0 25%, 12.5% 25%, 12.5% 12.5%, 25% 12.5%); }
+  .who { flex: 1; min-width: 0; }
+  .who b { display: block; font-size: 15px; }
+  .who small { font: 500 12px "IBM Plex Mono", monospace; color: var(--muted); }
+  .dot { width: 9px; height: 9px; background: var(--green); }
+  .dot.warn { background: #f3a73c; } .dot.done { background: #b9b0a2; }
+
+  .win { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); }
+  .win-h { display: flex; align-items: center; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--line); background: var(--paper-2); font: 500 12.5px "IBM Plex Mono", monospace; color: var(--muted); }
+  .win-h i { width: 10px; height: 10px; border-radius: 50%; background: #d9cfbd; }
+  .win-h i:first-child { background: #ef6a5a; } .win-h i:nth-child(2) { background: #f3c74c; } .win-h i:nth-child(3) { background: #5bbd62; }
+  .win-h span { margin-left: 8px; }
+  .win img { display: block; width: 100%; height: auto; }
+  .hero-shot { margin-top: 56px; box-shadow: 0 40px 80px -40px rgba(42, 36, 32, 0.4); }
+
+  .town { padding: 96px 0; background: #5d9a46 repeating-linear-gradient(90deg, transparent 0 46px, rgba(0, 0, 0, 0.05) 46px 48px); color: #fff; border-block: 6px solid #3f6d2f; }
+  .town-head { max-width: 760px; }
+  .town h2 { font-size: clamp(32px, 4.4vw, 54px); color: #fff; text-shadow: 3px 3px 0 #3f6d2f; }
+  .town-head p { margin: 16px 0 0; font-size: 17px; color: #eef7e6; }
+  .town-shot { position: relative; margin-top: 44px; border: 6px solid #2a2420; background: #2a2420; }
+  .town-shot img { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+  .bubble { position: absolute; padding: 6px 12px; background: #fffdf8; color: var(--ink); border: 3px solid var(--ink); font: 600 13px "IBM Plex Mono", monospace; white-space: nowrap; }
+  .bubble::after { content: ""; position: absolute; left: 18px; bottom: -11px; width: 12px; height: 8px; background: var(--ink); clip-path: polygon(0 0, 100% 0, 0 100%); }
+  .b1 { left: 6%; top: -22px; } .b2 { right: 6%; bottom: 14%; background: #f3a73c; }
+
+  .sec { padding: 96px 0; }
+  .sec-alt { background: var(--paper-2); border-block: 1px solid var(--line); }
+  .head { max-width: 720px; }
+  h2 { font-size: clamp(30px, 4vw, 48px); }
+  .grid { margin-top: 44px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .card { margin: 0; }
+  .card figcaption { padding: 14px 4px 0; color: var(--muted); font-size: 15px; }
+  .card figcaption b { display: block; margin-bottom: 2px; color: var(--ink); font: 700 19px "Pixelify Sans", sans-serif; }
+  .phone { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  .phone img { width: auto; max-width: 100%; max-height: 440px; border-radius: 22px; border: 6px solid var(--ink); }
   .phone figcaption { align-self: stretch; }
-  .safe { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 48px; border-radius: 24px; }
-  .safe-k { margin: 0 0 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255, 255, 255, 0.75); }
-  .safe h2 { font-size: clamp(28px, 3.6vw, 42px); font-weight: 800; }
-  @media (max-width: 860px) {
-    .grid, .safe { grid-template-columns: 1fr; }
-    .safe { padding: 28px; gap: 20px; }
+
+  .feat { list-style: none; margin: 44px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .feat li { display: flex; gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); transition: border-color 0.2s, transform 0.2s; }
+  .feat li:hover { border-color: var(--coral); transform: translateY(-2px); }
+  .feat-n { flex: none; display: grid; place-items: center; width: 38px; height: 38px; background: var(--coral-s); color: var(--coral); font: 700 16px "Pixelify Sans", sans-serif; }
+  .feat h3 { font-size: 19px; }
+  .feat p { margin: 8px 0 0; font-size: 14.5px; color: var(--muted); }
+
+  .perm { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--card); box-shadow: 0 30px 60px -40px rgba(42, 36, 32, 0.45); }
+  .perm-h { display: flex; align-items: center; gap: 10px; padding: 12px 20px; background: #f3a73c; color: var(--ink); font: 600 13px "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.06em; }
+  .perm-ic { display: grid; place-items: center; width: 22px; height: 22px; background: var(--ink); color: #f3a73c; font: 700 14px "Pixelify Sans", sans-serif; }
+  .perm-b { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 40px; }
+  .perm ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .perm li { position: relative; padding: 12px 14px 12px 40px; border-radius: 8px; background: var(--paper); font-size: 15px; }
+  .perm li::before { content: "✓"; position: absolute; left: 14px; top: 12px; color: var(--green); font-weight: 700; }
+
+  .dl-reveal { transition: opacity 0.6s ease, transform 0.6s steps(6); }
+  :global(.dl-motion) .dl-reveal { opacity: 0; transform: translateY(24px); }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .hero-in, .perm-b { grid-template-columns: 1fr; gap: 32px; }
+    .feat { grid-template-columns: 1fr 1fr; }
+    .appbar-tab:nth-child(n + 5) { display: none; }
+  }
+  @media (max-width: 640px) {
+    .grid, .feat { grid-template-columns: 1fr; }
+    .sec, .town { padding: 64px 0; }
+    .perm-b { padding: 24px; }
+    .appbar-tab:nth-child(n + 4) { display: none; }
+    .hero-in { margin-top: 40px; }
+    .b1 { top: -18px; } .b2 { display: none; }
+    .appbar-clock { display: none; }
   }
 </style>

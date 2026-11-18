@@ -1,6 +1,12 @@
 ---
-/* DyskAdmin product page: slate. Shown, not distributed (private repo), like DyskOS. */
-import ProductSimple from "../components/ProductSimple.astro";
+/*
+  DyskAdmin product page, in the app's own look: a macOS utility with a grey sidebar canvas,
+  system type, live-looking stat tiles, grouped settings rows and a dark terminal. Shown, not
+  distributed (private repo), like DyskOS. Bilingual through s(id, en).
+*/
+import Base from "../layouts/Base.astro";
+import ProductBar from "../components/ProductBar.astro";
+import ProductFooter from "../components/ProductFooter.astro";
 import { pick, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -22,40 +28,280 @@ const features = [
   { t: s("Aplikasi Mac dan Tailscale", "Mac apps and Tailscale"), d: s("Update, karantina, izin privasi, perangkat tailnet, exit node, serta Serve dan Funnel.", "Updates, quarantine, privacy permissions, tailnet devices, exit nodes, and Serve and Funnel.") },
   { t: s("Pembersih", "Cleaner"), d: s("Cache aplikasi, log, browser, Trash, dan cache developer, plus file besar dan item startup.", "App, log, browser, Trash and developer caches, plus large files and startup items.") },
 ];
+
+/* Stat tiles in the hero, shaped like the dashboard's (values are a sample, not live). */
+const stats = [
+  { k: "CPU", v: "6", u: "%", d: "Load 1.56 · 2.03", pts: "0,22 10,20 20,21 30,14 40,19 50,17 60,8 70,18 80,16 90,19 100,15" },
+  { k: "RAM", v: "77", u: "%", d: "12.4 GB / 16 GB", pts: "0,9 10,9 20,9 30,8 40,8 50,8 60,8 70,7 80,8 90,8 100,8" },
+  { k: s("Suhu CPU", "CPU temp"), v: "37", u: "°C", d: s("24 sensor", "24 sensors"), pts: "0,16 10,15 20,16 30,15 40,15 50,14 60,15 70,15 80,14 90,15 100,15" },
+  { k: "GPU", v: "0", u: "%", d: "Apple M4 · 8 core", pts: "0,24 10,24 20,23 30,24 40,22 50,24 60,24 70,21 80,24 90,24 100,24" },
+];
+const sidebar = [
+  [s("Pemantauan", "Monitoring"), ["Dashboard", "Uptime"]],
+  [s("Jaringan", "Network"), ["Port", "Tailscale"]],
+  [s("Pengembangan", "Development"), [s("Paket & Service", "Packages & Services"), s("Bahasa", "Languages"), "Docker", "Herd"]],
+  ["Mac", [s("Aplikasi Mac", "Mac apps"), s("Pembersih", "Cleaner"), s("File konfigurasi", "Config files")]],
+] as const;
+const tint = ["#0a84ff", "#5e5ce6", "#ff9f0a", "#30d158", "#64d2ff", "#ff375f"];
+const glyph = ["M4 18V9m5 9V5m5 13v-6m5 6V8", "M4 7h16M4 12h10M4 17h7", "M6 3h9l4 4v14H6zM9 12h7M9 16h5", "M5 12h14M12 5l7 7-7 7", "M3 5h18v11H3zM8 20h8", "M4 7h16l-1 13H5zM9 7V4h6v3"];
+const safe = [
+  s("Server hanya mendengarkan 127.0.0.1 dan menolak Host selain localhost.", "The server listens on 127.0.0.1 only and refuses any Host but localhost."),
+  s("Perintah dijalankan tanpa shell dengan input yang divalidasi, dan file hanya bisa dibuka dari daftar tetap.", "Commands run without a shell on validated input, and only files from a fixed list can be opened."),
+  s("Satu binary Go tanpa dependensi; semua aset ikut di dalamnya.", "One Go binary with no dependencies; every asset ships inside it."),
+];
 ---
-<ProductSimple
-  lang={lang}
-  slug="dyskadmin"
-  name="DyskAdmin"
-  accent="#64748b"
+
+<Base
   title={s("DyskAdmin: dasbor dev environment untuk Mac | DyskLab", "DyskAdmin: a dev environment dashboard for the Mac | DyskLab")}
   description={s(
     "DyskAdmin mengelola Homebrew, Docker, Laravel Herd, versi bahasa, file konfigurasi, dan statistik sistem Mac dari satu dasbor lokal, plus terminal di browser.",
     "DyskAdmin manages Homebrew, Docker, Laravel Herd, language versions, config files and Mac system stats from one local dashboard, plus a terminal in the browser.",
   )}
-  pillTag="2.0"
-  pill="macOS · Apple Silicon"
-  h1={s(["Dev environment Mac,", "satu dasbor."], ["Your Mac dev setup,", "one dashboard."])}
-  lede={s(
-    "Kelola Homebrew, Docker, Laravel Herd, versi bahasa, dan file konfigurasi dari satu tempat, lengkap dengan statistik sistem dan terminal sungguhan di browser.",
-    "Manage Homebrew, Docker, Laravel Herd, language versions and config files from one place, with system stats and a real terminal in the browser.",
-  )}
-  chips={["Homebrew", "Docker", "Laravel Herd", "Tailscale"]}
-  note={s("DyskAdmin dipakai sendiri dan belum dirilis.", "DyskAdmin is used in-house and not released yet.")}
-  hero={{ src: img("dashboard"), t: "", d: "", alt: s("Dasbor statistik DyskAdmin", "The DyskAdmin stats dashboard") }}
-  shots={shots}
-  views={{ kick: s("Tampilan", "Views"), h: s("Semua alat dev, di satu tab.", "Every dev tool, in one tab.") }}
-  featH={s("Yang biasanya tersebar di banyak aplikasi.", "What's usually spread across many apps.")}
-  features={features}
-  panel={{
-    kick: s("Keamanan", "Safety"),
-    h: s("Hanya bisa dibuka dari Mac Anda.", "Only reachable from your Mac."),
-    items: [
-      s("Server hanya mendengarkan 127.0.0.1 dan menolak Host selain localhost.", "The server listens on 127.0.0.1 only and refuses any Host but localhost."),
-      s("Perintah dijalankan tanpa shell dengan input yang divalidasi, dan file hanya bisa dibuka dari daftar tetap.", "Commands run without a shell on validated input, and only files from a fixed list can be opened."),
-      s("Satu binary Go tanpa dependensi; semua aset ikut di dalamnya.", "One Go binary with no dependencies; every asset ships inside it."),
-    ],
-  }}
-  platforms={["macOS"]}
-  license={s("Belum dirilis", "Not released yet")}
-/>
+  path={Astro.url.pathname}
+  ogImage={img("dashboard")}
+  ogTitle="DyskAdmin"
+  fonts="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+  theme="light"
+  themeColor="#f5f5f7"
+>
+  <div class="ad" id="top">
+    <ProductBar
+      lang={lang}
+      name="DyskAdmin"
+      icon="/images/apps/dyskadmin.png"
+      links={[
+        { href: "#tampilan", label: s("Tampilan", "Views") },
+        { href: "#terminal", label: "Terminal" },
+        { href: "#fitur", label: s("Fitur", "Features") },
+        { href: "#aman", label: s("Keamanan", "Safety") },
+      ]}
+      cta={{ href: "#tampilan", label: s("Lihat tampilan", "See the views") }}
+    />
+
+    <main>
+      <header class="hero">
+        <div class="wrap">
+          <div class="app">
+            <aside class="side" aria-hidden="true">
+              <p class="side-app"><img src="/images/apps/dyskadmin.png" width="28" height="28" alt="" /><span><b>DyskAdmin</b><small>MacBook Air</small></span></p>
+              {sidebar.map(([g, items]) => (
+                <div class="side-g">
+                  <p>{g}</p>
+                  <ul>{items.map((x, i) => <li class:list={{ on: g === sidebar[0][0] && i === 0 }}>{x}</li>)}</ul>
+                </div>
+              ))}
+              <p class="side-foot">macOS 27 · Apple M4</p>
+            </aside>
+            <div class="main">
+              <p class="ver"><span>2.0</span>macOS · Apple Silicon</p>
+              {lang === "id" ? (
+                <h1>Dev environment Mac, <span>satu dasbor.</span></h1>
+              ) : (
+                <h1>Your Mac dev setup, <span>one dashboard.</span></h1>
+              )}
+              <p class="lede">{s(
+                "Kelola Homebrew, Docker, Laravel Herd, versi bahasa, dan file konfigurasi dari satu tempat, lengkap dengan statistik sistem dan terminal sungguhan di browser.",
+                "Manage Homebrew, Docker, Laravel Herd, language versions and config files from one place, with system stats and a real terminal in the browser.",
+              )}</p>
+              <ul class="stats" aria-label={s("Contoh statistik", "Sample stats")}>
+                {stats.map((x) => (
+                  <li>
+                    <span class="st-k">{x.k}</span>
+                    <span class="st-v">{x.v}<small>{x.u}</small></span>
+                    <span class="st-d">{x.d}</span>
+                    <svg viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"><polyline points={x.pts} /><polygon points={`0,28 ${x.pts} 100,28`} /></svg>
+                  </li>
+                ))}
+              </ul>
+              <ul class="chips">{["Homebrew", "Docker", "Laravel Herd", "Tailscale"].map((c) => <li>{c}</li>)}</ul>
+              <p class="note">{s("DyskAdmin dipakai sendiri dan belum dirilis.", "DyskAdmin is used in-house and not released yet.")}</p>
+            </div>
+          </div>
+          <div class="win hero-shot dl-reveal">
+            <div class="win-h"><i></i><i></i><i></i><span>localhost · Dashboard</span></div>
+            <img src={img("dashboard")} alt={s("Dasbor statistik DyskAdmin", "The DyskAdmin stats dashboard")} width="1440" height="1100" decoding="async" />
+          </div>
+        </div>
+      </header>
+
+      <section id="terminal" class="term-sec">
+        <div class="wrap term-in">
+          <div>
+            <p class="kick kick-d">Terminal</p>
+            <h2>{s("Terminal sungguhan, di tab browser.", "A real terminal, in a browser tab.")}</h2>
+            <p class="term-p">{shots[0].d}</p>
+            <pre aria-hidden="true"><code><span class="pr">~/Project</span> <span class="g">❯</span> claude
+<span class="dim">Accessing workspace…</span>
+<span class="pr">~/Project</span> <span class="g">❯</span> brew services list
+<span class="dim">mysql     started</span>
+<span class="dim">redis     started</span>
+<span class="pr">~/Project</span> <span class="g">❯</span> <span class="cur"></span></code></pre>
+          </div>
+          <div class="win win-d dl-reveal">
+            <div class="win-h"><i></i><i></i><i></i><span>zsh · claude</span></div>
+            <img src={shots[0].src} alt={shots[0].alt} loading="lazy" decoding="async" />
+          </div>
+        </div>
+      </section>
+
+      <section id="tampilan" class="sec">
+        <div class="wrap">
+          <div class="head">
+            <p class="kick">{s("Tampilan", "Views")}</p>
+            <h2>{s("Semua alat dev, di satu tab.", "Every dev tool, in one tab.")}</h2>
+          </div>
+          <div class="grid">
+            {shots.slice(1).map((x) => (
+              <figure class="card dl-reveal">
+                <div class="win"><div class="win-h"><i></i><i></i><i></i><span>{x.t}</span></div><img src={x.src} alt={x.alt} loading="lazy" decoding="async" /></div>
+                <figcaption><b>{x.t}</b>{x.d}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="fitur" class="sec sec-alt">
+        <div class="wrap feat-in">
+          <div class="head">
+            <p class="kick">{s("Fitur", "Features")}</p>
+            <h2>{s("Yang biasanya tersebar di banyak aplikasi.", "What's usually spread across many apps.")}</h2>
+          </div>
+          <ul class="rows dl-reveal">
+            {features.map((f, i) => (
+              <li>
+                <span class="row-ic" style={`--t:${tint[i % tint.length]}`} aria-hidden="true"><svg viewBox="0 0 24 24"><path d={glyph[i % glyph.length]} /></svg></span>
+                <span class="row-t"><b>{f.t}</b><small>{f.d}</small></span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="aman" class="sec">
+        <div class="wrap">
+          <div class="sheet dl-reveal">
+            <span class="sheet-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6l-8-3Z" /><path d="m9 12 2 2 4-4" /></svg></span>
+            <p class="kick">{s("Keamanan", "Safety")}</p>
+            <h2>{s("Hanya bisa dibuka dari Mac Anda.", "Only reachable from your Mac.")}</h2>
+            <ul>{safe.map((x) => <li>{x}</li>)}</ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <ProductFooter lang={lang} current="dyskadmin" license={s("Belum dirilis", "Not released yet")} />
+  </div>
+  <script src="../scripts/reveal.js"></script>
+</Base>
+
+<style>
+  :global(body) { margin: 0; background: #f5f5f7; }
+  .ad {
+    --bg: #f5f5f7; --side: #ebebef; --card: #fff; --line: #dcdce1; --ink: #1d1d1f; --muted: #6e6e73; --blue: #0a84ff; --slate: #475569;
+    --pb-bg: #f5f5f7; --pb-fg: var(--ink); --pb-muted: var(--muted); --pb-line: var(--line); --pb-hover: #e8e8ed;
+    --pb-btn-bg: var(--ink); --pb-btn-fg: #fff; --pb-radius: 8px; --pb-font: "Inter", -apple-system, sans-serif;
+    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--ink); --pf-card: #fff; --pf-hover: var(--blue); --pf-radius: 12px; --pf-font: "Inter", -apple-system, sans-serif;
+    background: var(--bg); color: var(--ink); font: 400 16px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", system-ui, sans-serif; overflow-x: hidden;
+  }
+  .wrap { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  h1, h2, h3 { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif; font-weight: 700; letter-spacing: -0.025em; line-height: 1.08; }
+
+  .hero { padding: 40px 0 80px; }
+  .app { display: grid; grid-template-columns: 230px 1fr; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.35); }
+  .side { padding: 16px 12px; background: var(--side); border-right: 1px solid var(--line); font-size: 13.5px; display: flex; flex-direction: column; }
+  .side-app { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; padding: 0 6px; }
+  .side-app img { border-radius: 7px; }
+  .side-app b { display: block; font-size: 14px; }
+  .side-app small { display: block; font-size: 12px; color: var(--muted); }
+  .side-g p { margin: 12px 6px 4px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
+  .side-g ul { list-style: none; margin: 0; padding: 0; }
+  .side-g li { padding: 4px 8px; border-radius: 6px; color: #3a3a3c; }
+  .side-g li.on { background: #d8d8de; font-weight: 600; color: var(--ink); }
+  .side-foot { margin: auto 6px 0; padding-top: 18px; font-size: 11.5px; color: var(--muted); }
+  .main { padding: 48px 48px 40px; }
+  .ver { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; color: var(--muted); }
+  .ver span { padding: 1px 8px; border-radius: 6px; background: var(--slate); color: #fff; font-weight: 600; }
+  h1 { margin-top: 18px; font-size: clamp(36px, 4.8vw, 60px); }
+  h1 span { color: var(--slate); }
+  .lede { margin: 18px 0 0; max-width: 620px; font-size: 18px; color: var(--muted); }
+  .stats { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stats li { position: relative; display: flex; flex-direction: column; padding: 14px 14px 0; border: 1px solid var(--line); border-radius: 12px; background: #fff; overflow: hidden; }
+  .st-k { font-size: 12.5px; color: var(--muted); }
+  .st-v { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+  .st-v small { font-size: 15px; color: var(--muted); margin-left: 2px; }
+  .st-d { font-size: 11.5px; color: var(--muted); }
+  .stats svg { width: 100%; height: 30px; margin-top: 8px; }
+  .stats polyline { fill: none; stroke: #4a8fe7; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+  .stats polygon { fill: rgba(74, 143, 231, 0.12); }
+  .chips { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips li { padding: 3px 10px; border-radius: 6px; background: var(--bg); border: 1px solid var(--line); font-size: 13px; font-weight: 500; }
+  .note { margin: 16px 0 0; font-size: 13px; color: var(--muted); }
+
+  .win { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+  .win-h { display: flex; align-items: center; gap: 7px; padding: 9px 12px; background: #ececf0; border-bottom: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
+  .win-h i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+  .win-h i:nth-child(2) { background: #febc2e; } .win-h i:nth-child(3) { background: #28c840; }
+  .win-h span { flex: 1; text-align: center; margin-right: 50px; }
+  .win img { display: block; width: 100%; height: auto; }
+  .hero-shot { margin-top: 32px; box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.35); }
+
+  .term-sec { padding: 96px 0; background: #111113; color: #e5e5ea; }
+  .term-in { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 48px; align-items: center; }
+  .term-sec h2 { color: #fff; font-size: clamp(30px, 3.8vw, 44px); }
+  .term-p { margin: 14px 0 24px; color: #a1a1a6; }
+  .term-in > *, .feat-in > * { min-width: 0; }
+  pre { margin: 0; padding: 18px 20px; border-radius: 12px; background: #000; border: 1px solid #2c2c2e; overflow-x: auto; font: 400 13.5px/1.8 "JetBrains Mono", ui-monospace, monospace; color: #e5e5ea; }
+  .pr { color: #64d2ff; } .g { color: #30d158; } .dim { color: #8e8e93; }
+  .cur { display: inline-block; width: 8px; height: 15px; vertical-align: -2px; background: #e5e5ea; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .win-d { border-color: #2c2c2e; background: #1c1c1e; }
+  .win-d .win-h { background: #2c2c2e; border-color: #3a3a3c; color: #a1a1a6; }
+
+  .sec { padding: 96px 0; }
+  .sec-alt { background: #fff; border-block: 1px solid var(--line); }
+  .head { max-width: 680px; }
+  .kick { margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--blue); }
+  .kick-d { color: #64d2ff; }
+  h2 { font-size: clamp(30px, 4vw, 46px); }
+  .grid { margin-top: 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { margin: 0; }
+  .card figcaption { padding: 14px 2px 0; font-size: 14.5px; color: var(--muted); }
+  .card figcaption b { display: block; color: var(--ink); font-size: 16.5px; font-weight: 600; }
+
+  .feat-in { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 48px; align-items: start; }
+  .rows { list-style: none; margin: 0; padding: 0; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); overflow: hidden; }
+  .rows li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; }
+  .rows li + li { border-top: 1px solid var(--line); }
+  .row-ic { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--t); color: #fff; }
+  .row-ic svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .row-t b { display: block; font-size: 15.5px; font-weight: 600; }
+  .row-t small { display: block; margin-top: 2px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+
+  .sheet { max-width: 720px; margin: 0 auto; padding: 40px; text-align: center; border-radius: 18px; background: #fff; border: 1px solid var(--line); box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.4); }
+  .sheet-ic { display: inline-grid; place-items: center; width: 56px; height: 56px; margin-bottom: 14px; border-radius: 14px; background: #30d158; color: #fff; }
+  .sheet-ic svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .sheet ul { margin: 24px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; text-align: left; }
+  .sheet li { padding: 12px 14px 12px 40px; position: relative; border-radius: 10px; background: var(--bg); font-size: 15px; }
+  .sheet li::before { content: "✓"; position: absolute; left: 15px; color: #30d158; font-weight: 700; }
+
+  .dl-reveal { transition: opacity 0.5s ease, transform 0.5s ease; }
+  :global(.dl-motion) .dl-reveal { opacity: 0; transform: scale(0.98) translateY(14px); }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .app { grid-template-columns: 1fr; }
+    .side { display: none; }
+    .main { padding: 32px 24px; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .term-in, .feat-in { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    .sec, .term-sec { padding: 64px 0; }
+    .sheet { padding: 24px; }
+    .win-h span { margin-right: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .cur { animation: none; } }
+</style>

@@ -1,6 +1,12 @@
 ---
-/* DyskMedia product page: pink. Shown, not distributed (private repo), like DyskOS. */
-import ProductSimple from "../components/ProductSimple.astro";
+/*
+  DyskMedia product page, in the app's own look: a pastel content board with a light blue
+  canvas, a week calendar, rounded cards with ink outlines and platform chips like stickers.
+  Shown, not distributed (private repo), like DyskOS. Bilingual through s(id, en).
+*/
+import Base from "../layouts/Base.astro";
+import ProductBar from "../components/ProductBar.astro";
+import ProductFooter from "../components/ProductFooter.astro";
 import { pick, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -22,40 +28,236 @@ const features = [
   { t: s("Otomatisasi", "Automation"), d: s("Balasan otomatis berdasarkan kata kunci dan DM terjadwal.", "Keyword-based auto replies and scheduled DMs.") },
   { t: s("Akun demo", "Demo accounts"), d: s("Coba seluruh alur tanpa mengirim apa pun ke platform.", "Try the whole flow without sending anything to a platform.") },
 ];
+
+const platforms = [
+  { k: "YT", n: "YouTube", c: "#ff3b30" }, { k: "TT", n: "TikTok", c: "#111111" }, { k: "IG", n: "Instagram", c: "#d6249f" },
+  { k: "TH", n: "Threads", c: "#3a3a3a" }, { k: "X", n: "X", c: "#000000" }, { k: "FB", n: "Facebook", c: "#1877f2" },
+];
+const days = s(["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"], ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
+/* A sample week for the hero board: which day has a post, at what time, and to where. */
+const week: ({ t: string; p: string[]; c: string; title: string } | null)[] = [
+  { t: "09:00", p: ["YT", "IG", "TT"], c: "#7ee0a1", title: s("Review kopi lokal", "Local coffee review") },
+  null,
+  { t: "16:00", p: ["IG", "FB"], c: "#8fb8ff", title: s("Tips setup meja", "Desk setup tips") },
+  { t: "20:00", p: ["TT", "YT"], c: "#ffd36e", title: "Q&A live" },
+  null,
+  { t: "13:00", p: ["TH", "X"], c: "#ff9cc8", title: s("Thread tips", "Tips thread") },
+  { t: "18:00", p: ["YT", "FB"], c: "#8fb8ff", title: s("Vlog akhir pekan", "Weekend vlog") },
+];
+const pc = Object.fromEntries(platforms.map((x) => [x.k, x.c]));
+const safe = [
+  s("Publikasi tidak diulang otomatis. Koneksi putus ditandai “perlu dicek”, bukan gagal, karena kontennya bisa saja sudah terbit.", "Publishing never retries on its own. A dropped connection is marked “needs checking”, not failed, since the post may already be live."),
+  s("Balasan otomatis hanya untuk pesan yang masuk setelah aturan aktif, dan tiap pesan hanya dibalas sekali.", "Auto replies only answer messages that arrive after a rule is on, and each one only once."),
+  s("Fitur yang tidak didukung API resmi platform disembunyikan, bukan dipaksakan.", "Features a platform's official API doesn't support are hidden, not forced."),
+];
+const states = [s("Terjadwal", "Scheduled"), s("Terbit", "Published"), s("Draf", "Draft")];
 ---
-<ProductSimple
-  lang={lang}
-  slug="dyskmedia"
-  name="DyskMedia"
-  accent="#ec4899"
+
+<Base
   title={s("DyskMedia: perencana konten untuk semua platform | DyskLab", "DyskMedia: a content planner for every platform | DyskLab")}
   description={s(
     "DyskMedia merencanakan dan menjadwalkan konten ke YouTube, TikTok, Instagram, Threads, X, dan Facebook, lalu membalas komentar dan DM dari satu inbox.",
     "DyskMedia plans and schedules content to YouTube, TikTok, Instagram, Threads, X and Facebook, then answers comments and DMs from one inbox.",
   )}
-  pillTag={s("Baru", "New")}
-  pill="Web · Laravel"
-  h1={s(["Semua platform,", "satu kalender."], ["Every platform,", "one calendar."])}
-  lede={s(
-    "Upload video, tulis post sekali, pilih akun tujuannya, lalu jadwalkan. Komentar dan DM dari semua akun masuk ke satu inbox.",
-    "Upload videos, write a post once, pick which accounts it goes to and schedule it. Comments and DMs from every account land in one inbox.",
-  )}
-  chips={["YouTube", "TikTok", "Instagram", "Threads", "X", "Facebook"]}
-  hero={{ src: img("calendar"), t: "", d: "", alt: s("Kalender konten DyskMedia", "The DyskMedia content calendar") }}
-  shots={shots}
-  views={{ kick: s("Tampilan", "Views"), h: s("Rencanakan, jadwalkan, balas.", "Plan, schedule, reply.") }}
-  note={s("DyskMedia dipakai sendiri dan belum dirilis.", "DyskMedia is used in-house and not released yet.")}
-  featH={s("Dibuat untuk yang posting di banyak tempat.", "Built for posting in many places.")}
-  features={features}
-  panel={{
-    kick: s("Aman dipakai", "Safe by design"),
-    h: s("Tidak pernah posting dua kali.", "It never posts twice."),
-    items: [
-      s("Publikasi tidak diulang otomatis. Koneksi putus ditandai “perlu dicek”, bukan gagal, karena kontennya bisa saja sudah terbit.", "Publishing never retries on its own. A dropped connection is marked “needs checking”, not failed, since the post may already be live."),
-      s("Balasan otomatis hanya untuk pesan yang masuk setelah aturan aktif, dan tiap pesan hanya dibalas sekali.", "Auto replies only answer messages that arrive after a rule is on, and each one only once."),
-      s("Fitur yang tidak didukung API resmi platform disembunyikan, bukan dipaksakan.", "Features a platform's official API doesn't support are hidden, not forced."),
-    ],
-  }}
-  platforms={["Web"]}
-  license={s("Belum dirilis", "Not released yet")}
-/>
+  path={Astro.url.pathname}
+  ogImage={img("calendar")}
+  ogTitle="DyskMedia"
+  fonts="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap"
+  theme="light"
+  themeColor="#e6efff"
+>
+  <div class="md" id="top">
+    <ProductBar
+      lang={lang}
+      name="DyskMedia"
+      icon="/images/apps/dyskmedia.png"
+      links={[
+        { href: "#tampilan", label: s("Tampilan", "Views") },
+        { href: "#fitur", label: s("Fitur", "Features") },
+        { href: "#aman", label: s("Aman dipakai", "Safe by design") },
+      ]}
+      cta={{ href: "#fitur", label: s("Lihat fitur", "See features") }}
+    />
+
+    <main>
+      <header class="hero">
+        <div class="wrap">
+          <div class="hero-copy">
+            <p class="pill"><span>{s("Baru", "New")}</span>Web · Laravel</p>
+            {lang === "id" ? (
+              <h1>Semua platform, <span class="u">satu kalender.</span></h1>
+            ) : (
+              <h1>Every platform, <span class="u">one calendar.</span></h1>
+            )}
+            <p class="lede">{s(
+              "Upload video, tulis post sekali, pilih akun tujuannya, lalu jadwalkan. Komentar dan DM dari semua akun masuk ke satu inbox.",
+              "Upload videos, write a post once, pick which accounts it goes to and schedule it. Comments and DMs from every account land in one inbox.",
+            )}</p>
+            <ul class="stickers">
+              {platforms.map((x, i) => <li style={`--c:${x.c};--r:${(i % 2 ? 1 : -1) * (2 + i)}deg`}><b>{x.k}</b>{x.n}</li>)}
+            </ul>
+            <p class="note">{s("DyskMedia dipakai sendiri dan belum dirilis.", "DyskMedia is used in-house and not released yet.")}</p>
+          </div>
+
+          <div class="board" aria-label={s("Contoh minggu di kalender", "A sample week on the calendar")}>
+            {week.map((d, i) => (
+              <div class="day">
+                <span class="day-h">{days[i]}<b>{9 + i}</b></span>
+                {d && (
+                  <span class="post" style={`--bg:${d.c}`}>
+                    <small>{d.t}</small>{d.title}
+                    <span class="post-p">{d.p.map((k) => <i style={`--c:${pc[k]}`}>{k}</i>)}</span>
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div class="shot hero-shot dl-reveal">
+            <img src={img("calendar")} alt={s("Kalender konten DyskMedia", "The DyskMedia content calendar")} width="1440" height="900" decoding="async" />
+          </div>
+        </div>
+      </header>
+
+      <section id="tampilan" class="sec">
+        <div class="wrap">
+          <div class="head">
+            <p class="kick">{s("Tampilan", "Views")}</p>
+            <h2>{s("Rencanakan, jadwalkan, balas.", "Plan, schedule, reply.")}</h2>
+          </div>
+          <div class="grid">
+            {shots.map((x, i) => (
+              <figure class="card dl-reveal" style={`--tilt:${i % 2 ? 0.6 : -0.6}deg`}>
+                <div class="shot"><img src={x.src} alt={x.alt} loading="lazy" decoding="async" /></div>
+                <figcaption><b>{x.t}</b>{x.d}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="fitur" class="sec sec-alt">
+        <div class="wrap">
+          <div class="head">
+            <p class="kick">{s("Fitur", "Features")}</p>
+            <h2>{s("Dibuat untuk yang posting di banyak tempat.", "Built for posting in many places.")}</h2>
+          </div>
+          <ul class="feat">
+            {features.map((f, i) => (
+              <li class="dl-reveal">
+                <span class={`state st-${i % 3}`}>{states[i % 3]}</span>
+                <h3>{f.t}</h3>
+                <p>{f.d}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="aman" class="sec">
+        <div class="wrap">
+          <div class="safe dl-reveal">
+            <div>
+              <p class="kick">{s("Aman dipakai", "Safe by design")}</p>
+              <h2>{s("Tidak pernah posting dua kali.", "It never posts twice.")}</h2>
+            </div>
+            <ul>{safe.map((x) => <li>{x}</li>)}</ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <ProductFooter lang={lang} current="dyskmedia" license={s("Belum dirilis", "Not released yet")} />
+  </div>
+  <script src="../scripts/reveal.js"></script>
+</Base>
+
+<style>
+  :global(body) { margin: 0; background: #e6efff; }
+  .md {
+    --bg: #e6efff; --bg-2: #d9e6ff; --card: #fff; --ink: #121826; --muted: #4a5468; --line: #121826; --pink: #ec4899; --blue: #3b6cf6;
+    --bd: 2px solid var(--ink); --sh: 4px 4px 0 var(--ink);
+    --pb-bg: #e6efff; --pb-fg: var(--ink); --pb-muted: var(--muted); --pb-line: rgba(18, 24, 38, 0.15); --pb-hover: #fff;
+    --pb-btn-bg: var(--pink); --pb-btn-fg: #fff; --pb-radius: 12px; --pb-font: "DM Sans", sans-serif;
+    --pf-line: rgba(18, 24, 38, 0.15); --pf-muted: var(--muted); --pf-fg: var(--ink); --pf-card: #fff; --pf-hover: var(--pink); --pf-radius: 16px; --pf-font: "DM Sans", sans-serif;
+    background: var(--bg); color: var(--ink); font: 400 16px/1.6 "DM Sans", system-ui, sans-serif; overflow-x: hidden;
+  }
+  .wrap { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  h1, h2, h3 { margin: 0; font-family: "Bricolage Grotesque", "DM Sans", sans-serif; font-weight: 800; letter-spacing: -0.03em; line-height: 1.04; }
+  .md :global(.pf-grid a), .md :global(.pb-cta) { border: var(--bd) !important; box-shadow: 3px 3px 0 var(--ink); }
+
+  .hero { padding: 64px 0 56px; }
+  .hero-copy { text-align: center; }
+  .pill { display: inline-flex; align-items: center; gap: 10px; margin: 0; padding: 4px 14px 4px 4px; border: var(--bd); border-radius: 999px; background: #fff; box-shadow: var(--sh); font-weight: 700; font-size: 14px; }
+  .pill span { padding: 1px 10px; border-radius: 999px; background: var(--pink); color: #fff; }
+  h1 { margin: 24px auto 0; max-width: 900px; font-size: clamp(42px, 7vw, 92px); }
+  .u { position: relative; color: var(--blue); white-space: nowrap; }
+  .u::after { content: ""; position: absolute; left: 2%; right: 2%; bottom: 0.04em; height: 0.16em; border-radius: 99px; background: #ffd36e; z-index: -1; }
+  .lede { margin: 22px auto 0; max-width: 640px; font-size: 18.5px; color: var(--muted); }
+  .stickers { list-style: none; margin: 30px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .stickers li { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border: var(--bd); border-radius: 12px; background: #fff; box-shadow: 3px 3px 0 var(--ink); font-weight: 700; font-size: 14.5px; transform: rotate(var(--r)); transition: transform 0.2s; }
+  .stickers li:hover { transform: rotate(0) scale(1.06); }
+  .stickers b { display: grid; place-items: center; min-width: 28px; height: 24px; padding: 0 4px; border-radius: 7px; background: var(--c); color: #fff; font-size: 11.5px; }
+  .note { margin: 22px 0 0; font-size: 14px; color: var(--muted); }
+
+  .board { margin: 48px 0 0; display: grid; grid-template-columns: repeat(7, 1fr); border: var(--bd); border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 6px 6px 0 var(--ink); }
+  .day { min-height: 128px; padding: 10px; border-right: var(--bd); display: flex; flex-direction: column; gap: 8px; }
+  .day:last-child { border-right: 0; }
+  .day-h { display: flex; justify-content: space-between; font-weight: 700; font-size: 13px; color: var(--muted); }
+  .day-h b { color: var(--ink); }
+  .post { display: block; padding: 8px; border: var(--bd); border-radius: 10px; background: var(--bg); box-shadow: 2px 2px 0 var(--ink); font-weight: 700; font-size: 13px; line-height: 1.3; }
+  .post small { display: block; font-size: 11.5px; font-weight: 500; }
+  .post-p { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 6px; }
+  .post-p i { padding: 1px 5px; border-radius: 5px; background: var(--c); color: #fff; font: 700 10px "DM Sans", sans-serif; }
+
+  .shot { border: var(--bd); border-radius: 16px; overflow: hidden; background: #fff; }
+  .shot img { display: block; width: 100%; height: auto; }
+  .hero-shot { margin-top: 28px; box-shadow: 8px 8px 0 var(--ink); }
+
+  .sec { padding: 96px 0; }
+  .sec-alt { background: var(--bg-2); border-block: var(--bd); }
+  .head { max-width: 700px; }
+  .kick { display: inline-block; margin: 0 0 14px; padding: 3px 12px; border: var(--bd); border-radius: 999px; background: #ffd36e; font-weight: 700; font-size: 13px; }
+  h2 { font-size: clamp(32px, 4.4vw, 54px); }
+  .grid { margin-top: 44px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .card { margin: 0; padding: 12px; border: var(--bd); border-radius: 20px; background: #fff; box-shadow: 6px 6px 0 var(--ink); transform: rotate(var(--tilt)); transition: transform 0.2s; }
+  .card:hover { transform: rotate(0) translateY(-3px); }
+  .card .shot { border-radius: 12px; }
+  .card figcaption { padding: 14px 6px 4px; color: var(--muted); font-size: 15px; }
+  .card figcaption b { display: block; color: var(--ink); font: 800 20px "Bricolage Grotesque", sans-serif; }
+
+  .feat { list-style: none; margin: 44px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .feat li { padding: 22px; border: var(--bd); border-radius: 18px; background: #fff; box-shadow: var(--sh); }
+  .state { display: inline-block; padding: 2px 10px; border: var(--bd); border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .st-0 { background: #8fb8ff; } .st-1 { background: #7ee0a1; } .st-2 { background: #f0f0f0; }
+  .feat h3 { margin-top: 14px; font-size: 21px; }
+  .feat p { margin: 8px 0 0; font-size: 15px; color: var(--muted); }
+
+  .safe { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; padding: 40px; border: var(--bd); border-radius: 24px; background: var(--pink); color: #fff; box-shadow: 8px 8px 0 var(--ink); }
+  .safe h2 { color: #fff; }
+  .safe .kick { color: var(--ink); }
+  .safe ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+  .safe li { padding: 14px 16px; border: var(--bd); border-radius: 14px; background: #fff; color: var(--ink); font-size: 15px; }
+
+  .dl-reveal { transition: opacity 0.6s ease, translate 0.6s cubic-bezier(.2, .8, .2, 1); }
+  :global(.dl-motion) .dl-reveal { opacity: 0; translate: 0 20px; }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; translate: 0 0; }
+
+  @media (max-width: 960px) {
+    .feat { grid-template-columns: 1fr 1fr; }
+    .safe { grid-template-columns: 1fr; }
+    .board { grid-template-columns: repeat(4, 1fr); }
+    .day:nth-child(4) { border-right: 0; }
+    .day:nth-child(-n + 4) { border-bottom: var(--bd); }
+  }
+  @media (max-width: 640px) {
+    .grid, .feat { grid-template-columns: 1fr; }
+    .sec { padding: 64px 0; }
+    .safe { padding: 24px; }
+    .board { grid-template-columns: 1fr 1fr; }
+    .day { border-right: 0; border-bottom: var(--bd); min-height: 0; }
+    .day:nth-child(odd) { border-right: var(--bd); }
+    .day:nth-last-child(-n + 1) { border-bottom: 0; }
+    .card { transform: none; }
+  }
+</style>

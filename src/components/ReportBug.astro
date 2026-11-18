@@ -2,7 +2,8 @@
 /*
   "Report a problem" block for product pages. The site is static, so there's no backend:
   the form turns what the user typed into a pre-filled GitHub issue (opened in a new tab).
-  Nothing is sent to or stored on our side.
+  Nothing is sent to or stored on our side. Themed by the page's --pf-* and --pb-btn-* variables,
+  like Support.
 */
 import { ui, type Lang } from "../i18n";
 interface Props { lang: Lang; product: string; repo: string; platforms: string[]; id?: string }
@@ -75,30 +76,31 @@ const issues = `https://github.com/${repo}/issues`;
 </script>
 
 <style>
-  .rb { padding: 24px 0 0; }
+  .rb { padding: 40px 0 0; }
   .rb-in {
-    box-sizing: border-box; width: min(var(--wrap), calc(100% - 32px)); margin: 0 auto; display: grid; grid-template-columns: 1fr 1.25fr; gap: 40px; align-items: start;
-    padding: 40px; border-radius: 24px; border: 1px solid var(--line); background: radial-gradient(60% 80% at 0% 0%, var(--accent-soft), transparent 70%), var(--card);
+    box-sizing: border-box; width: min(1160px, calc(100% - 32px)); margin: 0 auto; display: grid; grid-template-columns: 1fr 1.25fr; gap: 36px; align-items: start;
+    padding: 36px; border-radius: calc(var(--pf-radius, 14px) + 8px); border: 1px solid var(--pf-line); background: var(--pf-card);
   }
-  .rb h2 { margin: 0; font-size: clamp(26px, 3vw, 36px); font-weight: 800; line-height: 1.1; }
-  .rb-copy p { margin: 12px 0 0; font-size: 16px; }
-  .rb-copy .rb-sub { font-size: 14px; color: var(--muted); }
-  .rb-copy a { color: var(--accent-hi); }
+  .rb h2 { margin: 0; font-size: clamp(26px, 3vw, 36px); line-height: 1.1; letter-spacing: -0.03em; color: var(--pf-fg); }
+  .rb-copy p { margin: 12px 0 0; color: var(--pf-muted); font-size: 16px; }
+  .rb-copy .rb-sub { font-size: 14px; }
+  .rb-copy a { color: inherit; text-decoration: underline; }
   .rb-form { display: grid; gap: 14px; }
   .rb-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
-  .rb label { display: grid; gap: 6px; font-size: 13.5px; font-weight: 700; color: var(--ink); }
+  .rb label { display: grid; gap: 6px; font-size: 14px; font-weight: 600; color: var(--pf-fg); }
   .rb input, .rb select, .rb textarea {
-    box-sizing: border-box; width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line-2);
-    background: var(--bg); color: var(--ink); font: inherit; font-weight: 400; font-size: 15px; transition: border-color 0.2s;
+    box-sizing: border-box; width: 100%; padding: 11px 12px; border-radius: var(--pb-radius, 12px); border: 1px solid var(--pf-line);
+    background: transparent; color: var(--pf-fg); font: inherit; font-weight: 400; font-size: 15px;
   }
-  .rb input:focus, .rb select:focus, .rb textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .rb select option { color: #111; }
   .rb textarea { resize: vertical; }
-  .rb-err { margin: 0; font-size: 14px; color: #f87171; }
+  .rb input:focus-visible, .rb select:focus-visible, .rb textarea:focus-visible { outline: 2px solid var(--pb-btn-bg); outline-offset: 1px; }
+  .rb-err { margin: 0; font-size: 14px; color: #e5484d; }
   .rb-btn {
-    justify-self: start; min-height: 50px; padding: 0 24px; border: 0; border-radius: 999px; cursor: pointer;
-    background: var(--accent); color: var(--on-accent); font: 700 13.5px var(--font); letter-spacing: 0.08em; text-transform: uppercase; transition: transform 0.15s;
+    justify-self: start; min-height: 46px; padding: 0 20px; border: 0; border-radius: var(--pb-radius, 12px); cursor: pointer;
+    background: var(--pb-btn-bg); color: var(--pb-btn-fg); font: inherit; font-weight: 700; font-size: 15px; transition: transform 0.15s, filter 0.15s;
   }
-  .rb-btn:hover { transform: translateY(-2px); }
+  .rb-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
   .rb-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   @media (max-width: 900px) { .rb-in { grid-template-columns: 1fr; } }
   @media (max-width: 560px) { .rb-in { padding: 24px; } .rb-row { grid-template-columns: 1fr; } }
