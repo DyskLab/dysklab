@@ -432,7 +432,13 @@ const jsonLd = {
           <div class="svc">
             {groups.map((g, gi) => (
               <div class:list={["svc-g", "dl-card", "dl-reveal", { "dl-featured": gi === 0 }]}>
-                <span class="svc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={gi === 0 ? '<path d="M4 20h16M6 16l4-10 4 6 2-3 3 7"/>' : '<path d="M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/>'} /></span>
+                <span class="svc-ic" aria-hidden="true">
+                  {gi === 0 ? (
+                    <svg viewBox="0 0 24 24" width="26" height="26"><rect x="3" y="4" width="18" height="16" rx="2.5" /><path d="M3 8.5h18" /><path d="m9.5 12.5-2.5 2.25 2.5 2.25M14.5 12.5l2.5 2.25-2.5 2.25" /><circle cx="6" cy="6.25" r=".6" /><circle cx="8.2" cy="6.25" r=".6" /></svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" width="26" height="26"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg>
+                  )}
+                </span>
                 <h3>{g.title}</h3>
                 <ul>{g.items.map(([n, d]) => <li><b>{n}</b><span>{d}</span></li>)}</ul>
               </div>
@@ -616,9 +622,10 @@ const jsonLd = {
   /* services */
   .svc { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .svc-g { padding: 34px; border-radius: 24px; }
-  .svc-ic { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-hi); }
-  .dl-featured .svc-ic { background: rgba(255, 255, 255, 0.14); color: #fff; }
-  .svc-ic svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .svc-ic { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-hi); box-shadow: inset 0 0 0 1px var(--accent-line); }
+  .dl-featured .svc-ic { background: rgba(255, 255, 255, 0.16); color: #fff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28); }
+  .svc-ic svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .svc-ic circle { fill: currentColor; stroke: none; }
   .svc-g h3 { margin-top: 20px; font-size: 22px; font-weight: 800; }
   .svc-g ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 16px; }
   .svc-g li { position: relative; padding-left: 32px; }
@@ -626,8 +633,8 @@ const jsonLd = {
   .dl-featured.svc-g li::before { background: rgba(255, 255, 255, 0.16); color: #fff; }
   .svc-g b { display: block; color: var(--ink); font-size: 15.5px; }
   .dl-featured.svc-g b { color: #fff; }
-  .svc-g span { display: block; margin-top: 2px; font-size: 14.5px; }
-  .dl-featured.svc-g span { color: rgba(255, 255, 255, 0.8); }
+  .svc-g li span { display: block; margin-top: 2px; font-size: 14.5px; }
+  .dl-featured.svc-g li span { color: rgba(255, 255, 255, 0.8); }
   .sub { margin: 72px 0 0; font-size: clamp(24px, 2.6vw, 30px); font-weight: 800; }
   .sub-row .sub { margin-top: 72px; }
   .cases { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
