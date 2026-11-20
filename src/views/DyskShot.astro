@@ -1,0 +1,352 @@
+---
+/*
+  DyskShot product page, in the app's own look: a dark macOS capture tool with the violet
+  icon colour, the editor's sunset wallpaper, a selection overlay with a W × H label as the
+  hero, Quick Access thumbnails, the recording HUD and keycaps for the shortcuts. The DMG link
+  is resolved from the newest GitHub release at build time. Bilingual through s(id, en).
+*/
+import Base from "../layouts/Base.astro";
+import ProductBar from "../components/ProductBar.astro";
+import ProductFooter from "../components/ProductFooter.astro";
+import { pick, ui, type Lang } from "../i18n";
+import { download } from "../lib/releases";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+const dir = "/images/products/dyskshot";
+const repo = "DyskLab/dyskshot";
+const nt = ui[lang].newTab;
+const mac = await download(repo, /\.dmg$/i);
+
+const qa = [
+  s("Salin", "Copy"), s("Simpan", "Save"), s("Anotasi", "Annotate"), "Pin", "OCR", s("Unggah", "Upload"),
+];
+
+const tools = [
+  s("Crop dan latar", "Crop and backgrounds"), s("Kotak, elips, garis", "Boxes, ellipses, lines"), s("Panah, empat gaya", "Arrows, four styles"),
+  s("Teks", "Text"), "Pixelate", "Spotlight", s("Penomoran", "Counters"), s("Pensil dan stabilo", "Pencil and highlighter"),
+];
+
+const features = [
+  { k: "01", t: s("Tangkap apa saja", "Capture anything"), d: s("Area, area sebelumnya, jendela (dengan wallpaper, padding, dan bayangan, atau transparan), layar penuh, dan timer. Layar bisa dibekukan saat memilih, dengan crosshair dan kaca pembesar.", "Area, previous area, window (with wallpaper, padding and shadow, or transparent), fullscreen and a self-timer. The screen can freeze while you select, with a crosshair and magnifier.") },
+  { k: "02", t: "Quick Access", d: s("Setiap hasil tangkapan muncul sebagai thumbnail melayang: salin, simpan, anotasi, pin, OCR, unggah, atau seret langsung ke aplikasi lain.", "Every capture shows up as a floating thumbnail: copy, save, annotate, pin, OCR, upload, or drag it straight into another app.") },
+  { k: "03", t: s("Baca teks (OCR)", "Read text (OCR)"), d: s("Salin teks dari area mana pun, dengan atau tanpa baris baru, dalam bahasa yang didukung Vision.", "Copy the text from any area, with or without line breaks, in every language Vision supports.") },
+  { k: "04", t: s("Pin ke layar", "Pin to screen"), d: s("Screenshot melayang yang selalu di atas. Scroll untuk mengubah ukurannya.", "Floating, always-on-top screenshots. Scroll to resize them.") },
+  { k: "05", t: s("Editor video", "Video editor"), d: s("Potong dengan filmstrip, atur kualitas, ukuran, dan format, lalu pilih audio: tetap, mono, bisu, atau volume 0–200%.", "Trim with a filmstrip, set quality, size and format, then choose the audio: keep, mono, mute or 0–200% volume.") },
+  { k: "06", t: s("Kompres video", "Compress video"), d: s("HEVC dengan kualitas konstan: resolusi, timing frame, dan warna tetap sama. File asli dipertahankan kalau hasilnya tidak lebih kecil.", "HEVC at constant quality, with the same resolution, frame timing and colour. The original stays if the result wouldn't be smaller.") },
+  { k: "07", t: "GIF", d: s("Frame rate 5–30, kualitas, penggabungan frame yang identik, dan lebar maksimum.", "Frame rate 5–30, quality, merging of identical frames and a maximum width.") },
+  { k: "08", t: s("Riwayat dan ikon desktop", "History and desktop icons"), d: s("Buka lagi screenshot terbaru, atur berapa lama disimpan, dan sembunyikan ikon desktop saat menangkap layar.", "Reopen recent screenshots, choose how long to keep them, and hide desktop icons while you capture.") },
+];
+
+const keys = [
+  { t: s("Tangkap area", "Capture area"), k: ["⌃", "⇧", "4"] },
+  { t: s("Tangkap jendela", "Capture window"), k: ["⌃", "⇧", "5"] },
+  { t: s("Layar penuh", "Fullscreen"), k: ["⌃", "⇧", "3"] },
+  { t: s("Tangkap teks (OCR)", "Capture text (OCR)"), k: ["⌃", "⇧", "2"] },
+  { t: s("Rekam layar / berhenti", "Record screen / stop"), k: ["⌃", "⇧", "6"] },
+];
+
+const rec = [
+  s("Area yang bisa diubah ukurannya, dengan HUD W × H", "A resizable area with a W × H HUD"),
+  s("Mikrofon dan audio sistem", "Microphone and system audio"),
+  s("Gelembung kamera", "A camera bubble"),
+  s("Sorotan klik dan tombol yang ditekan", "Click highlights and keystrokes"),
+  s("Hitung mundur dan latar yang diredupkan", "A countdown and a dimmed background"),
+  s("MP4 (H.264 atau HEVC) atau GIF", "MP4 (H.264 or HEVC) or GIF"),
+];
+
+const privacy = [
+  s("Semua hasil tetap di Mac Anda. Tidak ada server DyskLab.", "Everything stays on your Mac. There is no DyskLab server."),
+  s("Unggah ke Google Drive itu opsional, memakai OAuth client Anda sendiri, dan hanya bisa melihat file yang dibuat DyskShot (scope drive.file).", "Google Drive upload is opt-in, uses your own OAuth client, and can only see files DyskShot creates (the drive.file scope)."),
+  s("Login lewat loopback dengan PKCE; refresh token disimpan di Keychain.", "Sign-in uses a loopback redirect with PKCE; the refresh token is kept in the Keychain."),
+];
+
+const cmds = ["capture-area", "capture-window", "capture-text", "record-gif"];
+---
+
+<Base
+  title={s("DyskShot: screenshot dan rekam layar untuk Mac | DyskLab", "DyskShot: screenshots and screen recording for the Mac | DyskLab")}
+  description={s(
+    "DyskShot adalah aplikasi menu bar untuk screenshot dan rekam layar di macOS: tangkap, beri anotasi, baca teks, rekam MP4 atau GIF, sunting, kompres, dan bagikan. Native Swift, semua tetap di Mac Anda.",
+    "DyskShot is a menu bar app for screenshots and screen recordings on macOS: capture, annotate, read text, record MP4 or GIF, edit, compress and share. Native Swift, and everything stays on your Mac.",
+  )}
+  path={Astro.url.pathname}
+  ogImage={`${dir}/editor.jpg`}
+  ogTitle="DyskShot"
+  fonts="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+  theme="dark"
+  themeColor="#161618"
+>
+  <div class="sh" id="top">
+    <ProductBar
+      lang={lang}
+      name="DyskShot"
+      repo={repo}
+      icon="/images/apps/dyskshot.png"
+      links={[
+        { href: "#anotasi", label: s("Anotasi", "Annotate") },
+        { href: "#rekam", label: s("Rekam", "Record") },
+        { href: "#fitur", label: s("Fitur", "Features") },
+        { href: "#pintasan", label: s("Pintasan", "Shortcuts") },
+      ]}
+      cta={{ href: mac.url, label: s("Unduh gratis", "Download free") }}
+    />
+
+    <main>
+      <header class="hero">
+        <div class="wrap hero-in">
+          <div class="copy">
+            <p class="ver"><span>macOS 15+</span>{s("Aplikasi menu bar", "Menu bar app")}</p>
+            {lang === "id" ? (
+              <h1>Tangkap, coret, rekam, <span>bagikan.</span></h1>
+            ) : (
+              <h1>Capture, mark up, record, <span>share.</span></h1>
+            )}
+            <p class="lede">{s(
+              "Tekan pintasan, pilih area, jendela, atau layar, dan hasilnya langsung muncul di thumbnail Quick Access. Dari situ bisa disalin, disimpan, diberi anotasi, di-pin, dibaca teksnya, atau diunggah. Rekaman layar bekerja dengan cara yang sama.",
+              "Press a shortcut, pick an area, window or screen, and the capture lands in a floating Quick Access thumbnail. Copy it, save it, annotate it, pin it, read its text or upload it from there. Screen recordings work the same way.",
+            )}</p>
+            <ul class="chips">{["Swift", "AppKit", "ScreenCaptureKit", s("Tanpa Electron", "No Electron")].map((c) => <li>{c}</li>)}</ul>
+            <div class="cta">
+              <a class="btn" href={mac.url}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14" /></svg>
+                <span><b>{s("Unduh untuk Mac", "Download for Mac")}</b><small>{mac.version ? `v${mac.version} · ` : ""}Apple Silicon · DMG</small></span>
+              </a>
+              <a class="btn btn-g" href={`https://github.com/${repo}`} target="_blank" rel="noopener">GitHub ↗<span class="sr">{nt}</span></a>
+            </div>
+            <p class="note">{s("Gratis, MIT License. Belum ter-notarize: izinkan peluncuran pertama di System Settings › Privacy & Security › Open Anyway.", "Free, MIT License. Not notarized yet: allow the first launch in System Settings › Privacy & Security › Open Anyway.")}</p>
+          </div>
+
+          <div class="stage" aria-hidden="true">
+            <div class="desk">
+              <div class="sel">
+                <span class="sel-wh">800 × 450</span>
+                <i class="h tl"></i><i class="h tr"></i><i class="h bl"></i><i class="h br"></i>
+                <div class="sel-mock">
+                  <b>Q3 report</b>
+                  <span class="bars"><i style="--h:40%"></i><i style="--h:65%"></i><i style="--h:52%"></i><i style="--h:88%"></i><i style="--h:74%"></i></span>
+                  <svg class="arrow" viewBox="0 0 120 70"><path d="M8 62 104 12" /><path d="M86 10 106 11 98 29" /></svg>
+                  <span class="num">1</span>
+                </div>
+              </div>
+              <span class="cross"></span>
+              <div class="qa">
+                <img src={`${dir}/editor.jpg`} alt="" width="1600" height="1030" />
+                <div class="qa-b">{qa.slice(0, 4).map((x) => <span>{x}</span>)}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section id="anotasi" class="sec">
+        <div class="wrap">
+          <div class="head">
+            <p class="kick">{s("Anotasi", "Annotate")}</p>
+            <h2>{s("Editor yang lengkap, langsung setelah tangkap.", "A full editor, right after the capture.")}</h2>
+            <p class="sub">{s("Latar gradien, panah, blur, spotlight, dan penomoran, dengan undo, redo, zoom, dan “Drag Me” untuk menyeret hasilnya ke aplikasi mana pun.", "Gradient backgrounds, arrows, pixelate, spotlight and counters, with undo, redo, zoom and “Drag Me” to drop the result into any app.")}</p>
+          </div>
+          <div class="win dl-reveal">
+            <img src={`${dir}/editor.jpg`} alt={s("Editor anotasi DyskShot dengan latar gradien, kotak, dan panah", "The DyskShot annotation editor with a gradient background, a box and arrows")} width="1600" height="1030" loading="lazy" decoding="async" />
+          </div>
+          <ul class="tools">{tools.map((t) => <li>{t}</li>)}</ul>
+        </div>
+      </section>
+
+      <section id="rekam" class="sec sec-alt">
+        <div class="wrap rec-in">
+          <div>
+            <p class="kick">{s("Rekam layar", "Screen recording")}</p>
+            <h2>{s("Rekam video atau GIF, dengan suara dan kamera.", "Record video or GIF, with sound and camera.")}</h2>
+            <p class="sub">{s("Pilih area, atur ukurannya di HUD, lalu tekan ↩ untuk video atau ⌥↩ untuk GIF.", "Pick an area, size it in the HUD, then press ↩ for video or ⌥↩ for a GIF.")}</p>
+            <ul class="ticks">{rec.map((x) => <li>{x}</li>)}</ul>
+          </div>
+          <div class="hud dl-reveal">
+            <img src={`${dir}/record-hud.png`} alt={s("HUD perekaman DyskShot: ukuran 800 × 400, mikrofon, audio, kamera, dan pilihan GIF atau video", "The DyskShot recording HUD: 800 × 400, microphone, audio, camera, and GIF or video")} width="464" height="292" loading="lazy" decoding="async" />
+            <img class="hud-c" src={`${dir}/record-controls.png`} alt={s("Kontrol saat merekam", "Controls while recording")} width="292" height="68" loading="lazy" decoding="async" />
+            <span class="rec-dot">REC 00:12</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="fitur" class="sec">
+        <div class="wrap">
+          <div class="head">
+            <p class="kick">{s("Fitur", "Features")}</p>
+            <h2>{s("Kecil, native, dan lengkap.", "Small, native and complete.")}</h2>
+          </div>
+          <ul class="feat">
+            {features.map((f) => (
+              <li class="dl-reveal"><span class="fk">{f.k}</span><b>{f.t}</b><p>{f.d}</p></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="pintasan" class="sec sec-alt">
+        <div class="wrap keys-in">
+          <div>
+            <p class="kick">{s("Pintasan", "Shortcuts")}</p>
+            <h2>{s("Semua aksi bisa punya pintasan global.", "Every action can have a global shortcut.")}</h2>
+            <p class="sub">{s("Saat memilih, Space pindah ke mode jendela, Shift menjaga bentuk persegi, dan Esc membatalkan. Atur sisanya di Settings › Shortcuts.", "While selecting, Space switches to window mode, Shift keeps it square, and Esc cancels. Set the rest in Settings › Shortcuts.")}</p>
+            <ul class="keys">
+              {keys.map((x) => (
+                <li><span>{x.t}</span><span class="kc">{x.k.map((k) => <kbd>{k}</kbd>)}</span></li>
+              ))}
+            </ul>
+          </div>
+          <div class="win dl-reveal">
+            <img src={`${dir}/settings-shortcuts.jpg`} alt={s("Pengaturan pintasan DyskShot", "DyskShot shortcut settings")} width="1480" height="1280" loading="lazy" decoding="async" />
+          </div>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="wrap two">
+          <div class="card dl-reveal">
+            <p class="kick">{s("Privasi", "Privacy")}</p>
+            <h3>{s("Tetap di Mac Anda.", "Stays on your Mac.")}</h3>
+            <ul class="ticks">{privacy.map((x) => <li>{x}</li>)}</ul>
+            <img class="card-img" src={`${dir}/settings-cloud.jpg`} alt={s("Pengaturan Google Drive di DyskShot", "Google Drive settings in DyskShot")} width="1480" height="1122" loading="lazy" decoding="async" />
+          </div>
+          <div class="card dl-reveal">
+            <p class="kick">{s("Otomasi", "Automation")}</p>
+            <h3>{s("Panggil dari skrip atau Shortcuts.", "Call it from scripts or Shortcuts.")}</h3>
+            <p class="sub">{s("Nyalakan Settings › Advanced › API, lalu pakai URL scheme dyskshot://.", "Turn on Settings › Advanced › API, then use the dyskshot:// URL scheme.")}</p>
+            <pre><code>{cmds.map((c) => <><span class="g">❯</span> open <span class="pr">dyskshot://{c}</span>{"\n"}</>)}<span class="g">❯</span> <span class="cur"></span></code></pre>
+            <p class="small">{s("Juga: capture-previous, capture-fullscreen, self-timer, record-screen, history, toggle-desktop-icons, settings.", "Also: capture-previous, capture-fullscreen, self-timer, record-screen, history, toggle-desktop-icons, settings.")}</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <ProductFooter lang={lang} current="dyskshot" />
+  </div>
+  <script src="../scripts/reveal.js"></script>
+</Base>
+
+<style>
+  :global(body) { margin: 0; background: #161618; }
+  .sh {
+    --bg: #161618; --bg2: #1e1e20; --card: #232326; --line: #333337; --ink: #f2f2f4; --muted: #a1a1a8; --vi: #a855f7; --vi2: #c084fc; --blue: #2f7cf6;
+    --sunset: linear-gradient(135deg, #ec7aa0 0%, #f0a07a 45%, #f6dc5c 100%);
+    --pb-bg: rgba(22, 22, 24, 0.85); --pb-fg: var(--ink); --pb-muted: var(--muted); --pb-line: var(--line); --pb-hover: #2a2a2e;
+    --pb-btn-bg: var(--vi); --pb-btn-fg: #fff; --pb-radius: 8px; --pb-font: "Inter", -apple-system, sans-serif;
+    --pf-line: var(--line); --pf-muted: var(--muted); --pf-fg: var(--ink); --pf-card: var(--bg2); --pf-hover: var(--vi); --pf-radius: 12px; --pf-font: "Inter", -apple-system, sans-serif;
+    background: var(--bg); color: var(--ink); font: 400 16px/1.6 "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif; overflow-x: hidden;
+  }
+  .wrap { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+  h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.03em; line-height: 1.06; }
+  .kick { margin: 0 0 10px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--vi2); }
+  .sub { margin: 14px 0 0; color: var(--muted); font-size: 17px; max-width: 620px; }
+
+  /* hero */
+  .hero { padding: 56px 0 96px; background: radial-gradient(900px 500px at 85% 10%, rgba(168, 85, 247, 0.22), transparent 60%); }
+  .hero-in { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 48px; align-items: center; }
+  .hero-in > * { min-width: 0; }
+  .ver { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; color: var(--muted); }
+  .ver span { padding: 1px 8px; border-radius: 6px; background: var(--vi); color: #fff; font-weight: 600; }
+  h1 { margin-top: 18px; font-size: clamp(40px, 5.4vw, 66px); }
+  h1 span { background: var(--sunset); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { margin: 20px 0 0; font-size: 18px; color: var(--muted); }
+  .chips { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips li { padding: 3px 10px; border-radius: 6px; background: var(--bg2); border: 1px solid var(--line); font-size: 13px; font-weight: 500; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 10px; background: var(--vi); color: #fff; text-decoration: none; font-weight: 600; transition: transform 0.15s, background 0.15s; }
+  .btn:hover { background: #9333ea; transform: translateY(-1px); }
+  .btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .btn b { display: block; font-size: 15px; line-height: 1.2; }
+  .btn small { display: block; font-size: 12px; font-weight: 500; opacity: 0.85; }
+  .btn-g { background: var(--bg2); border: 1px solid var(--line); }
+  .btn-g:hover { background: #2a2a2e; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .note { margin: 14px 0 0; font-size: 13px; color: var(--muted); }
+
+  .stage { position: relative; }
+  .desk { position: relative; aspect-ratio: 4 / 3; border-radius: 16px; background: var(--sunset); box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.8); overflow: hidden; }
+  .desk::before { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45); }
+  .sel { position: absolute; left: 12%; top: 16%; width: 62%; height: 52%; outline: 1.5px dashed #fff; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.15); }
+  .sel-mock { position: absolute; inset: 0; background: linear-gradient(135deg, #2b4a7a, #2b6170); display: flex; flex-direction: column; padding: 6% 7%; }
+  .sel-mock b { font-size: clamp(14px, 1.8vw, 20px); color: #fff; padding: 4px 8px; align-self: flex-start; border: 2px solid #f6d14a; border-radius: 4px; }
+  .bars { flex: 1; display: flex; align-items: flex-end; gap: 7%; padding: 8% 4% 0; }
+  .bars i { flex: 1; height: var(--h); border-radius: 4px 4px 0 0; background: rgba(255, 255, 255, 0.28); }
+  .bars i:nth-child(4) { background: #7aa7ff; }
+  .arrow { position: absolute; right: 8%; top: 22%; width: 34%; }
+  .arrow path { fill: none; stroke: #ef4b4b; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+  .num { position: absolute; right: 12%; bottom: 14%; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--blue); border: 2px solid #fff; color: #fff; font-size: 13px; font-weight: 700; }
+  .sel-wh { position: absolute; z-index: 2; left: 50%; top: -34px; transform: translateX(-50%); padding: 3px 10px; border-radius: 6px; background: rgba(20, 20, 22, 0.9); font: 600 12.5px/1.4 "JetBrains Mono", monospace; white-space: nowrap; }
+  .h { position: absolute; z-index: 2; width: 10px; height: 10px; background: #fff; border-radius: 2px; }
+  .tl { left: -5px; top: -5px; } .tr { right: -5px; top: -5px; } .bl { left: -5px; bottom: -5px; } .br { right: -5px; bottom: -5px; }
+  .cross { position: absolute; left: 74%; top: 68%; width: 30px; height: 30px; transform: translate(-50%, -50%); }
+  .cross::before, .cross::after { content: ""; position: absolute; background: #fff; }
+  .cross::before { left: 50%; top: 0; bottom: 0; width: 1.5px; } .cross::after { top: 50%; left: 0; right: 0; height: 1.5px; }
+  .qa { position: absolute; right: 4%; bottom: 5%; width: 30%; border-radius: 10px; overflow: hidden; background: rgba(30, 30, 32, 0.92); border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5); animation: pop 0.6s 0.4s both cubic-bezier(0.2, 1.4, 0.4, 1); }
+  .qa img { display: block; width: 100%; height: auto; }
+  .qa-b { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 6px; }
+  .qa-b span { padding: 3px 0; text-align: center; border-radius: 5px; background: rgba(255, 255, 255, 0.1); font-size: 11px; font-weight: 600; }
+  @keyframes pop { from { opacity: 0; transform: translateY(20px) scale(0.9); } }
+
+  /* sections */
+  .sec { padding: 96px 0; }
+  .sec-alt { background: var(--bg2); border-block: 1px solid var(--line); }
+  .head { max-width: 720px; margin-bottom: 40px; }
+  h2 { font-size: clamp(30px, 4vw, 46px); }
+  .win { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: #222; box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8); }
+  .win img { display: block; width: 100%; height: auto; }
+  .tools { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .tools li { padding: 6px 12px; border-radius: 8px; background: var(--card); border: 1px solid var(--line); font-size: 14px; font-weight: 500; }
+
+  .rec-in, .keys-in { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .rec-in > *, .keys-in > * { min-width: 0; }
+  .ticks { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 8px; }
+  .ticks li { position: relative; padding-left: 28px; font-size: 15.5px; }
+  .ticks li::before { content: ""; position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--vi); box-shadow: inset 0 0 0 4px var(--bg2); outline: 1.5px solid var(--vi); outline-offset: -1.5px; }
+  .hud { position: relative; display: grid; place-items: center; gap: 18px; padding: 56px 24px; border-radius: 16px; background: var(--sunset); }
+  .hud::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: rgba(0, 0, 0, 0.35); }
+  .hud img { position: relative; max-width: 100%; height: auto; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.5)); }
+  .hud img:first-child { width: 360px; }
+  .hud-c { width: 220px; }
+  .rec-dot { position: absolute; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: 999px; background: rgba(0, 0, 0, 0.55); font: 600 12px/1.4 "JetBrains Mono", monospace; }
+  .rec-dot::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #ff453a; animation: blink 1.2s steps(1) infinite; }
+
+  .feat { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .feat li { padding: 20px; border-radius: 14px; background: var(--bg2); border: 1px solid var(--line); transition: border-color 0.2s; }
+  .feat li:hover { border-color: var(--vi); }
+  .fk { font: 600 12px/1 "JetBrains Mono", monospace; color: var(--vi2); }
+  .feat b { display: block; margin-top: 12px; font-size: 16.5px; }
+  .feat p { margin: 6px 0 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
+
+  .keys { list-style: none; margin: 24px 0 0; padding: 0; border-radius: 12px; border: 1px solid var(--line); overflow: hidden; }
+  .keys li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 16px; background: var(--card); }
+  .keys li:nth-child(even) { background: var(--bg2); }
+  .kc { display: inline-flex; gap: 4px; }
+  kbd { min-width: 26px; padding: 3px 7px; text-align: center; border-radius: 6px; background: #3a3a3e; border: 1px solid #4a4a4f; border-bottom-width: 3px; font: 600 13px/1.3 -apple-system, "Inter", sans-serif; color: var(--ink); }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .two > * { min-width: 0; }
+  .card { padding: 32px; border-radius: 18px; background: var(--bg2); border: 1px solid var(--line); }
+  .card h3 { font-size: 28px; }
+  .card .ticks li::before { box-shadow: inset 0 0 0 4px var(--bg2); }
+  .card-img { display: block; width: 100%; height: auto; margin-top: 24px; border-radius: 10px; border: 1px solid var(--line); }
+  pre { margin: 22px 0 0; padding: 18px 20px; border-radius: 12px; background: #0c0c0d; border: 1px solid var(--line); overflow-x: auto; font: 400 13.5px/1.9 "JetBrains Mono", ui-monospace, monospace; color: #e5e5ea; }
+  .pr { color: var(--vi2); } .g { color: #30d158; }
+  .cur { display: inline-block; width: 8px; height: 15px; vertical-align: -2px; background: #e5e5ea; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .small { margin: 14px 0 0; font-size: 13.5px; color: var(--muted); }
+
+  .dl-reveal { transition: opacity 0.5s ease, transform 0.5s ease; }
+  :global(.dl-motion) .dl-reveal { opacity: 0; transform: translateY(16px); }
+  :global(.dl-motion) .dl-reveal:global(.is-in) { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .hero-in, .rec-in, .keys-in, .two { grid-template-columns: 1fr; }
+    .feat { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .feat { grid-template-columns: 1fr; }
+    .sec { padding: 64px 0; }
+    .card { padding: 22px; }
+    .qa-b span { font-size: 9.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .cur, .rec-dot::before, .qa { animation: none; } }
+</style>

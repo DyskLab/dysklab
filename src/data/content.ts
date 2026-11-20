@@ -260,6 +260,22 @@ const content: Content =
         "JavaScript",
         "Swift"
       ]
+    },
+    {
+      "slug": "dyskshot",
+      "page": "/produk/dyskshot/",
+      "name": "DyskShot",
+      "kind": "Screenshot dan rekam layar",
+      "kind_en": "Screenshots and recording",
+      "platform": "macOS",
+      "icon": "/images/apps/dyskshot.png",
+      "text": "Aplikasi menu bar untuk screenshot dan rekam layar di Mac: tangkap, beri anotasi, rekam, sunting, kompres, dan bagikan.",
+      "stack": [
+        "Swift",
+        "AppKit",
+        "ScreenCaptureKit"
+      ],
+      "repo": "https://github.com/DyskLab/dyskshot"
     }
   ],
   "cases": [

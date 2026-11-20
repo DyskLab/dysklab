@@ -93,6 +93,13 @@ const meta = {
     points: { id: ["Satu binary Go, tanpa dependensi", "Pilih versi PHP, Node, Python, Go, Java, Ruby", "Suhu, GPU, dan baterai tanpa sudo"], en: ["One Go binary, no dependencies", "Pick PHP, Node, Python, Go, Java or Ruby versions", "Temperatures, GPU and battery without sudo"] },
     platforms: ["macOS"],
   },
+  dyskshot: {
+    repo: "DyskLab/dyskshot", match: /\.dmg$/i, color: "#a855f7", shot: "/images/products/dyskshot/editor.jpg",
+    tag: { id: "Tangkap, coret, rekam, bagikan.", en: "Capture, mark up, record, share." },
+    text: { id: "Aplikasi menu bar untuk screenshot dan rekam layar di Mac. Hasilnya muncul di thumbnail Quick Access, siap disalin, diberi anotasi, di-pin, dibaca teksnya, atau diunggah.", en: "A menu bar app for screenshots and screen recordings on the Mac. Each capture lands in a Quick Access thumbnail, ready to copy, annotate, pin, read the text from, or upload." },
+    points: { id: ["Editor anotasi dengan panah, blur, spotlight, dan nomor", "Rekam MP4 atau GIF dengan mikrofon, audio sistem, dan kamera", "Native Swift, tanpa Electron, semua tetap di Mac Anda"], en: ["Annotation editor with arrows, pixelate, spotlight and counters", "Records MP4 or GIF with mic, system audio and camera", "Native Swift, no Electron, everything stays on your Mac"] },
+    platforms: ["macOS"],
+  },
 } as const;
 
 const products = await Promise.all(
@@ -102,7 +109,7 @@ const products = await Promise.all(
     return { ...a, ...m, version: dl.version, star, url: href(lang, a.page), kindL: lang === "id" ? a.kind : a.kind_en };
   })
 );
-const allRepos = ["DyskLab/dyskfiles", "DyskLab/dyskfocus", "DyskLab/dyskflow", "DyskLab/dysklink-mac", "DyskLab/dysklink-desktop", "DyskLab/dysklink-android", "DyskLab/dyskstream", "DyskLab/dyskpos"];
+const allRepos = ["DyskLab/dyskfiles", "DyskLab/dyskfocus", "DyskLab/dyskflow", "DyskLab/dysklink-mac", "DyskLab/dysklink-desktop", "DyskLab/dysklink-android", "DyskLab/dyskstream", "DyskLab/dyskpos", "DyskLab/dyskshot"];
 const starTotal = await totalStars(allRepos);
 const showStars = starTotal !== null && starTotal >= 25;
 
@@ -115,11 +122,11 @@ const T = L({
     cta: "Lihat produk",
     badge: "Gratis · MIT License · tanpa akun",
     h1a: "Software open source", h1b: "untuk kerja sehari-hari.",
-    lede: "DyskLab membuat aplikasi gratis untuk Mac, Windows, Linux, Android, dan web. Kelola aset, tugas, situs, konten, live stream, dan kasir toko, lalu hubungkan HP ke komputer. Tanpa iklan, tanpa akun, dan kodenya terbuka untuk siapa saja.",
+    lede: "DyskLab membuat aplikasi gratis untuk Mac, Windows, Linux, Android, dan web. Kelola aset, tugas, situs, konten, live stream, kasir toko, dan screenshot, lalu hubungkan HP ke komputer. Tanpa iklan, tanpa akun, dan kodenya terbuka untuk siapa saja.",
     explore: "Jelajahi produk", gh: "DyskLab di GitHub",
-    strip: ["9 produk", "macOS · Windows · Linux · Android · Web", "Data tetap milik Anda", "Dibuat di Gresik, Indonesia"],
+    strip: ["10 produk", "macOS · Windows · Linux · Android · Web", "Data tetap milik Anda", "Dibuat di Gresik, Indonesia"],
     starsLabel: (n: number) => `${n} star di GitHub`,
-    prodK: "Produk", prodH: "Sembilan aplikasi, satu cara kerja:", prodH2: "sederhana, jujur, dan terbuka.",
+    prodK: "Produk", prodH: "Sepuluh aplikasi, satu cara kerja:", prodH2: "sederhana, jujur, dan terbuka.",
     latest: "Versi terbaru", see: (n: string) => `Lihat ${n}`, code: "Kode",
     whyK: "Kenapa open source",
     whyH: "Software yang bisa Anda periksa, ubah, dan simpan sendiri.",
@@ -163,11 +170,11 @@ const T = L({
     cta: "See products",
     badge: "Free · MIT License · no account",
     h1a: "Open-source software", h1b: "for everyday work.",
-    lede: "DyskLab makes free apps for Mac, Windows, Linux, Android and the web. Manage assets, tasks, websites, content, live streams and a shop till, then link your phone to your computer. No ads, no accounts, and the code is open to everyone.",
+    lede: "DyskLab makes free apps for Mac, Windows, Linux, Android and the web. Manage assets, tasks, websites, content, live streams, a shop till and screenshots, then link your phone to your computer. No ads, no accounts, and the code is open to everyone.",
     explore: "Explore the products", gh: "DyskLab on GitHub",
-    strip: ["9 products", "macOS · Windows · Linux · Android · Web", "Your data stays yours", "Made in Gresik, Indonesia"],
+    strip: ["10 products", "macOS · Windows · Linux · Android · Web", "Your data stays yours", "Made in Gresik, Indonesia"],
     starsLabel: (n: number) => `${n} stars on GitHub`,
-    prodK: "Products", prodH: "Nine apps, one way of working:", prodH2: "simple, honest and open.",
+    prodK: "Products", prodH: "Ten apps, one way of working:", prodH2: "simple, honest and open.",
     latest: "Latest version", see: (n: string) => `See ${n}`, code: "Code",
     whyK: "Why open source",
     whyH: "Software you can inspect, change and keep.",
