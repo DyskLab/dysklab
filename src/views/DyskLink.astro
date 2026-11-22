@@ -2,7 +2,7 @@
 /*
   DyskLink product page. Look: device-ecosystem keynote — near-black navy, teal signal
   glow, Sora headlines, a Mac and a phone joined by pulsing rings. Downloads for the
-  computer (Mac, Windows, Linux) and for the phone (Android), because the phone features
+  computer (Mac, Windows; Linux builds exist but are hidden for now) and for the phone (Android), because the phone features
   need both apps.
   Every feature has a picture: a real screenshot (rendered by the Mac app's --snapshot
   mode, in /images/products/dysklink/f/) or a small HTML/CSS scene from LinkIllo.
@@ -27,7 +27,6 @@ const macDl = await download("DyskLab/dysklink-mac", /mac.*\.zip$/i);
 const androidDl = await download("DyskLab/dysklink-android", /\.apk$/i);
 const desktop = "https://github.com/DyskLab/dysklink-desktop";
 const winDl = await download("DyskLab/dysklink-desktop", /windows.*\.msi$/i);
-const linuxDl = await download("DyskLab/dysklink-desktop", /linux.*\.deb$/i);
 const img = (n: string) => `/images/products/dysklink/${n}.jpg`;
 const f = (n: string) => `/images/products/dysklink/f/${n}.jpg`;
 const shot = t("Tangkapan layar DyskLink", "DyskLink screenshot");
@@ -187,18 +186,18 @@ const privacy = {
     { t: t("Notifikasi dikirim apa adanya", "Notifications are sent as they are"), ok: false, d: t("Kecuali yang ditandai rahasia oleh aplikasinya, jadi kode verifikasi bank atau SMS bisa muncul di Mac. Kirim salinan HP otomatis juga bisa ikut mengirim password yang disalin.", "Except those their app marks as secret, so verification codes from banks or SMS can show on the Mac. Sending phone copies automatically can also send a copied password.") },
     { t: t("Batas keamanan saat ini", "Current security limits"), ok: false, d: t("Kunci privat disimpan sebagai file berizin terbatas, belum di Keychain atau Android Keystore. APK masih build debug, jadi datanya bisa dibaca lewat <code>adb run-as</code>.", "Private keys are stored as files with restricted permissions, not yet in the Keychain or Android Keystore. The APK is a debug build, so its data can be read through <code>adb run-as</code>.") },
   ],
-  note: t(`Semua kode terbuka: ${a(mac, "DyskLink untuk Mac")}, ${a(desktop, "untuk Windows dan Linux")}, dan ${a(android, "DyskLink untuk Android")}.`, `All the code is open: ${a(mac, "DyskLink for Mac")}, ${a(desktop, "for Windows and Linux")}, and ${a(android, "DyskLink for Android")}.`),
+  note: t(`Semua kode terbuka: ${a(mac, "DyskLink untuk Mac")}, ${a(desktop, "untuk Windows")}, dan ${a(android, "DyskLink untuk Android")}.`, `All the code is open: ${a(mac, "DyskLink for Mac")}, ${a(desktop, "for Windows")}, and ${a(android, "DyskLink for Android")}.`),
 };
 const xattr = "<code>xattr -dr com.apple.quarantine /Applications/DyskLink.app</code>";
 const faq = [
   { q: t("Apakah DyskLink gratis?", "Is DyskLink free?"),
-    a: t(`<p>Ya. Gratis dan open source dengan MIT License: tanpa iklan, akun, atau versi berbayar. Kodenya ada di GitHub untuk ${a(mac, "Mac")}, ${a(desktop, "Windows dan Linux")}, dan ${a(android, "Android")}.</p>`, `<p>Yes. It's free and open source under the MIT License: no ads, no account, no paid tier. The code is on GitHub for ${a(mac, "Mac")}, ${a(desktop, "Windows and Linux")}, and ${a(android, "Android")}.</p>`) },
+    a: t(`<p>Ya. Gratis dan open source dengan MIT License: tanpa iklan, akun, atau versi berbayar. Kodenya ada di GitHub untuk ${a(mac, "Mac")}, ${a(desktop, "Windows")}, dan ${a(android, "Android")}.</p>`, `<p>Yes. It's free and open source under the MIT License: no ads, no account, no paid tier. The code is on GitHub for ${a(mac, "Mac")}, ${a(desktop, "Windows")}, and ${a(android, "Android")}.</p>`) },
   { q: t("Perangkat apa saja yang didukung?", "Which devices does it support?"),
-    a: t("<p>Mac dengan macOS 15 atau lebih baru di Apple Silicon, PC Windows 10 atau 11 (64-bit), atau desktop Linux 64-bit (Wayland maupun X11), dan HP Android 8 atau lebih baru. Untuk Mac Intel, bangun dari source. Beberapa fitur butuh versi lebih baru, misalnya suara HP ke Mac butuh Android 10.</p>", "<p>A Mac with macOS 15 or later on Apple Silicon, a Windows 10 or 11 PC (64-bit), or a 64-bit Linux desktop (Wayland or X11), and an Android phone with Android 8 or later. For Intel Macs, build it from source. A few features need more, for example the phone's sound on the Mac needs Android 10.</p>") },
+    a: t("<p>Mac dengan macOS 15 atau lebih baru di Apple Silicon, atau PC Windows 10 atau 11 (64-bit), dan HP Android 8 atau lebih baru. Untuk Mac Intel, bangun dari source. Beberapa fitur butuh versi lebih baru, misalnya suara HP ke Mac butuh Android 10.</p>", "<p>A Mac with macOS 15 or later on Apple Silicon, or a Windows 10 or 11 PC (64-bit), and an Android phone with Android 8 or later. For Intel Macs, build it from source. A few features need more, for example the phone's sound on the Mac needs Android 10.</p>") },
   { q: t("Bisa dipakai dengan iPhone?", "Does it work with an iPhone?"),
     a: t("<p>Tidak. Fitur HP hanya untuk Android. Alat Advanced dan Mac care tetap bisa dipakai di Mac tanpa HP sama sekali.</p>", "<p>No. The phone features are for Android only. The Advanced tools and Mac care still work on a Mac with no phone at all.</p>") },
-  { q: t("Apakah ada untuk Windows dan Linux?", "Is there a Windows and Linux version?"),
-    a: t(`<p>Ada. Sejak versi 1.0 tersedia installer Windows 10/11 (.msi dan .exe) dan paket Linux 64-bit (.deb, .rpm, .tar.gz). Cara pairing sama seperti di Mac, dan butuh DyskLink untuk Android 1.5.0 atau lebih baru. Isinya mencakup clipboard, file, notifikasi, layar dan kamera HP, remote control, Island, Clipboard History, Launcher, PC care, dan (di Windows) kunci keyboard. Versi 1.1 memperbaiki aplikasi yang langsung tertutup di 1.0.0; kalau 1.0.0 tidak mau terbuka, pasang 1.1 di atasnya. Kodenya di ${a(desktop, "GitHub")}.</p>`, `<p>Yes. Since 1.0 there are installers for Windows 10/11 (.msi and .exe) and 64-bit Linux packages (.deb, .rpm, .tar.gz). Pairing works the same as on the Mac, and it needs DyskLink for Android 1.5.0 or later. It covers clipboard, files, notifications, the phone's screen and camera, remote control, the Island, Clipboard History, the Launcher, PC care, and (on Windows) a keyboard lock. Version 1.1 fixes the app closing right away in 1.0.0; if 1.0.0 didn't open, install 1.1 over it. The code is on ${a(desktop, "GitHub")}.</p>`) },
+  { q: t("Apakah ada untuk Windows?", "Is there a Windows version?"),
+    a: t(`<p>Ada. Sejak versi 1.0 tersedia installer Windows 10/11 (.msi dan .exe). Cara pairing sama seperti di Mac, dan butuh DyskLink untuk Android 1.5.0 atau lebih baru. Isinya mencakup clipboard, file, notifikasi, layar dan kamera HP, remote control, Island, Clipboard History, Launcher, PC care, dan kunci keyboard. Versi 1.1 memperbaiki aplikasi yang langsung tertutup di 1.0.0; kalau 1.0.0 tidak mau terbuka, pasang 1.1 di atasnya. Kodenya di ${a(desktop, "GitHub")}.</p>`, `<p>Yes. Since 1.0 there are installers for Windows 10/11 (.msi and .exe). Pairing works the same as on the Mac, and it needs DyskLink for Android 1.5.0 or later. It covers clipboard, files, notifications, the phone's screen and camera, remote control, the Island, Clipboard History, the Launcher, PC care, and a keyboard lock. Version 1.1 fixes the app closing right away in 1.0.0; if 1.0.0 didn't open, install 1.1 over it. The code is on ${a(desktop, "GitHub")}.</p>`) },
   { q: t("Windows memperingatkan aplikasinya. Apa yang harus dilakukan?", "Windows warns about the app. What do I do?"),
     a: t("<p>Installer Windows belum ditandatangani, jadi SmartScreen menampilkan penerbit tidak dikenal. Pilih <b>More info › Run anyway</b>, lalu izinkan DyskLink lewat firewall di jaringan privat supaya HP bisa menemukannya.</p>", "<p>The Windows installer isn't code-signed, so SmartScreen shows an unknown publisher. Choose <b>More info › Run anyway</b>, then allow DyskLink through the firewall on private networks so the phone can find it.</p>") },
   { q: t("macOS menolak membuka aplikasinya. Apa yang harus dilakukan?", "macOS won't open the app. What do I do?"),
@@ -212,15 +211,15 @@ const faq = [
   { q: t("Saya masih pakai versi 0.1. Bagaimana pindah ke 1.0?", "I'm still on version 0.1. How do I move to 1.0?"),
     a: t("<p>Di Mac, pairing, kunci, dan Clipboard History tetap ada, tapi izinkan lagi Accessibility, Screen Recording, dan notifikasi, lalu matikan dan nyalakan <b>Open at login</b>. Di Android, sejak 0.2.0 aplikasinya terpisah: hapus versi lama, pasang versi terbaru, lalu pasangkan lagi.</p>", "<p>On the Mac, pairings, keys, and Clipboard History stay, but allow Accessibility, Screen Recording, and notifications again, and turn <b>Open at login</b> off and on. On Android, it has been a separate app since 0.2.0: uninstall the old one, install the latest, and pair again.</p>") },
   { q: t("Menemukan bug atau punya ide?", "Found a bug or have an idea?"),
-    a: t(`<p>Laporkan lewat GitHub Issues di repo ${a(`${mac}/issues`, "Mac")}, ${a(`${desktop}/issues`, "Windows dan Linux")}, atau ${a(`${android}/issues`, "Android")}. Sertakan versi aplikasi, model HP dan versi Android, serta langkah untuk memunculkannya.</p>`, `<p>Open an issue on GitHub for the ${a(`${mac}/issues`, "Mac app")}, the ${a(`${desktop}/issues`, "Windows and Linux app")}, or the ${a(`${android}/issues`, "Android app")}. Include the app version, the phone model and Android version, and the steps that cause it.</p>`) },
+    a: t(`<p>Laporkan lewat GitHub Issues di repo ${a(`${mac}/issues`, "Mac")}, ${a(`${desktop}/issues`, "Windows")}, atau ${a(`${android}/issues`, "Android")}. Sertakan versi aplikasi, model HP dan versi Android, serta langkah untuk memunculkannya.</p>`, `<p>Open an issue on GitHub for the ${a(`${mac}/issues`, "Mac app")}, the ${a(`${desktop}/issues`, "Windows app")}, or the ${a(`${android}/issues`, "Android app")}. Include the app version, the phone model and Android version, and the steps that cause it.</p>`) },
 ];
 ---
 
 <Base
-  title={t("DyskLink: hubungkan Mac, Windows, Linux, dan HP Android tanpa cloud | DyskLab", "DyskLink: connect your Mac, Windows or Linux PC and Android phone without a cloud | DyskLab")}
+  title={t("DyskLink: hubungkan Mac, Windows, dan HP Android tanpa cloud | DyskLab", "DyskLink: connect your Mac or Windows PC and Android phone without a cloud | DyskLab")}
   description={t(
-    "DyskLink menghubungkan HP Android dengan Mac, Windows, atau Linux lewat Wi-Fi lokal, tanpa cloud dan tanpa akun: kirim file, clipboard, notifikasi, SMS, layar HP, kamera, dan remote control, plus alat tambahan dan perawatan baterai.",
-    "DyskLink connects your Android phone to a Mac, Windows or Linux computer over local Wi-Fi, with no cloud and no account: files, clipboard, notifications, SMS, the phone's screen and camera, and remote control, plus extra tools and battery care.",
+    "DyskLink menghubungkan HP Android dengan Mac atau Windows lewat Wi-Fi lokal, tanpa cloud dan tanpa akun: kirim file, clipboard, notifikasi, SMS, layar HP, kamera, dan remote control, plus alat tambahan dan perawatan baterai.",
+    "DyskLink connects your Android phone to a Mac or Windows computer over local Wi-Fi, with no cloud and no account: files, clipboard, notifications, SMS, the phone's screen and camera, and remote control, plus extra tools and battery care.",
   )}
   path={Astro.url.pathname}
   ogImage="/images/products/dysklink/og.jpg"
@@ -252,8 +251,8 @@ const faq = [
           <h1>{t("Komputer dan Android,", "Computer and Android,")}<br /><span class="glow">{t("satu jaringan.", "one network.")}</span></h1>
           <p class="lede">
             {t(
-              "DyskLink menghubungkan HP Android dengan Mac, Windows, atau Linux lewat Wi-Fi lokal. Tanpa cloud, tanpa akun. File, clipboard, notifikasi, sampai layar HP, langsung dari satu perangkat ke perangkat lain.",
-              "DyskLink connects your Android phone to a Mac, Windows or Linux computer over local Wi-Fi. No cloud, no account. Files, clipboard, notifications, even the phone's screen, straight from one device to the other.",
+              "DyskLink menghubungkan HP Android dengan Mac atau Windows lewat Wi-Fi lokal. Tanpa cloud, tanpa akun. File, clipboard, notifikasi, sampai layar HP, langsung dari satu perangkat ke perangkat lain.",
+              "DyskLink connects your Android phone to a Mac or Windows computer over local Wi-Fi. No cloud, no account. Files, clipboard, notifications, even the phone's screen, straight from one device to the other.",
             )}
           </p>
           <div class="cta">
@@ -265,19 +264,15 @@ const faq = [
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zM11.5 4.3L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z" /></svg>
               {t("Unduh untuk Windows", "Download for Windows")}
             </a>
-            <a class="btn btn-dim" href={linuxDl.url} download={linuxDl.file ?? undefined}>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c-2 0-3 1.8-3 4 0 1.4-.4 2.3-1.2 3.5C6.7 12 5.5 14 5.5 16.5c0 1 .5 1.6 1.4 1.9.6.2.9.8 1.2 1.6.4.9 1.4 1.5 3 1.5h1.8c1.6 0 2.6-.6 3-1.5.3-.8.6-1.4 1.2-1.6.9-.3 1.4-.9 1.4-1.9 0-2.5-1.2-4.5-2.3-6C15.4 9.3 15 8.4 15 7c0-2.2-1-4-3-4Z" /></svg>
-              {t("Unduh untuk Linux", "Download for Linux")}
-            </a>
             <a class="btn btn-dim" href={androidDl.url} download={androidDl.file ?? undefined}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9h10v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V9Zm0-1a5 5 0 0 1 10 0H7Zm3-2.5h.01M14 5.5h.01M4.5 10v5M19.5 10v5M9.5 18v3M14.5 18v3M8 3l1.2 2M16 3l-1.2 2" /></svg>
               {t("Unduh untuk Android", "Download for Android")}
             </a>
           </div>
           <p class="req">
-            {macDl.version && <>Mac {macDl.version} · </>}{winDl.version && <>Windows/Linux {winDl.version} · </>}{androidDl.version && <>Android {androidDl.version} · </>}macOS 15+ Apple Silicon · Windows 10/11 · Linux 64-bit · Android 8+ · {t("Gratis, MIT License", "Free, MIT License")} ·
+            {macDl.version && <>Mac {macDl.version} · </>}{winDl.version && <>Windows {winDl.version} · </>}{androidDl.version && <>Android {androidDl.version} · </>}macOS 15+ Apple Silicon · Windows 10/11 · Android 8+ · {t("Gratis, MIT License", "Free, MIT License")} ·
             <a href={`${mac}/releases`} target="_blank" rel="noopener">{t("rilis Mac", "Mac releases")}<span class="sr">{nt}</span></a> ·
-            <a href={`${desktop}/releases`} target="_blank" rel="noopener">{t("rilis Windows dan Linux", "Windows and Linux releases")}<span class="sr">{nt}</span></a>
+            <a href={`${desktop}/releases`} target="_blank" rel="noopener">{t("rilis Windows", "Windows releases")}<span class="sr">{nt}</span></a>
           </p>
 
           <div class="devices dl-reveal" aria-hidden="true">
@@ -297,8 +292,8 @@ const faq = [
             <p class="kick">{t("Bersama HP", "With your phone")}</p>
             <h2>{t("Semua yang ada di HP,", "Everything on your phone,")}<br />{t("terasa dekat di Mac.", "close at hand on the Mac.")}</h2>
             <p class="body">{t(
-              "Butuh dua aplikasi: DyskLink untuk komputer (Mac, Windows, atau Linux) dan DyskLink untuk Android. Data, layar, dan kontrol HP mati sampai Anda menyalakannya dari HP.",
-              "You need two apps: DyskLink for your computer (Mac, Windows or Linux) and DyskLink for Android. Phone data, screen, and control stay off until you turn them on from the phone.",
+              "Butuh dua aplikasi: DyskLink untuk komputer (Mac atau Windows) dan DyskLink untuk Android. Data, layar, dan kontrol HP mati sampai Anda menyalakannya dari HP.",
+              "You need two apps: DyskLink for your computer (Mac or Windows) and DyskLink for Android. Phone data, screen, and control stay off until you turn them on from the phone.",
             )}</p>
           </div>
 
@@ -390,7 +385,7 @@ const faq = [
             </ul>
           </div>
           <div class="island-gal dl-reveal">
-            <p class="kick">{t("Island di Windows dan Linux", "The Island on Windows and Linux")}</p>
+            <p class="kick">{t("Island di Windows", "The Island on Windows")}</p>
             <div class="island-grid">
               <figure class="island-big"><img src={img("desktop-03-island-music")} width="1600" height="589" alt={`Island: ${t("Musik", "Music")}`} loading="lazy" decoding="async" /><figcaption>{t("Musik", "Music")}</figcaption></figure>
               <figure><img src={img("desktop-01-island-resting")} width="1600" height="252" alt={`Island: ${t("Diam", "Resting")}`} loading="lazy" decoding="async" /><figcaption>{t("Diam", "Resting")}</figcaption></figure>
@@ -457,13 +452,12 @@ const faq = [
               <span class="num">1</span>
               <h3>{t("Pasang di komputer", "Install on the computer")}</h3>
               <p set:html={t(
-                "<b>Mac:</b> ekstrak zip-nya, pindahkan ke Applications, lalu izinkan lewat <b>Privacy &amp; Security › Open Anyway</b>.<br><b>Windows:</b> jalankan <code>.msi</code> atau setup <code>.exe</code>. Kalau muncul peringatan, pilih <b>More info › Run anyway</b>.<br><b>Linux:</b> pasang <code>.deb</code>, <code>.rpm</code>, atau ekstrak <code>.tar.gz</code>.",
-                "<b>Mac:</b> unzip it, move it to Applications, then allow it under <b>Privacy &amp; Security › Open Anyway</b>.<br><b>Windows:</b> run the <code>.msi</code> or the setup <code>.exe</code>. If a warning appears, choose <b>More info › Run anyway</b>.<br><b>Linux:</b> install the <code>.deb</code> or <code>.rpm</code>, or unpack the <code>.tar.gz</code>.",
+                "<b>Mac:</b> ekstrak zip-nya, pindahkan ke Applications, lalu izinkan lewat <b>Privacy &amp; Security › Open Anyway</b>.<br><b>Windows:</b> jalankan <code>.msi</code> atau setup <code>.exe</code>. Kalau muncul peringatan, pilih <b>More info › Run anyway</b>.",
+                "<b>Mac:</b> unzip it, move it to Applications, then allow it under <b>Privacy &amp; Security › Open Anyway</b>.<br><b>Windows:</b> run the <code>.msi</code> or the setup <code>.exe</code>. If a warning appears, choose <b>More info › Run anyway</b>.",
               )} />
               <span class="dls">
                 <a href={macDl.url} download={macDl.file ?? undefined}>macOS →</a>
                 <a href={winDl.url} download={winDl.file ?? undefined}>Windows →</a>
-                <a href={linuxDl.url} download={linuxDl.file ?? undefined}>Linux →</a>
               </span>
             </li>
             <li class="card dl-reveal">
@@ -480,15 +474,15 @@ const faq = [
             </li>
           </ol>
           <p class="note dl-reveal">{t(
-            "DyskLink masih tahap awal, jadi mungkin ada yang belum mulus. Build Mac memakai sertifikat self-signed, installer Windows belum ditandatangani, dan APK Android masih build debug. Versi Windows dan Linux masih baru dan belum dicoba di banyak PC. Untuk Mac Intel, bangun dari source.",
-            "DyskLink is in early development, so expect rough edges. The Mac build uses a self-signed certificate, the Windows installer isn't code-signed, and the Android APK is still a debug build. The Windows and Linux version is still new and hasn't been tested on many PCs yet. For Intel Macs, build from source.",
+            "DyskLink masih tahap awal, jadi mungkin ada yang belum mulus. Build Mac memakai sertifikat self-signed, installer Windows belum ditandatangani, dan APK Android masih build debug. Versi Windows masih baru dan belum dicoba di banyak PC. Untuk Mac Intel, bangun dari source.",
+            "DyskLink is in early development, so expect rough edges. The Mac build uses a self-signed certificate, the Windows installer isn't code-signed, and the Android APK is still a debug build. The Windows version is still new and hasn't been tested on many PCs yet. For Intel Macs, build from source.",
           )}</p>
         </div>
       </section>
 
       <Privacy lang={lang} id="privasi" summary={privacy.summary} items={privacy.items} note={privacy.note} />
       <Faq lang={lang} id="faq" items={faq} />
-      <Support lang={lang} product="DyskLink" repos={[{ label: "Mac", repo: "DyskLab/dysklink-mac" }, { label: "Windows/Linux", repo: "DyskLab/dysklink-desktop" }, { label: "Android", repo: "DyskLab/dysklink-android" }]} />
+      <Support lang={lang} product="DyskLink" repos={[{ label: "Mac", repo: "DyskLab/dysklink-mac" }, { label: "Windows", repo: "DyskLab/dysklink-desktop" }, { label: "Android", repo: "DyskLab/dysklink-android" }]} />
     </main>
 
     <ProductFooter lang={lang} current="dysklink" />
