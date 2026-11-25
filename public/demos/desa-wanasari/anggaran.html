@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anggaran desa: Desa Wanasari</title>
+<meta name="description" content="Pemakaian dan sumber APBDes Wanasari tahun 2026.">
+<meta name="theme-color" content="#f6f7f5">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="anggaran">
+<a class="lewati" href="#utama">Langsung ke isi</a>
+
+<header class="atas">
+  <div class="wadah">
+    <a class="merek" href="index.html">Desa Wanasari</a>
+    <nav class="navlebar" aria-label="Menu utama">
+      <a href="layanan.html">Layanan surat</a>
+      <a href="pengumuman.html">Pengumuman</a>
+      <a href="kabar.html">Kabar</a>
+      <a href="produk.html">Produk warga</a>
+      <a class="aktif" aria-current="page" href="anggaran.html">Anggaran</a>
+      <a href="profil.html">Profil</a>
+      <a href="kontak.html">Kontak</a>
+    </nav>
+    <a class="tombol-kecil" href="kontak.html">Hubungi desa</a>
+  </div>
+</header>
+
+<main id="utama">
+<section id="anggaran">
+    <div class="wadah">
+      <h1>Ke mana uang desa dipakai</h1>
+      <div class="pilih-tahun"><label for="tahun" style="font-weight:600">Tahun anggaran</label><select id="tahun"></select></div>
+      <div id="isiAnggaran">
+        <p class="total" id="tAnggaran"></p>
+        <p class="total-label" id="tAnggaranLabel"></p>
+        <dl class="angka-total">
+          <div><dt>Pendapatan</dt><dd id="aPend"></dd></div>
+          <div><dt>Belanja (anggaran)</dt><dd id="aBel"></dd></div>
+          <div><dt>Belanja terealisasi</dt><dd id="aReal"></dd></div>
+          <div><dt>Terserap</dt><dd id="aPersen"></dd></div>
+        </dl>
+        <div class="grid-grafik">
+          <div><h3 style="margin-top:28px">Belanja per bidang</h3><div class="grafik" id="gBatang"></div></div>
+          <div><h3 style="margin-top:28px">Sumber pendapatan</h3><div class="grafik" id="gDonat"></div>
+            <h3 style="margin-top:28px">Perbandingan antartahun</h3><div class="grafik" id="gTren"></div></div>
+        </div>
+        <div id="tabelAnggaran"></div>
+        <p class="catatan">Realisasi tahun berjalan dicatat sampai laporan terakhir. Angka bisa diubah di halaman admin demo.</p>
+      </div>
+    </div>
+  </section>
+<section id="kegiatan" class="panel-hijau">
+<div class="wadah">
+<h2>Kegiatan pembangunan 2026</h2>
+<p class="x-lead">Rincian bidang pembangunan desa senilai Rp 638.500.000.</p>
+<div class="x-tw"><table class="x-t"><thead><tr><th scope="col">Kegiatan</th><th scope="col">Volume</th><th scope="col">Biaya</th><th scope="col">Keadaan</th></tr></thead><tbody><tr><td data-label="Kegiatan">Jalan usaha tani blok timur</td><td data-label="Volume">1,2 km</td><td data-label="Biaya">Rp 186.000.000</td><td data-label="Keadaan"><span class="x-lg">Selesai</span></td></tr><tr><td data-label="Kegiatan">Saluran irigasi Krajan</td><td data-label="Volume">420 meter</td><td data-label="Biaya">Rp 142.500.000</td><td data-label="Keadaan"><span class="x-lg">Selesai</span></td></tr><tr><td data-label="Kegiatan">Talud Dusun Tegalsari</td><td data-label="Volume">310 meter</td><td data-label="Biaya">Rp 96.000.000</td><td data-label="Keadaan"><span class="x-lg">Berjalan</span></td></tr><tr><td data-label="Kegiatan">Perbaikan gedung Polindes</td><td data-label="Volume">1 gedung</td><td data-label="Biaya">Rp 88.000.000</td><td data-label="Keadaan"><span class="x-lg">Berjalan</span></td></tr><tr><td data-label="Kegiatan">Sumur bor Dusun Sumberan</td><td data-label="Volume">2 titik</td><td data-label="Biaya">Rp 76.000.000</td><td data-label="Keadaan"><span class="x-lg">Selesai</span></td></tr><tr><td data-label="Kegiatan">Lampu jalan tenaga surya</td><td data-label="Volume">30 titik</td><td data-label="Biaya">Rp 50.000.000</td><td data-label="Keadaan"><span class="x-lg nanti">Mulai Desember</span></td></tr></tbody></table></div>
+</div>
+</section>
+<section id="warga" class="panel-hijau">
+<div class="wadah">
+<h2>Dana untuk warga</h2>
+<p class="x-lead">Rincian dua bidang yang langsung diterima warga.</p>
+<div class="x-k tiga"><div><h3>Posyandu dan gizi</h3><p>Makanan tambahan balita, timbangan digital, dan insentif 25 kader.</p><p class="x-info">Rp 78.400.000</p></div><div><h3>Modal BUMDes</h3><p>Rak jemur, kemasan kopi, dan tambahan modal kios.</p><p class="x-info">Rp 60.000.000</p></div><div><h3>Pelatihan petani</h3><p>Sekolah lapang padi, sangrai kopi, dan pupuk organik.</p><p class="x-info">Rp 46.500.000</p></div><div><h3>Kelompok pemuda dan perempuan</h3><p>Pelatihan menjahit dan perpustakaan keliling.</p><p class="x-info">Rp 29.200.000</p></div><div><h3>BLT Dana Desa</h3><p>28 keluarga, Rp 300.000 per bulan selama setahun.</p><p class="x-info">Rp 100.800.000</p></div><div><h3>Cadangan bencana</h3><p>Dipakai saat banjir, longsor, atau wabah.</p><p class="x-info">Rp 20.200.000</p></div></div>
+</div>
+</section>
+<section id="awasi" class="panel-hijau">
+<div class="wadah">
+<h2>Cara warga ikut mengawasi</h2>
+
+<div class="tanya"><details><summary>Di mana bisa melihat dokumen lengkap?</summary><p>Dokumen APBDes dan laporan realisasi tersedia di kantor desa. Baliho ringkasannya dipasang di depan balai desa.</p></details><details><summary>Bagaimana cara mengusulkan kegiatan?</summary><p>Sampaikan di musyawarah dusun. Usulan dirangkum dalam musyawarah desa setiap Januari.</p></details><details><summary>Kalau menemukan pekerjaan yang tidak sesuai?</summary><p>Laporkan kepada Badan Permusyawaratan Desa atau Sekretaris Desa, sebaiknya dengan foto dan lokasinya.</p></details><details><summary>Siapa yang memeriksa keuangan desa?</summary><p>Laporan diperiksa oleh pemerintah kecamatan dan Inspektorat Kabupaten setiap tahun.</p></details></div>
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="wadah">
+    <p>Situs contoh. Tiket, pengumuman, dan data lain yang Anda ubah tersimpan di peramban ini saja. Nama desa, orang, angka anggaran, jadwal, harga, dan kontak adalah data acak, dan foto hanya ilustrasi dari tempat lain. Hanya nomor darurat nasional yang asli. <a href="admin.html">Buka admin demo</a>.</p>
+    <details>
+      <summary>Sumber foto</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Desa-Nglanggeran.jpg">Bentang desa</a>, Ainandoo, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gotong_Royong_adalah_warisan_budaya.jpg">Gotong royong</a>, Andesta Saputra, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Farmer_harvesting_rice,_Kampung_Rawa_2014-06-20.jpg">Panen padi</a>, Crisco 1492, CC BY-SA 3.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gotong_Royong_Pindah_Rumah.jpg">Pindah rumah</a>, Herusutimbul, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kopi_Robusta_Banjarnegara.jpg">Petani kopi</a>, Haridi123, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kegiatan_Posyandu_Desa_Koto_Cerenti.jpg">Posyandu</a>, Refki Assadiky, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:20180707_Sidetapa_anyam_bambu.jpg">Perajin bambu</a>, Dinata Juan, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kue_Jajanan_Pasar.jpg">Jajan pasar</a>, Nopian8, CC BY-SA 4.0</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+<nav class="navbawah" aria-label="Menu cepat">
+  <a href="index.html">Beranda</a>
+  <a href="layanan.html">Surat</a>
+  <a href="pengumuman.html">Info</a>
+  <a href="kabar.html">Kabar</a>
+  <button type="button" id="tLainnya" aria-expanded="false" aria-controls="lainnya">Lainnya</button>
+</nav>
+<div class="lainnya" id="lainnya" hidden>
+  <a href="produk.html">Produk warga</a>
+  <a class="aktif" aria-current="page" href="anggaran.html">Anggaran desa</a>
+  <a href="profil.html">Profil desa</a>
+  <a href="kontak.html">Kontak</a>
+  <a href="admin.html">Admin demo</a>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

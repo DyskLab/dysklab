@@ -1,0 +1,309 @@
+---
+/*
+  /demo/ (and /en/demo/): a gallery of clickable website demos for the custom-software
+  service, in the shared home look (Site layout, SiteNav, SiteFooter). Each card opens a
+  viewer dialog with the demo in an iframe, a desktop / tablet / phone switch, "open in a
+  new tab", fullscreen, and the demo logins with copy buttons. Demos live in
+  public/demos/<slug>/ and are listed in src/data/demos.ts.
+*/
+import Base from "../layouts/Site.astro";
+import SiteNav from "../components/SiteNav.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import Icon from "../components/Icon.astro";
+import content from "../data/content";
+import { demos } from "../data/demos";
+import { waNumber } from "../lib/mask";
+import { href, pick, ui, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = ui[lang];
+const s = <T,>(id: T, en: T): T => pick(lang, { id, en });
+const home = href(lang, "/");
+const wa = (text: string) => `https://wa.me/${waNumber(content.whatsapp)}?text=${encodeURIComponent(text)}`;
+
+const kinds = {
+  website: s("Website", "Website"),
+  system: s("Sistem", "System"),
+  mobile: s("Aplikasi HP", "Mobile app"),
+  landing: s("Landing page", "Landing page"),
+} as const;
+const counts = Object.fromEntries(Object.keys(kinds).map((k) => [k, demos.filter((d) => d.kind === k).length]));
+
+const items = demos.map((d) => ({
+  ...d,
+  url: `/demos/${d.slug}/index.html`,
+  titleL: pick(lang, d.title),
+  textL: pick(lang, d.text),
+  loginsL: d.logins.map((l) => ({ label: pick(lang, l.label), value: l.value })),
+}));
+---
+
+<Base
+  title={s("Demo website dan aplikasi yang bisa dicoba | DyskLab", "Website and app demos you can try | DyskLab")}
+  description={s(
+    `${demos.length} demo website, landing page, sistem, dan aplikasi HP yang bisa langsung diklik: toko online, booking, klinik, kasir, sekolah, desa, travel, wedding, dan lainnya. Contoh hasil kerja DyskLab untuk perusahaan dan UMKM.`,
+    `${demos.length} clickable website, landing page, system and mobile demos: online shops, booking, clinics, point of sale, schools, villages, travel, weddings and more. Examples of what DyskLab builds for companies and small businesses.`,
+  )}
+  path={Astro.url.pathname}
+  ogTitle={s("Demo DyskLab", "DyskLab demos")}
+>
+  <div id="top">
+    <SiteNav
+      lang={lang}
+      links={[
+        { href: `${home}#produk`, label: s("Produk", "Products") },
+        { href: `${home}#layanan`, label: s("Untuk perusahaan", "For companies") },
+        { href: "#demo", label: "Demo" },
+        { href: `${home}#faq`, label: "FAQ" },
+      ]}
+      cta={{ href: wa(s("Halo DyskLab, saya ingin konsultasi pembuatan sistem.", "Hello DyskLab, I'd like to talk about a custom system.")), label: s("Konsultasi", "Consult"), external: true }}
+      github="https://github.com/DyskLab"
+    />
+
+    <main>
+      <section class="hero dl-gridbg">
+        <div class="dl-wrap dl-head-c">
+          <p class="dl-eyebrow"><b>{demos.length}</b> {s("demo siap dicoba", "demos to try")}</p>
+          <h1 class="dl-h1">{s("Coba dulu,", "Try it first,")}<br /><span class="dl-hl">{s("seperti situs sungguhan.", "like the real thing.")}</span></h1>
+          <p class="dl-lede">{s(
+            "Klik salah satu demo lalu pakai seperti biasa: buka menu, pindah halaman, isi formulir, dan masuk ke panel admin. Data hanya tersimpan di browser Anda.",
+            "Open any demo and use it as you would the real site: browse the menu, move between pages, fill in forms and sign in to the admin panel. Data stays in your browser only.",
+          )}</p>
+          <div class="filter" role="group" aria-label={s("Saring demo", "Filter demos")}>
+            <button type="button" class="is-on" data-filter="all" aria-pressed="true">{s("Semua", "All")} <i>{demos.length}</i></button>
+            {Object.entries(kinds).map(([k, l]) => <button type="button" data-filter={k} aria-pressed="false">{l} <i>{counts[k]}</i></button>)}
+          </div>
+        </div>
+      </section>
+
+      <section id="demo" class="dl-sec dl-sec-tight">
+        <div class="dl-wrap">
+          <ul class="grid">
+            {items.map((d) => (
+              <li data-kind={d.kind} class="dl-reveal">
+                <button
+                  type="button"
+                  class="card dl-card dl-card-hover"
+                  data-url={d.url}
+                  data-title={d.titleL}
+                  data-kind={d.kind}
+                  data-admin={d.admin ?? ""}
+                  data-logins={JSON.stringify(d.loginsL)}
+                >
+                  <span class:list={["thumb", { "thumb-m": d.kind === "mobile" }]}>
+                    <img src={`/images/demos/${d.slug}.jpg`} alt="" width="900" height="563" loading="lazy" decoding="async" />
+                    <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4v16l13-8Z" /></svg></span>
+                  </span>
+                  <span class="txt">
+                    <small>{kinds[d.kind]}</small>
+                    <b>{d.titleL}</b>
+                    <em>{d.textL}</em>
+                    <span class="go">{s("Coba demo", "Try the demo")} <u aria-hidden="true">→</u></span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <div class="ask dl-card">
+            <div>
+              <h2>{s("Butuh demo untuk bidang usaha Anda?", "Need a demo for your line of business?")}</h2>
+              <p>{s("Ceritakan alur kerja Anda. DyskLab bisa membuatkan demo yang lebih dekat dengan kebutuhan, sebelum pengerjaan dimulai.", "Tell us how you work. DyskLab can build a demo closer to what you need before the real work starts.")}</p>
+            </div>
+            <a class="dl-btn dl-btn-wa" href={wa(s("Halo DyskLab, saya ingin minta demo khusus.", "Hello DyskLab, I'd like a custom demo."))} target="_blank" rel="noopener">
+              {s("Minta lewat WhatsApp", "Ask on WhatsApp")}<span class="dl-arr" aria-hidden="true"><Icon name="whatsapp" size={19} /></span><span class="dl-sr">{t.newTab}</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="viewer" data-viewer aria-labelledby="vw-title">
+      <div class="vw-bar">
+        <span class="vw-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <b id="vw-title" data-vw-title></b>
+        <div class="vw-dev" role="group" aria-label={s("Ukuran layar", "Screen size")}>
+          <button type="button" data-dev="desktop" aria-pressed="true" title={s("Komputer", "Desktop")}><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5" /><path d="M8 20h8M12 16v4" /></svg><span class="dl-sr">{s("Komputer", "Desktop")}</span></button>
+          <button type="button" data-dev="tablet" aria-pressed="false" title="Tablet"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" /><path d="M11 18h2" /></svg><span class="dl-sr">Tablet</span></button>
+          <button type="button" data-dev="phone" aria-pressed="false" title={s("HP", "Phone")}><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2" /><path d="M11 18h2" /></svg><span class="dl-sr">{s("HP", "Phone")}</span></button>
+        </div>
+        <a class="vw-btn" data-vw-open href="#" target="_blank" rel="noopener">{s("Tab baru", "New tab")} ↗<span class="dl-sr">{t.newTab}</span></a>
+        <button type="button" class="vw-btn vw-hide-s" data-vw-full>{s("Layar penuh", "Fullscreen")}</button>
+        <button type="button" class="vw-x" data-vw-close aria-label={s("Tutup", "Close")}>×</button>
+      </div>
+      <div class="vw-body">
+        <div class="vw-stage"><div class="vw-frame" data-vw-frame><iframe title="Demo" data-vw-iframe></iframe></div></div>
+        <aside class="vw-side" data-vw-side>
+          <p class="vw-h">{s("Akun demo", "Demo logins")}</p>
+          <p class="vw-admin" data-vw-admin></p>
+          <ul data-vw-logins></ul>
+          <p class="vw-note">{s("Semua data hanya tersimpan di browser ini dan bisa direset kapan saja.", "All data stays in this browser and can be reset at any time.")}</p>
+        </aside>
+      </div>
+    </dialog>
+
+    <SiteFooter lang={lang} />
+  </div>
+</Base>
+
+<script define:vars={{ L: { copy: s("Salin", "Copy"), copied: s("Tersalin", "Copied"), admin: s("Panel admin:", "Admin panel:"), none: s("Tidak perlu login. Langsung coba.", "No sign-in needed. Just try it.") } }}>
+  const dlg = document.querySelector("[data-viewer]");
+  const frame = dlg.querySelector("[data-vw-frame]");
+  const iframe = dlg.querySelector("[data-vw-iframe]");
+  const open = dlg.querySelector("[data-vw-open]");
+  const list = dlg.querySelector("[data-vw-logins]");
+  const adminP = dlg.querySelector("[data-vw-admin]");
+  const devs = dlg.querySelectorAll("[data-dev]");
+  let base = "";
+
+  const setDev = (d) => {
+    frame.dataset.dev = d;
+    devs.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.dev === d)));
+  };
+  devs.forEach((b) => b.addEventListener("click", () => setDev(b.dataset.dev)));
+
+  document.querySelectorAll(".card[data-url]").forEach((c) =>
+    c.addEventListener("click", () => {
+      base = c.dataset.url;
+      dlg.querySelector("[data-vw-title]").textContent = c.dataset.title;
+      iframe.src = base;
+      open.href = base;
+      const logins = JSON.parse(c.dataset.logins || "[]");
+      const admin = c.dataset.admin;
+      adminP.replaceChildren();
+      if (admin) {
+        const a = document.createElement("a");
+        a.href = admin.startsWith("#") ? base + admin : base.replace(/index\.html$/, admin);
+        a.target = "vw-demo";
+        a.textContent = admin;
+        a.addEventListener("click", (e) => { e.preventDefault(); iframe.src = a.href; });
+        adminP.append(L.admin + " ", a);
+      }
+      list.replaceChildren(
+        ...(logins.length ? logins : [{ label: "", value: "" }]).map((l) => {
+          const li = document.createElement("li");
+          if (!l.value) { li.className = "vw-none"; li.textContent = L.none; return li; }
+          const k = document.createElement("span"); k.textContent = l.label;
+          const v = document.createElement("code"); v.textContent = l.value;
+          const b = document.createElement("button"); b.type = "button"; b.textContent = L.copy;
+          b.addEventListener("click", async () => {
+            try { await navigator.clipboard.writeText(l.value); } catch {}
+            b.textContent = L.copied; setTimeout(() => (b.textContent = L.copy), 1400);
+          });
+          li.append(k, v, b);
+          return li;
+        }),
+      );
+      setDev(c.dataset.kind === "mobile" || innerWidth < 720 ? "phone" : "desktop");
+      dlg.showModal();
+      document.documentElement.style.overflow = "hidden";
+    }),
+  );
+
+  const close = () => dlg.close();
+  dlg.querySelector("[data-vw-close]").addEventListener("click", close);
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) close(); });
+  dlg.addEventListener("close", () => {
+    iframe.src = "about:blank";
+    document.documentElement.style.overflow = "";
+    if (document.fullscreenElement) document.exitFullscreen();
+  });
+  dlg.querySelector("[data-vw-full]").addEventListener("click", () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else dlg.requestFullscreen?.();
+  });
+
+  /* filter */
+  const btns = document.querySelectorAll("[data-filter]");
+  btns.forEach((b) =>
+    b.addEventListener("click", () => {
+      const f = b.dataset.filter;
+      btns.forEach((x) => { x.classList.toggle("is-on", x === b); x.setAttribute("aria-pressed", String(x === b)); });
+      document.querySelectorAll(".grid > li").forEach((li) => { li.hidden = f !== "all" && li.dataset.kind !== f; });
+    }),
+  );
+</script>
+
+<style>
+  .hero { padding: 88px 0 40px; overflow: hidden; }
+  .filter { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 32px; padding: 6px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); }
+  .filter button { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; border: 0; background: transparent; color: var(--text); font: 600 14px/1 var(--font); cursor: pointer; transition: background 0.2s, color 0.2s; }
+  .filter button i { font-style: normal; font-size: 12px; padding: 2px 7px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--muted); }
+  .filter button:hover { color: var(--ink); }
+  .filter button.is-on { background: var(--accent); color: var(--on-accent); }
+  .filter button.is-on i { background: rgba(255, 255, 255, 0.22); color: inherit; }
+
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .grid > li[hidden] { display: none; }
+  .card { all: unset; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; width: 100%; overflow: hidden; cursor: pointer; border-radius: var(--radius); border: 1px solid var(--line); background: var(--card); transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+  .card:hover { border-color: var(--accent-line); transform: translateY(-3px); box-shadow: var(--shadow); }
+  .card:focus-visible { outline: 2px solid var(--accent-hi); outline-offset: 3px; }
+  .thumb { position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--card-2); border-bottom: 1px solid var(--line); }
+  .thumb img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.5s ease; }
+  .thumb-m img { object-fit: contain; background: radial-gradient(circle at 50% 40%, var(--accent-soft), transparent 70%); }
+  .card:hover .thumb img { transform: scale(1.04); }
+  .play { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(10, 12, 16, 0.35); opacity: 0; transition: opacity 0.2s; }
+  .play svg { width: 54px; height: 54px; padding: 15px; border-radius: 50%; background: var(--accent); fill: #fff; box-sizing: border-box; box-shadow: 0 12px 30px -10px var(--accent); }
+  .card:hover .play, .card:focus-visible .play { opacity: 1; }
+  .txt { display: flex; flex-direction: column; flex: 1; padding: 18px 20px 20px; }
+  .txt small { font: 700 11.5px/1.4 var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-hi); }
+  .txt b { margin-top: 6px; color: var(--ink); font-size: 18px; line-height: 1.3; letter-spacing: -0.01em; }
+  .txt em { margin-top: 8px; font-style: normal; font-size: 14.5px; line-height: 1.55; color: var(--text); flex: 1; }
+  .go { margin-top: 16px; font-weight: 700; font-size: 14px; color: var(--ink); }
+  .go u { text-decoration: none; display: inline-block; transition: transform 0.2s; }
+  .card:hover .go u { transform: translateX(3px); }
+
+  .ask { margin-top: 48px; padding: 32px 36px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
+  .ask h2 { font-size: clamp(22px, 2.6vw, 28px); font-weight: 800; }
+  .ask p { margin: 8px 0 0; max-width: 620px; }
+
+  /* viewer */
+  .viewer { width: min(1400px, 96vw); height: min(900px, 92vh); max-width: none; max-height: none; padding: 0; border: 1px solid var(--line-2); border-radius: 18px; background: var(--bg-2); color: var(--text); box-shadow: 0 50px 120px -30px rgba(0, 0, 0, 0.8); overflow: hidden; }
+  .viewer[open] { display: flex; flex-direction: column; }
+  .viewer::backdrop { background: rgba(6, 8, 12, 0.7); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  .viewer:fullscreen { width: 100vw; height: 100vh; border-radius: 0; border: 0; }
+  .vw-bar { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--card); }
+  .vw-dots { display: inline-flex; gap: 6px; }
+  .vw-dots i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+  .vw-dots i:nth-child(2) { background: #febc2e; } .vw-dots i:nth-child(3) { background: #28c840; }
+  .vw-bar b { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); font-size: 14.5px; }
+  .vw-dev { display: inline-flex; padding: 3px; gap: 2px; border-radius: 10px; background: var(--bg-2); border: 1px solid var(--line); }
+  .vw-dev button { display: grid; place-items: center; width: 34px; height: 30px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); cursor: pointer; }
+  .vw-dev button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+  .vw-dev svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+  .vw-btn { padding: 7px 12px; border-radius: 9px; border: 1px solid var(--line-2); background: transparent; color: var(--ink); font: 600 13px/1.2 var(--font); text-decoration: none; cursor: pointer; white-space: nowrap; }
+  .vw-btn:hover { border-color: var(--accent-line); }
+  .vw-x { width: 34px; height: 34px; border-radius: 9px; border: 0; background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; }
+  .vw-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 260px; }
+  .vw-stage { min-width: 0; min-height: 0; display: grid; place-items: center; padding: 14px; overflow: auto; background: repeating-linear-gradient(45deg, transparent 0 10px, var(--grid) 10px 11px); }
+  .vw-frame { width: 100%; height: 100%; border-radius: 10px; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px var(--line-2); transition: width 0.3s, height 0.3s, border-radius 0.3s; }
+  .vw-frame[data-dev="tablet"] { width: 820px; max-width: 100%; height: min(100%, 1080px); border-radius: 22px; box-shadow: 0 0 0 10px #0b0d10, 0 0 0 11px var(--line-2); }
+  .vw-frame[data-dev="phone"] { width: 390px; max-width: 100%; height: min(100%, 820px); border-radius: 34px; box-shadow: 0 0 0 10px #0b0d10, 0 0 0 11px var(--line-2); }
+  .vw-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+  .vw-side { padding: 18px; border-left: 1px solid var(--line); background: var(--card); overflow: auto; }
+  .vw-h { margin: 0 0 10px; font: 700 12px/1.4 var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .vw-admin { margin: 0 0 12px; font-size: 13.5px; }
+  .vw-admin:empty { display: none; }
+  .vw-admin :global(a) { color: var(--accent-hi); font-family: var(--mono); }
+  .vw-side ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .vw-side :global(li) { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; padding: 10px 12px; border-radius: 10px; background: var(--bg-2); border: 1px solid var(--line); }
+  .vw-side :global(li span) { grid-column: 1 / -1; font-size: 12px; color: var(--muted); }
+  .vw-side :global(li code) { color: var(--ink); font-size: 14.5px; overflow-wrap: anywhere; }
+  .vw-side :global(li button) { padding: 3px 9px; border-radius: 7px; border: 1px solid var(--line-2); background: transparent; color: var(--ink); font: 600 12px/1.3 var(--font); cursor: pointer; }
+  .vw-side :global(li.vw-none) { display: block; font-size: 14px; }
+  .vw-note { margin: 14px 0 0; font-size: 12.5px; color: var(--muted); }
+
+  @media (max-width: 1020px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    .vw-body { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+    .vw-side { border-left: 0; border-top: 1px solid var(--line); max-height: 34vh; }
+  }
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    .ask { padding: 24px; }
+    .viewer { width: 100vw; height: 100dvh; border-radius: 0; border: 0; }
+    .vw-dots, .vw-hide-s, .vw-dev { display: none; }
+    .vw-stage { padding: 0; }
+    .vw-frame, .vw-frame[data-dev] { width: 100%; height: 100%; border-radius: 0; box-shadow: none; }
+  }
+</style>

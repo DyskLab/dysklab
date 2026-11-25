@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panggung Kita: tiket event (demo)</title>
+<meta name="description" content="Demo penjualan tiket event: pilih tiket dan kursi, bayar simulasi, e-tiket QR, check-in dan panel penyelenggara.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#app">Lewati ke konten</a>
+<div id="shell"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t" aria-hidden="true">
+<div class="sh-h"><h2 id="sheet-t"></h2><button class="ibtn" type="button" data-act="sheet-close" aria-label="Tutup panel">&times;</button></div>
+<div class="sh-b" id="sheet-b"></div>
+</aside>
+<noscript><p style="padding:20px">Demo ini memerlukan JavaScript.</p></noscript>
+<script src="core.js"></script>
+<script src="shop.js"></script>
+<script src="admin.js"></script>
+<script>boot();</script>
+</body>
+</html>

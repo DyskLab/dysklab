@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Galeri: Desa Tirta Asri</title>
+<meta name="description" content="Foto sudut-sudut Desa Tirta Asri.">
+<meta name="theme-color" content="#0f2a22">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-halaman="galeri">
+<a class="lewati" href="#utama">Langsung ke isi</a>
+
+<header class="atas">
+  <div class="dalam">
+    <a class="merek" href="index.html">Tirta Asri</a>
+    <button id="tMenu" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu" aria-label="Menu utama"><a href="index.html#sehari">Sehari</a><a href="aktivitas.html">Aktivitas</a><a href="menginap.html">Menginap</a><a href="galeri.html" class="aktif" aria-current="page">Galeri</a><a href="info.html">Info</a><a href="cek.html">Cek booking</a><a href="kunjungan.html#keranjang">Rencanakan<span class="kbadge" data-kbadge hidden>0</span></a></nav>
+  </div>
+</header>
+
+<main id="utama">
+<section id="galeri">
+    <div class="wadah">
+      <h1>Sudut-sudut desa</h1>
+      <p class="x-lead">Foto ilustrasi dari tempat serupa. Pilih kategori, ketuk foto untuk memperbesar, lalu pakai tombol panah di papan ketik untuk pindah foto.</p>
+      <div class="filter-g" id="filterG" role="group" aria-label="Filter foto"></div>
+      <p class="petunjuk" id="jmlG" role="status"></p>
+      <div class="grid-g" id="gridG"></div>
+    </div>
+  </section>
+<dialog id="lb" aria-label="Foto diperbesar">
+  <figure><img id="lbImg" alt="" width="960" height="640"></figure>
+  <div class="bawah-dialog">
+    <p id="lbCap"></p>
+    <p id="lbHitung" aria-live="polite"></p>
+    <div class="kendali"><button id="lbPrev" type="button">Sebelumnya</button><button id="lbNext" type="button">Berikutnya</button><button id="lbTutup" type="button">Tutup</button></div>
+    <p style="color:var(--redup);font-size:.8125rem">Panah kiri dan kanan untuk pindah foto, Esc untuk menutup.</p>
+  </div>
+</dialog>
+<section id="cerita">
+<div class="wadah">
+<h2>Cerita di balik foto</h2>
+
+<div class="x-f"><figure><img loading="lazy" width="960" height="1280" src="img/sawah-hutan.jpg" alt="Sawah berundak di kaki bukit berhutan"></figure><div><h3>Air yang datang dari hutan</h3><p class="r">Hutan di atas desa tidak boleh ditebang. Dari sanalah air mengalir melalui terowongan kecil ke sawah paling atas, lalu turun petak demi petak. Giliran air disepakati bersama dalam rapat subak setiap bulan.</p></div></div><div style="height:36px"></div><div class="x-f balik"><figure><img loading="lazy" width="960" height="1280" src="img/pura.jpg" alt="Bangunan pura di sudut desa"></figure><div><h3>Pura di sudut desa</h3><p class="r">Pura ini dipakai warga untuk upacara. Tamu boleh melihat dari luar, dan bisa masuk ke halaman jika memakai kain dan didampingi pemandu. Saat ada upacara, pengelola akan memberi tahu lebih awal.</p></div></div>
+</div>
+</section>
+<section id="titik" class="alt">
+<div class="wadah">
+<h2>Tempat dan jam terbaik memotret</h2>
+<p class="x-lead">Saran dari pemandu desa berdasarkan arah cahaya.</p>
+<div class="x-tw"><table class="x-t"><thead><tr><th scope="col">Tempat</th><th scope="col">Jam terbaik</th><th scope="col">Yang bisa didapat</th></tr></thead><tbody><tr><td data-label="Tempat">Bukit timur</td><td data-label="Jam terbaik">05.45 sampai 06.30</td><td data-label="Yang bisa didapat">Kabut tipis di atas terasering</td></tr><tr><td data-label="Tempat">Jalan utama desa</td><td data-label="Jam terbaik">07.00 sampai 08.00</td><td data-label="Yang bisa didapat">Rumah adat tanpa keramaian</td></tr><tr><td data-label="Tempat">Sawah Subak Tengah</td><td data-label="Jam terbaik">08.00 sampai 09.30</td><td data-label="Yang bisa didapat">Petani bekerja dan pantulan air</td></tr><tr><td data-label="Tempat">Sanggar tari</td><td data-label="Jam terbaik">16.00 sampai 17.00</td><td data-label="Yang bisa didapat">Cahaya sore di antara pepohonan</td></tr><tr><td data-label="Tempat">Lembah barat</td><td data-label="Jam terbaik">17.15 sampai 18.00</td><td data-label="Yang bisa didapat">Matahari terbenam di balik bukit</td></tr></tbody></table></div>
+</div>
+</section>
+<section id="etika">
+<div class="wadah">
+<h2>Saat memotret warga</h2>
+
+<div class="x-k tiga"><div><h3>Minta izin dulu</h3><p>Sapa dan tunjukkan kamera Anda. Hampir semua warga senang, asal ditanya lebih dulu.</p></div><div><h3>Jangan terbangkan drone sembarangan</h3><p>Drone harus izin pengelola dan tidak boleh dipakai di atas pura atau upacara.</p></div><div><h3>Tetap di pematang</h3><p>Jangan menginjak bibit muda demi mencari sudut foto.</p></div></div>
+</div>
+</section>
+<section id="musimfoto" class="alt">
+<div class="wadah">
+<h2>Warna desa sepanjang tahun</h2>
+<p class="x-lead">Pilih bulan sesuai warna yang ingin Anda abadikan.</p>
+<ul class="x-s"><li><span>Desember sampai Februari<small>Sawah bercermin dan langit dramatis</small></span><span>Perak</span></li><li><span>Maret sampai April<small>Padi muda dan udara segar</small></span><span>Hijau muda</span></li><li><span>Mei sampai Juni<small>Padi menguning dan musim panen</small></span><span>Emas</span></li><li><span>Juli sampai November<small>Langit biru dan sawah bera</small></span><span>Biru dan cokelat</span></li></ul>
+</div>
+</section>
+<section class="x-cs"><div class="wadah"><div class="x-c"><div><h2>Ingin melihat langsung?</h2><p>Foto terbaik datang dari waktu yang cukup. Coba pesan menginap semalam.</p></div><a class="x-n" href="menginap.html">Cari penginapan</a></div></div></section>
+</main>
+
+<footer>
+  <div class="wadah">
+    <p>Situs contoh. Nama desa, orang, harga, jadwal, alamat, dan kontak adalah data acak, dan foto hanya ilustrasi dari tempat lain. Data pemesanan tersimpan di peramban Anda saja. <a href="cek.html">Cek booking</a> atau <a href="admin.html">buka admin demo</a>.</p>
+    <details>
+      <summary>Sumber foto</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields,_Rice_terraces_in_East_Bali,_Indonesia.jpg">Terasering</a> dan <a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields_and_forest,_East_Bali,_Indonesia.jpg">sawah dan hutan</a>, Vyacheslav Argenberg, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gianyar-Regency_Bali_Indonesia_A-rice-farmer-working-in-his-paddy-01.jpg">Petani</a>, CEphoto, Uwe Aranas, CC BY-SA 3.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Learn_to_Dance.jpg">Latihan tari</a>, Hendri Suhandi, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_souvenir_shops.jpg">Lorong</a>, <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath.jpg">jalan desa</a>, dan <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath_3.jpg">jalan desa 2</a>, Dare2Leap, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Tegallalang_Rice_Terraces_Bali.jpg">Terasering dekat</a>, Philip Nalangan, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_temple.png">Pura</a>, Kiara Juliane, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Proses_Membatik_di_Desa_Batik_Girilayu.jpg">Membatik</a>, Ardyansa Nugraha, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Anyaman_bambu-Kalo.jpg">Anyaman bambu</a>, Desa.gedangdowo, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Aneka_jajan_pasar_tradisional_jawa.jpg">Serabi</a>, Hersy ardianty a, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Desa_wisata,_Minangkabau.jpg">Rumah kayu</a>, Andipsp11, CC BY-SA 4.0</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

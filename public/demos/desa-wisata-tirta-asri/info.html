@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Info kunjungan: Desa Tirta Asri</title>
+<meta name="description" content="Waktu terbaik, jalan ke desa, dan pertanyaan pengunjung.">
+<meta name="theme-color" content="#0f2a22">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-halaman="info">
+<a class="lewati" href="#utama">Langsung ke isi</a>
+
+<header class="atas">
+  <div class="dalam">
+    <a class="merek" href="index.html">Tirta Asri</a>
+    <button id="tMenu" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu" aria-label="Menu utama"><a href="index.html#sehari">Sehari</a><a href="aktivitas.html">Aktivitas</a><a href="menginap.html">Menginap</a><a href="galeri.html">Galeri</a><a href="info.html" class="aktif" aria-current="page">Info</a><a href="cek.html">Cek booking</a><a href="kunjungan.html#keranjang">Rencanakan<span class="kbadge" data-kbadge hidden>0</span></a></nav>
+  </div>
+</header>
+
+<main id="utama">
+<section id="sebelum">
+    <div class="wadah">
+      <h1>Sebelum datang</h1>
+      <ul class="pesan">
+        <li><h3>Pakaian</h3><p>Pakai yang sopan dan boleh kotor. Bawa topi, karena sawah hampir tanpa peneduh.</p></li>
+        <li><h3>Uang</h3><p>Warung dan kios warga umumnya lebih mudah dibayar tunai. Tiket masuk Rp 15.000, anak-anak Rp 7.500.</p></li>
+        <li><h3>Adat</h3><p>Upacara bukan pertunjukan. Tanya pemandu sebelum masuk area pura atau memotret warga.</p></li>
+        <li><h3>Jam buka</h3><p>Setiap hari pukul 07.00 sampai 18.00. Loket tutup saat hari raya desa.</p></li>
+        <li><h3>Alamat</h3><p>Jl. Subak Asri No. 8, Desa Tirta Asri, Kabupaten Sukamaju.</p></li>
+        <li><h3>Naik mobil atau motor</h3><p>Sekitar 1 jam 15 menit dari pusat Kota Sukamaju (38 km). Parkir luas tersedia di gerbang desa.</p></li>
+        <li><h3>Naik angkutan umum</h3><p>Naik bus jurusan Sukamaju ke Terminal Asri, lalu lanjut ojek desa sekitar 15 menit, Rp 20.000.</p></li>
+        <li><h3>Sinyal dan listrik</h3><p>Sinyal seluler cukup di jalan utama, tetapi lemah di sawah. Wi-Fi tersedia di balai wisata.</p></li>
+      </ul>
+    </div>
+  </section>
+<section id="jam" class="alt">
+<div class="wadah">
+<h2>Jam buka</h2>
+<p class="x-lead" id="statusBuka"></p>
+<div class="x-tw"><table class="x-t jam-t"><thead><tr><th scope="col">Tempat</th><th scope="col">Hari</th><th scope="col">Jam</th><th scope="col">Sekarang</th></tr></thead><tbody id="jamBody"></tbody></table></div>
+</div>
+</section>
+<section id="musim">
+    <div class="wadah">
+      <h2>Kapan sebaiknya datang</h2>
+      <ul class="musim">
+        <li><b>Desember sampai Februari</b><h3>Musim tanam</h3><p>Sawah penuh air dan bercermin. Sering hujan pada sore hari, jadi bawa jas hujan.</p></li>
+        <li><b>Maret sampai April</b><h3>Sawah menghijau</h3><p>Warna paling segar untuk berfoto, dan hujan mulai jarang.</p></li>
+        <li><b>Mei sampai Juni</b><h3>Panen pertama</h3><p>Sawah menguning, dan tamu boleh ikut memanen bersama petani.</p></li>
+        <li><b>Juli sampai November</b><h3>Kemarau</h3><p>Langit cerah dan jalan kering, paling nyaman untuk bersepeda.</p></li>
+      </ul>
+      <div class="acara">
+        <h3>Festival Panen Tirta Asri</h3>
+        <p>12 sampai 14 Juni 2027. Arak-arakan hasil bumi, pertunjukan tari, dan pasar makanan di jalan utama desa. Pesan penginapan sejak jauh hari.</p>
+      </div>
+    </div>
+  </section>
+<section id="rencana">
+<div class="wadah">
+<h2>Rencana sesuai kondisi</h2>
+<p class="x-lead">Situs ini tidak menampilkan ramalan cuaca. Pilih kondisi pada hari Anda datang, dan lihat apa yang sebaiknya dilakukan.</p>
+<div class="opsi-c" id="cuaca" role="group" aria-label="Kondisi hari kunjungan"><button type="button" data-k="cerah" aria-pressed="true">Cerah</button><button type="button" data-k="hujan" aria-pressed="false">Hujan</button><button type="button" data-k="berkabut" aria-pressed="false">Berkabut</button></div>
+<div id="cuacaIsi" class="kartu-i" aria-live="polite"></div>
+</div>
+</section>
+<section id="peta-s" class="alt">
+<div class="wadah">
+<h2>Peta desa</h2>
+<p class="x-lead">Peta skematis, bukan skala. Pilih nomor di peta atau di daftar untuk melihat keterangannya.</p>
+<div class="peta-w">
+<svg id="peta" class="peta" viewBox="0 0 400 280" role="group" aria-labelledby="petaJ">
+<title id="petaJ">Peta skematis Desa Tirta Asri, tidak sesuai skala</title>
+<g fill="#2f6b3f"><path d="M12 18 L150 10 L168 92 L22 112Z"/><path d="M200 196 L388 204 L384 266 L190 258Z"/></g>
+<path d="M18 142 L118 150 L102 214 L14 206Z" fill="#3b7d4a"/>
+<path d="M268 0 L400 0 L400 112 C360 92 326 62 268 0Z" fill="#14281f"/>
+<path d="M0 262 C80 240 150 276 260 250 S360 246 400 256" stroke="#4d8fb0" stroke-width="9" fill="none" opacity=".85"/>
+<path d="M30 252 Q88 206 140 180 T240 138 T330 62" stroke="#e6dcbf" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M215 215 L200 156 M300 96 Q326 122 335 150" stroke="#e6dcbf" stroke-width="4" fill="none" stroke-linecap="round"/>
+<g font-size="11" fill="#bccabf" font-family="system-ui,sans-serif"><text x="40" y="76">Sawah</text><text x="266" y="238">Sawah</text><text x="150" y="272">Sungai</text><text x="344" y="22">Bukit</text><text x="372" y="208">U</text></g>
+<path d="M381 232 L381 214 M376 220 L381 214 L386 220" stroke="#bccabf" stroke-width="1.6" fill="none"/>
+</svg>
+<div><ul class="poi-l" id="poiList"></ul><div class="poi-i" id="poiInfo" role="status" style="margin-top:12px"></div></div>
+</div>
+</div>
+</section>
+<section id="tanya">
+    <div class="wadah">
+      <h2>Pertanyaan pengunjung</h2>
+      <div class="cari-f"><label for="cariFaq" class="sr">Cari pertanyaan</label><input id="cariFaq" type="search" placeholder="Cari pertanyaan, misalnya hujan atau QRIS" autocomplete="off"></div>
+      <div class="tanya" id="faq">
+        <details><summary>Apakah harus pesan dulu?</summary><p>Untuk jalan-jalan santai tidak perlu. Untuk kelas dan menginap, pesan minimal tiga hari sebelumnya agar warga bisa bersiap.</p></details>
+        <details><summary>Aman untuk anak kecil dan orang tua?</summary><p>Jalan utama desa rata dan mudah dilalui. Pematang sawah sempit dan licin, jadi pemandu akan memilih jalur yang lebih ringan bila diminta.</p></details>
+        <details><summary>Bagaimana kalau hujan?</summary><p>Kegiatan sawah dipindah ke pagi berikutnya atau diganti kelas membatik dan menganyam di sanggar tanpa biaya tambahan.</p></details>
+        <details><summary>Bisa bayar dengan QRIS?</summary><p>Loket tiket dan Warung Bu Sari menerima QRIS. Kios kecil dan ojek desa hanya menerima tunai.</p></details>
+        <details><summary>Bisa untuk rombongan sekolah?</summary><p>Bisa, sampai 60 orang per hari. Kirim jadwal dan jumlah peserta lewat <a href="kunjungan.html">formulir kunjungan</a> supaya pengelola bisa menyiapkan pemandu.</p></details>
+      <details><summary>Bagaimana cara memesan dan membayar?</summary><p>Pilih paket di <a href="aktivitas.html#paket">halaman aktivitas</a> atau rumah di <a href="menginap.html">halaman menginap</a>, masukkan ke keranjang, lalu isi data pemesan. Bayar uang muka 30% dan konfirmasi lewat WhatsApp.</p></details><details><summary>Bagaimana kalau ingin membatalkan?</summary><p>Buka <a href="cek.html">Cek booking</a>, isi kode dan nomor telepon, lalu pilih Batalkan booking. Lebih dari tiga hari sebelum datang, uang muka kembali penuh.</p></details></div>
+      <p id="faqKosong" class="catat" hidden>Tidak ada pertanyaan yang cocok. Tulis pertanyaan Anda di formulir di bawah.</p>
+    </div>
+  </section>
+<section id="kirim" style="padding-top:0">
+<div class="wadah"><div class="kotak">
+<div><h2>Tanya pengelola</h2><p class="pengantar">Tidak menemukan jawabannya? Tulis pertanyaan Anda. Pengelola membacanya di admin dan membalas lewat kontak yang Anda tulis. Di demo ini pertanyaan hanya tersimpan di peramban.</p></div>
+<div>
+<form class="formulir" id="tanyaForm" novalidate>
+<div><label for="tNama">Nama</label><input id="tNama" name="nama" autocomplete="name" aria-describedby="eNama"><p class="salah" id="eNama" hidden></p></div>
+<div><label for="tKontak">Telepon atau email</label><input id="tKontak" name="kontak" autocomplete="off" aria-describedby="eKontak"><p class="salah" id="eKontak" hidden></p></div>
+<div><label for="tTopik">Topik</label><select id="tTopik" name="topik"><option>Umum</option><option>Paket dan kelas</option><option>Menginap</option><option>Rombongan</option><option>Pembayaran</option></select></div>
+<div><label for="tIsi">Pertanyaan</label><textarea id="tIsi" name="isi" aria-describedby="eIsi" maxlength="800"></textarea><p class="salah" id="eIsi" hidden></p></div>
+<button class="tombol" type="submit">Kirim pertanyaan</button>
+<p id="tanyaOk" role="status" hidden style="font-weight:600"></p>
+</form></div>
+</div></div>
+</section>
+<section id="tiket" class="alt">
+<div class="wadah">
+<h2>Tiket dan biaya</h2>
+
+<div class="x-tw"><table class="x-t"><thead><tr><th scope="col">Jenis</th><th scope="col">Harga</th><th scope="col">Catatan</th></tr></thead><tbody><tr><td data-label="Jenis">Dewasa</td><td data-label="Harga">Rp 15.000</td><td data-label="Catatan">Sudah termasuk peta desa</td></tr><tr><td data-label="Jenis">Anak 5 sampai 12 tahun</td><td data-label="Harga">Rp 7.500</td><td data-label="Catatan">Di bawah 5 tahun gratis</td></tr><tr><td data-label="Jenis">Parkir motor</td><td data-label="Harga">Rp 3.000</td><td data-label="Catatan">Sekali masuk</td></tr><tr><td data-label="Jenis">Parkir mobil</td><td data-label="Harga">Rp 8.000</td><td data-label="Catatan">Sekali masuk</td></tr><tr><td data-label="Jenis">Parkir bus</td><td data-label="Harga">Rp 25.000</td><td data-label="Catatan">Bus sedang, lewat jalur selatan</td></tr><tr><td data-label="Jenis">Pemandu tambahan</td><td data-label="Harga">Rp 100.000</td><td data-label="Catatan">Per 3 jam, untuk 10 orang</td></tr></tbody></table></div>
+</div>
+</section>
+<section id="bawaan">
+<div class="wadah">
+<h2>Yang sebaiknya dibawa</h2>
+
+<div class="x-f"><figure><img loading="lazy" width="960" height="1280" src="img/jalan-utama.jpg" alt="Jalan batu lurus diapit rumah adat"></figure><div><ul><li>Topi dan tabir surya</li><li>Baju ganti dan kantong plastik untuk baju basah</li><li>Sandal yang mudah dilepas</li><li>Losion antinyamuk bila menginap</li><li>Uang tunai secukupnya</li><li>Botol minum, karena isi ulang gratis di balai wisata</li></ul><p class="r">Jangan bawa pengeras suara. Desa ini paling nikmat saat tenang.</p></div></div>
+</div>
+</section>
+<section id="layananumum" class="alt">
+<div class="wadah">
+<h2>Fasilitas di desa</h2>
+
+<ul class="x-s"><li><span>Balai wisata<small>Loket, loker, Wi-Fi, dan toilet</small></span><span>Gerbang desa</span></li><li><span>Musala<small>Terbuka untuk tamu</small></span><span>Dekat parkir</span></li><li><span>Klinik desa<small>Senin sampai Sabtu, 08.00 sampai 14.00</small></span><span>5 menit jalan kaki</span></li><li><span>ATM terdekat<small>Minimarket di Terminal Asri</small></span><span>6 km</span></li><li><span>Bengkel motor<small>Ban dan servis ringan</small></span><span>Jalan utama</span></li><li><span>Kursi roda<small>Pinjam gratis di loket</small></span><span>Jalan utama saja</span></li></ul>
+</div>
+</section>
+<section class="x-cs"><div class="wadah"><div class="x-c"><div><h2>Siap berkunjung?</h2><p>Pilih paket atau penginapan, dan lihat tanggal yang masih kosong.</p></div><a class="x-n" href="aktivitas.html#paket">Pesan sekarang</a></div></div></section>
+</main>
+
+<footer>
+  <div class="wadah">
+    <p>Situs contoh. Nama desa, orang, harga, jadwal, alamat, dan kontak adalah data acak, dan foto hanya ilustrasi dari tempat lain. Data pemesanan tersimpan di peramban Anda saja. <a href="cek.html">Cek booking</a> atau <a href="admin.html">buka admin demo</a>.</p>
+    <details>
+      <summary>Sumber foto</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields,_Rice_terraces_in_East_Bali,_Indonesia.jpg">Terasering</a> dan <a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields_and_forest,_East_Bali,_Indonesia.jpg">sawah dan hutan</a>, Vyacheslav Argenberg, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gianyar-Regency_Bali_Indonesia_A-rice-farmer-working-in-his-paddy-01.jpg">Petani</a>, CEphoto, Uwe Aranas, CC BY-SA 3.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Learn_to_Dance.jpg">Latihan tari</a>, Hendri Suhandi, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_souvenir_shops.jpg">Lorong</a>, <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath.jpg">jalan desa</a>, dan <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath_3.jpg">jalan desa 2</a>, Dare2Leap, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Tegallalang_Rice_Terraces_Bali.jpg">Terasering dekat</a>, Philip Nalangan, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_temple.png">Pura</a>, Kiara Juliane, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Proses_Membatik_di_Desa_Batik_Girilayu.jpg">Membatik</a>, Ardyansa Nugraha, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Anyaman_bambu-Kalo.jpg">Anyaman bambu</a>, Desa.gedangdowo, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Aneka_jajan_pasar_tradisional_jawa.jpg">Serabi</a>, Hersy ardianty a, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Desa_wisata,_Minangkabau.jpg">Rumah kayu</a>, Andipsp11, CC BY-SA 4.0</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

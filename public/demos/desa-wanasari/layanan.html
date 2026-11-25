@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Layanan surat: Desa Wanasari</title>
+<meta name="description" content="Syarat dan alur mengurus surat di kantor Desa Wanasari.">
+<meta name="theme-color" content="#f6f7f5">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="layanan">
+<a class="lewati" href="#utama">Langsung ke isi</a>
+
+<header class="atas">
+  <div class="wadah">
+    <a class="merek" href="index.html">Desa Wanasari</a>
+    <nav class="navlebar" aria-label="Menu utama">
+      <a class="aktif" aria-current="page" href="layanan.html">Layanan surat</a>
+      <a href="pengumuman.html">Pengumuman</a>
+      <a href="kabar.html">Kabar</a>
+      <a href="produk.html">Produk warga</a>
+      <a href="anggaran.html">Anggaran</a>
+      <a href="profil.html">Profil</a>
+      <a href="kontak.html">Kontak</a>
+    </nav>
+    <a class="tombol-kecil" href="kontak.html">Hubungi desa</a>
+  </div>
+</header>
+
+<main id="utama">
+<section id="layanan">
+    <div class="wadah">
+      <h1>Layanan surat</h1>
+      <p class="pengantar">Ajukan surat dari ponsel, pantau statusnya, lalu ambil di kantor desa setelah selesai. Tanpa biaya.</p>
+      <div class="tabs" role="tablist" aria-label="Layanan surat">
+        <button type="button" role="tab" id="tabAjukan" aria-controls="pAjukan" aria-selected="true">Ajukan surat</button>
+        <button type="button" role="tab" id="tabCek" aria-controls="pCek" aria-selected="false">Cek status tiket</button>
+      </div>
+      <div class="panel" id="pAjukan" role="tabpanel" aria-labelledby="tabAjukan">
+        <div class="ruang-surat">
+          <div class="pilihan" id="pilihan" role="group" aria-label="Jenis surat"></div>
+          <div class="lembar">
+            <div id="kepalaSurat"><h3 id="namaSurat"></h3><p class="untuk" id="untukSurat"></p></div>
+            <form id="formSurat" class="form" novalidate></form>
+            <div id="hasilSurat" aria-live="polite" hidden></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel" id="pCek" role="tabpanel" aria-labelledby="tabCek" hidden>
+        <div class="lembar" style="max-width:760px">
+          <h3>Cek status tiket</h3>
+          <p class="untuk">Masukkan nomor tiket dan NIK pemohon. Status yang tampil sama dengan yang diubah petugas.</p>
+          <form id="formCek" class="form" novalidate>
+            <div class="dua-kolom">
+              <div class="fg"><label for="c_no">Nomor tiket <span class="req" aria-hidden="true">*</span></label><input type="text" id="c_no" autocomplete="off" aria-describedby="c_no_e c_no_h" placeholder="SRT-2611-0001"><p class="bantu" id="c_no_h">Contoh yang bisa dicoba: SRT-2611-0001</p><p class="pesan" id="c_no_e" role="alert"></p></div>
+              <div class="fg"><label for="c_nik">NIK pemohon <span class="req" aria-hidden="true">*</span></label><input type="text" id="c_nik" inputmode="numeric" maxlength="16" autocomplete="off" aria-describedby="c_nik_e c_nik_h"><p class="bantu" id="c_nik_h">Untuk contoh di atas: 3299000000000001</p><p class="pesan" id="c_nik_e" role="alert"></p></div>
+            </div>
+            <div class="aksi" style="margin-top:0"><button type="submit" class="btn">Cek status</button></div>
+          </form>
+          <div id="hasilCek" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="alur">
+        <h3>Alurnya</h3>
+        <ol class="langkah">
+          <li><b>Isi formulir</b><p>Pilih jenis surat, siapkan berkas, lalu isi data pemohon.</p></li>
+          <li><b>Simpan nomor tiket</b><p>Nomor tiket muncul setelah pengajuan terkirim. Simpan atau cetak buktinya.</p></li>
+          <li><b>Petugas memeriksa</b><p>Status berubah dari diterima, diverifikasi, diproses, sampai selesai.</p></li>
+          <li><b>Ambil di kantor desa</b><p>Bawa KTP asli dan berkas yang disebutkan saat surat sudah selesai.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wadah">
+    <p>Situs contoh. Tiket, pengumuman, dan data lain yang Anda ubah tersimpan di peramban ini saja. Nama desa, orang, angka anggaran, jadwal, harga, dan kontak adalah data acak, dan foto hanya ilustrasi dari tempat lain. Hanya nomor darurat nasional yang asli. <a href="admin.html">Buka admin demo</a>.</p>
+    <details>
+      <summary>Sumber foto</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Desa-Nglanggeran.jpg">Bentang desa</a>, Ainandoo, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gotong_Royong_adalah_warisan_budaya.jpg">Gotong royong</a>, Andesta Saputra, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Farmer_harvesting_rice,_Kampung_Rawa_2014-06-20.jpg">Panen padi</a>, Crisco 1492, CC BY-SA 3.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gotong_Royong_Pindah_Rumah.jpg">Pindah rumah</a>, Herusutimbul, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kopi_Robusta_Banjarnegara.jpg">Petani kopi</a>, Haridi123, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kegiatan_Posyandu_Desa_Koto_Cerenti.jpg">Posyandu</a>, Refki Assadiky, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:20180707_Sidetapa_anyam_bambu.jpg">Perajin bambu</a>, Dinata Juan, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kue_Jajanan_Pasar.jpg">Jajan pasar</a>, Nopian8, CC BY-SA 4.0</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+<nav class="navbawah" aria-label="Menu cepat">
+  <a href="index.html">Beranda</a>
+  <a class="aktif" aria-current="page" href="layanan.html">Surat</a>
+  <a href="pengumuman.html">Info</a>
+  <a href="kabar.html">Kabar</a>
+  <button type="button" id="tLainnya" aria-expanded="false" aria-controls="lainnya">Lainnya</button>
+</nav>
+<div class="lainnya" id="lainnya" hidden>
+  <a href="produk.html">Produk warga</a>
+  <a href="anggaran.html">Anggaran desa</a>
+  <a href="profil.html">Profil desa</a>
+  <a href="kontak.html">Kontak</a>
+  <a href="admin.html">Admin demo</a>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

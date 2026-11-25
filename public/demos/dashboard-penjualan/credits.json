@@ -1,0 +1,44 @@
+[
+ {
+  "file": "img/espresso.jpg",
+  "title": "A cup of espresso.jpg",
+  "author": "Vee Satayamas",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:A_cup_of_espresso.jpg"
+ },
+ {
+  "file": "img/latte.jpg",
+  "title": "Latte art.jpg",
+  "author": "Mortefot from Flickr",
+  "license": "CC BY-SA 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Latte_art.jpg"
+ },
+ {
+  "file": "img/kopi-susu.jpg",
+  "title": "Hot Cappuccino and Iced Latte.jpg",
+  "author": "Sannidhishetty",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Hot_Cappuccino_and_Iced_Latte.jpg"
+ },
+ {
+  "file": "img/cold-brew.jpg",
+  "title": "Iced Coffee in Glass - Sunshine Coffee - Laramie Cafe (53838344552).jpg",
+  "author": "Tony Webster",
+  "license": "CC BY 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Iced_Coffee_in_Glass_-_Sunshine_Coffee_-_Laramie_Cafe_(53838344552).jpg"
+ },
+ {
+  "file": "img/matcha.jpg",
+  "title": "Hot Matcha Green Tea Latte (36622433756).jpg",
+  "author": "NuCastiel from Bangkok, Thailand",
+  "license": "CC BY 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Hot_Matcha_Green_Tea_Latte_(36622433756).jpg"
+ },
+ {
+  "file": "img/croissant.jpg",
+  "title": "Croissant, whole.jpg",
+  "author": "SKopp",
+  "license": "CC BY-SA 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Croissant,_whole.jpg"
+ }
+]

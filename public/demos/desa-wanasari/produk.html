@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Produk warga: Desa Wanasari</title>
+<meta name="description" content="Kopi, anyaman bambu, jajan pasar, dan beras dari warga Desa Wanasari.">
+<meta name="theme-color" content="#f6f7f5">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="produk">
+<a class="lewati" href="#utama">Langsung ke isi</a>
+
+<header class="atas">
+  <div class="wadah">
+    <a class="merek" href="index.html">Desa Wanasari</a>
+    <nav class="navlebar" aria-label="Menu utama">
+      <a href="layanan.html">Layanan surat</a>
+      <a href="pengumuman.html">Pengumuman</a>
+      <a href="kabar.html">Kabar</a>
+      <a class="aktif" aria-current="page" href="produk.html">Produk warga</a>
+      <a href="anggaran.html">Anggaran</a>
+      <a href="profil.html">Profil</a>
+      <a href="kontak.html">Kontak</a>
+    </nav>
+    <a class="tombol-kecil" href="kontak.html">Hubungi desa</a>
+  </div>
+</header>
+
+<main id="utama">
+<section id="potensi">
+    <div class="wadah">
+      <h1>Beli produk warga</h1>
+      <p class="pengantar">Pilih produk, lalu kirim pesanan lewat WhatsApp ke penjualnya. Pembayaran dilakukan langsung kepada penjual.</p>
+      <div class="cari-baris">
+        <div class="dua-kolom">
+          <div class="fg"><label for="cari">Cari produk</label><input type="search" id="cari" autocomplete="off" placeholder="Misalnya kopi atau besek"></div>
+          <div class="fg"><label for="urut">Urutkan</label><select id="urut"><option value="baru">Bawaan</option><option value="murah">Harga termurah</option><option value="mahal">Harga termahal</option></select></div>
+        </div>
+      </div>
+      <div class="saring" id="saring" role="group" aria-label="Saring kategori"></div>
+      <p class="jumlah" id="jumlah" aria-live="polite"></p>
+      <ul class="produk" id="daftar"></ul>
+      <p class="kosong" id="kosong" hidden>Tidak ada produk yang cocok. Ubah kata kunci atau pilih "Semua".</p>
+    </div>
+  </section>
+<dialog id="dlgPesan" aria-labelledby="o_judul">
+  <h3 id="o_judul"></h3>
+  <p class="catatan" id="o_info" style="margin-top:0"></p>
+  <div class="form">
+    <div class="dua-kolom">
+      <div class="fg"><label for="o_qty">Jumlah</label><input type="number" id="o_qty" min="1" max="999" value="1" inputmode="numeric"></div>
+      <div class="fg"><label for="o_ambil">Pengambilan</label><select id="o_ambil"><option>Ambil di kios BUMDes</option><option>Antar di dalam desa</option></select></div>
+    </div>
+    <div class="fg"><label for="o_nama">Nama Anda <span class="req" aria-hidden="true">*</span></label><input type="text" id="o_nama" autocomplete="name" aria-describedby="o_err"><p class="pesan" id="o_err" role="alert"></p></div>
+    <div class="fg"><label for="o_cat">Catatan (boleh dikosongkan)</label><textarea id="o_cat" style="min-height:80px"></textarea></div>
+    <p class="b" style="font-weight:700">Perkiraan harga: <span id="o_total"></span></p>
+    <div class="aksi" style="margin-top:0"><a class="btn" id="kirimWa" href="#" target="_blank" rel="noopener">Kirim lewat WhatsApp</a><button type="button" class="btn sek" id="o_tutup">Tutup</button></div>
+  </div>
+</dialog>
+<section id="pesan">
+<div class="wadah">
+<h2>Cara memesan</h2>
+<p class="x-lead">Pembayaran dilakukan langsung kepada penjual, tunai atau transfer.</p>
+<ol class="langkah"><li><b>Pilih produk</b><p>Tekan "Pesan via WhatsApp" pada produk yang Anda mau.</p></li><li><b>Isi jumlah dan nama</b><p>Pesan WhatsApp terisi otomatis, tinggal dikirim ke penjual.</p></li><li><b>Sepakati pengambilan</b><p>Ambil sendiri di kios, atau minta dikirim di dalam desa tanpa biaya.</p></li><li><b>Bayar saat barang diterima</b><p>Untuk pesanan besar, penjual dapat meminta uang muka 30 persen.</p></li></ol>
+</div>
+</section>
+<section id="perajin" class="panel-hijau">
+<div class="wadah">
+<h2>Kenalan dengan pembuatnya</h2>
+
+<div class="x-f"><figure><img loading="lazy" width="960" height="638" src="img/bambu.jpg" alt="Perajin menganyam bambu di depan rumah"></figure><div><h3>Bu Karti dan perajin Sidorejo</h3><p class="r">Sudah tiga generasi keluarga Bu Karti menganyam bambu. Kini ia memimpin 18 perajin yang membuat besek, tampah, dan caping. Bambu diambil dari kebun sendiri dan ditebang saat musim kemarau agar lebih awet.</p><p class="r">Pesanan di atas 100 buah butuh waktu sekitar dua minggu.</p></div></div><div style="height:36px"></div><div class="x-f balik"><figure><img loading="lazy" width="960" height="663" src="img/kopi.jpg" alt="Petani memetik buah kopi merah"></figure><div><h3>Pak Sutris dan kelompok tani kopi</h3><p class="r">Kebun kopi robusta Wanasari berada di ketinggian sekitar 600 meter. Buah dipetik merah, dijemur di para-para, lalu disangrai sedang di rumah sangrai BUMDes.</p><p class="r">Boleh datang langsung untuk mencicipi dan melihat proses sangrai setiap Sabtu pagi.</p></div></div>
+</div>
+</section>
+<section id="pasar" class="panel-hijau">
+<div class="wadah">
+<h2>Datang ke pasar desa</h2>
+<p class="x-lead">Pasar desa digelar setiap Minggu keempat di Lapangan Wanasari, pukul 06.00 sampai 11.00.</p>
+<div class="x-k tiga"><div><h3>Hasil kebun</h3><p>Sayur, pisang, dan gula aren langsung dari petani.</p></div><div><h3>Makanan pagi</h3><p>Bubur, serabi, dan aneka jajan pasar yang dibuat pagi itu.</p></div><div><h3>Kerajinan</h3><p>Anyaman bambu dan kopi kemasan dengan harga kios.</p></div></div>
+</div>
+</section>
+<section class="x-cs"><div class="wadah"><div class="x-c"><div><h2>Mau memesan dalam jumlah banyak?</h2><p>Beri tahu tanggal dan jumlahnya, lalu petugas kios BUMDes akan menghubungkan Anda dengan penjual.</p></div><a class="x-n" href="kontak.html">Hubungi kios BUMDes</a></div></div></section>
+</main>
+
+<footer>
+  <div class="wadah">
+    <p>Situs contoh. Tiket, pengumuman, dan data lain yang Anda ubah tersimpan di peramban ini saja. Nama desa, orang, angka anggaran, jadwal, harga, dan kontak adalah data acak, dan foto hanya ilustrasi dari tempat lain. Hanya nomor darurat nasional yang asli. <a href="admin.html">Buka admin demo</a>.</p>
+    <details>
+      <summary>Sumber foto</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Desa-Nglanggeran.jpg">Bentang desa</a>, Ainandoo, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gotong_Royong_adalah_warisan_budaya.jpg">Gotong royong</a>, Andesta Saputra, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Farmer_harvesting_rice,_Kampung_Rawa_2014-06-20.jpg">Panen padi</a>, Crisco 1492, CC BY-SA 3.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gotong_Royong_Pindah_Rumah.jpg">Pindah rumah</a>, Herusutimbul, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kopi_Robusta_Banjarnegara.jpg">Petani kopi</a>, Haridi123, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kegiatan_Posyandu_Desa_Koto_Cerenti.jpg">Posyandu</a>, Refki Assadiky, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:20180707_Sidetapa_anyam_bambu.jpg">Perajin bambu</a>, Dinata Juan, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kue_Jajanan_Pasar.jpg">Jajan pasar</a>, Nopian8, CC BY-SA 4.0</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+<nav class="navbawah" aria-label="Menu cepat">
+  <a href="index.html">Beranda</a>
+  <a href="layanan.html">Surat</a>
+  <a href="pengumuman.html">Info</a>
+  <a href="kabar.html">Kabar</a>
+  <button type="button" id="tLainnya" aria-expanded="false" aria-controls="lainnya">Lainnya</button>
+</nav>
+<div class="lainnya" id="lainnya" hidden>
+  <a class="aktif" aria-current="page" href="produk.html">Produk warga</a>
+  <a href="anggaran.html">Anggaran desa</a>
+  <a href="profil.html">Profil desa</a>
+  <a href="kontak.html">Kontak</a>
+  <a href="admin.html">Admin demo</a>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

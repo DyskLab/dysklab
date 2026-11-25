@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NOLA Studio | Contoh toko online pakaian</title>
+<meta name="description" content="Contoh toko online pakaian yang berfungsi: katalog dengan filter, pilihan ukuran dan warna, keranjang, promo, checkout, lacak pesanan, retur, dan panel penjual.">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<a class="skip" href="#/" data-act="skip">Lewati ke konten</a>
+<div class="topbar" id="topbar" role="region" aria-label="Info toko"></div>
+<header class="hdr" id="hdr"><div class="hrow">
+<button type="button" class="ib menub" data-act="menu" aria-expanded="false" aria-controls="mnu" aria-label="Buka menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
+<a class="logo" href="#/" aria-label="NOLA Studio, beranda">NOLA<small>Studio</small></a>
+<nav class="nav" aria-label="Menu utama"><a href="#/" data-act="toshop" data-v="baru" data-nav="home">Baru masuk</a><a href="#/" data-act="toshop" data-v="kategori">Kategori</a><a href="#/" data-act="toshop" class="nvx">Semua produk</a><a href="#/track" data-nav="track">Lacak pesanan</a></nav>
+<div class="icons"><button type="button" class="ib" data-act="stoggle" aria-expanded="false" aria-controls="sbar" aria-label="Cari produk"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button><a class="ib" href="#/wishlist" aria-label="Wishlist" data-nav="wishlist"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><i id="wn" hidden>0</i></a><a class="ib" href="#/cart" aria-label="Keranjang" data-nav="cart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg><i id="cn" hidden>0</i></a></div>
+</div>
+<form class="srch" id="sbar" data-form="search" role="search" hidden><label class="sr" for="hq">Cari produk</label><input id="hq" type="search" placeholder="Cari kaos, dress, jaket..." data-ch="q" autocomplete="off"><button class="btn sm" type="submit">Cari</button></form>
+</header>
+<div class="mnu" id="mnu" hidden role="dialog" aria-modal="true" aria-label="Menu"><div class="mtop"><span>Menu</span><button type="button" class="ib" data-act="menu" aria-label="Tutup menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>
+<nav class="mlist" aria-label="Menu penuh"><a href="#/" data-act="toshop" data-v="baru">Baru masuk</a><a href="#/" data-act="toshop" data-v="kategori">Kategori</a><a href="#/" data-act="toshop">Semua produk</a><a href="#/track">Lacak pesanan</a><a href="#/wishlist">Wishlist</a><a href="#/cart">Keranjang</a></nav>
+<p class="mfoot"><a href="#/admin">Panel penjual</a></p></div>
+<main id="app" tabindex="-1"></main>
+<footer class="ftr" id="ftr"><div class="wrap fcols"><div><span class="flogo">NOLA Studio</span><p>Toko contoh untuk demo. Bukan toko sungguhan: data tersimpan di peramban ini saja dan tidak ada pesanan yang diproses.</p></div>
+<div><h4>Belanja</h4><a href="#/" data-act="toshop" data-v="baru">Baru masuk</a><a href="#/" data-act="toshop" data-v="kategori">Kategori</a><a href="#/" data-act="toshop">Semua produk</a></div>
+<div><h4>Bantuan</h4><a href="#/track">Lacak pesanan</a><a href="#/wishlist">Wishlist</a><a href="#/cart">Keranjang</a></div>
+<div><h4>Demo</h4><a href="#/admin">Panel penjual</a><button class="lnk" data-act="reset" type="button">Reset data demo</button></div></div><p class="cphoto">Foto: Wikimedia Commons, <a href="credits.json" target="_blank" rel="noopener">lihat kredit</a>.</p></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body></html>

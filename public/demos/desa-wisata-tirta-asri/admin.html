@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin Tirta Asri</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b1a15">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body data-halaman="admin">
+<a class="lewati" href="#a-main">Langsung ke isi</a>
+
+<section id="login" class="a-login">
+  <form id="loginForm" class="a-kartu" novalidate>
+    <div class="a-logo" aria-hidden="true">T</div>
+    <h1>Admin Tirta Asri</h1>
+    <p class="m">Masuk untuk mengelola booking, kuota, dan penginapan. Ini admin demo.</p>
+    <div class="a-f"><label for="pin">PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off" aria-describedby="pinInfo pinErr"></div>
+    <p class="m" id="pinInfo">PIN demo: <b>2468</b></p>
+    <p class="a-err" id="pinErr" role="alert" hidden></p>
+    <button class="a-btn" type="submit">Masuk</button>
+    <p class="m"><a href="index.html">Kembali ke situs</a></p>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header class="a-top">
+    <div class="a-merek"><span class="a-logo" aria-hidden="true">T</span><b>Admin Tirta Asri</b></div>
+    <div class="a-kanan"><a class="a-btn out sm" href="index.html" target="_blank" rel="noopener">Lihat situs</a><button class="a-btn out sm" id="keluar" type="button">Keluar</button></div>
+  </header>
+  <nav class="a-nav" id="aNav" aria-label="Menu admin">
+    <a href="#dashboard" data-v="dashboard">Dashboard</a>
+    <a href="#booking" data-v="booking">Booking <span class="a-c" data-c="booking" hidden></span></a>
+    <a href="#paket" data-v="paket">Paket</a>
+    <a href="#homestay" data-v="homestay">Homestay</a>
+    <a href="#pesan" data-v="pesan">Pertanyaan <span class="a-c" data-c="pesan" hidden></span></a>
+    <a href="#data" data-v="data">Data</a>
+  </nav>
+  <main id="a-main" tabindex="-1"></main>
+</div>
+<script src="app.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

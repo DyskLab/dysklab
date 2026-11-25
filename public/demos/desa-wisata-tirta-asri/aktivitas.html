@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aktivitas dan paket: Desa Tirta Asri</title>
+<meta name="description" content="Kelas membatik, menganyam, memasak, dan harga paket kunjungan.">
+<meta name="theme-color" content="#0f2a22">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-halaman="aktivitas">
+<a class="lewati" href="#utama">Langsung ke isi</a>
+
+<header class="atas">
+  <div class="dalam">
+    <a class="merek" href="index.html">Tirta Asri</a>
+    <button id="tMenu" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu" aria-label="Menu utama"><a href="index.html#sehari">Sehari</a><a href="aktivitas.html" class="aktif" aria-current="page">Aktivitas</a><a href="menginap.html">Menginap</a><a href="galeri.html">Galeri</a><a href="info.html">Info</a><a href="cek.html">Cek booking</a><a href="kunjungan.html#keranjang">Rencanakan<span class="kbadge" data-kbadge hidden>0</span></a></nav>
+  </div>
+</header>
+
+<main id="utama">
+<section id="aktivitas" style="padding-top:0">
+    <div class="wadah">
+      <h1>Belajar langsung dari warga</h1>
+      <div class="kegiatan">
+        <article>
+          <figure style="margin:0"><img loading="lazy" width="960" height="600" src="img/membatik.jpg" alt="Seorang ibu mengerjakan kain batik di samping tungku malam"></figure>
+          <div><h3>Membatik dengan canting</h3><p>Ibu-ibu Sanggar Kencana mengajari cara memegang canting sampai mewarnai. Kain buatan Anda boleh dibawa pulang.</p><p class="rincian">3 jam, <span data-harga="membatik">Rp 120.000</span> per orang</p><a class="tombol kecil" style="margin-top:12px" href="#paket" data-pilih="membatik">Pesan kelas ini</a></div>
+        </article>
+        <article>
+          <figure style="margin:0"><img loading="lazy" width="960" height="720" src="img/anyaman.jpg" alt="Tumpukan kalo dan tampah dari anyaman bambu"></figure>
+          <div><h3>Menganyam bambu</h3><p>Mulai dari membelah bilah bambu, lalu menganyam satu tampah kecil. Cocok untuk anak-anak di atas 10 tahun.</p><p class="rincian">2 jam, <span data-harga="menganyam">Rp 75.000</span> per orang</p><a class="tombol kecil" style="margin-top:12px" href="#paket" data-pilih="menganyam">Pesan kelas ini</a></div>
+        </article>
+        <article>
+          <figure style="margin:0"><img loading="lazy" width="960" height="640" src="img/serabi.jpg" alt="Kue serabi dipanggang di atas tungku"></figure>
+          <div><h3>Memasak jajanan desa</h3><p>Bikin serabi di atas tungku tanah liat bersama Bu Sari, lalu makan hasilnya selagi hangat.</p><p class="rincian">90 menit, <span data-harga="memasak">Rp 60.000</span> per orang</p><a class="tombol kecil" style="margin-top:12px" href="#paket" data-pilih="memasak">Pesan kelas ini</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+<section id="paket" class="alt">
+    <div class="wadah">
+      <h2>Pesan paket atau kelas</h2>
+      <p class="x-lead">Pilih paket, lalu tanggal yang masih ada tempat. Hari yang penuh atau tutup tidak bisa dipilih. Harga dihitung otomatis.</p>
+      <div class="pesanan" id="paketApp">
+        <div class="pilih-daftar" id="pDaftar" role="radiogroup" aria-label="Pilih paket"></div>
+        <div class="panel-pesan" id="pPanel"></div>
+      </div>
+      <p class="catat">Harga per orang. Anak di bawah 5 tahun gratis. Rombongan di atas 15 orang mendapat potongan 10%. Isi paket dibandingkan di <a href="#banding">tabel di bawah</a>.</p>
+    </div>
+  </section>
+<section id="jadwal">
+<div class="wadah">
+<h2>Jadwal kelas mingguan</h2>
+<p class="x-lead">Kelas di luar jadwal ini bisa dibuka untuk rombongan minimal lima orang.</p>
+<div class="x-tw"><table class="x-t"><thead><tr><th scope="col">Kelas</th><th scope="col">Hari</th><th scope="col">Mulai</th><th scope="col">Kuota</th></tr></thead><tbody><tr><td data-label="Kelas">Membatik dengan canting</td><td data-label="Hari">Senin, Rabu, Sabtu</td><td data-label="Mulai">09.00</td><td data-label="Kuota">12 orang</td></tr><tr><td data-label="Kelas">Menganyam bambu</td><td data-label="Hari">Selasa, Kamis, Minggu</td><td data-label="Mulai">09.00</td><td data-label="Kuota">15 orang</td></tr><tr><td data-label="Kelas">Memasak jajanan desa</td><td data-label="Hari">Setiap hari</td><td data-label="Mulai">10.30</td><td data-label="Kuota">10 orang</td></tr><tr><td data-label="Kelas">Menanam padi</td><td data-label="Hari">Desember sampai Februari</td><td data-label="Mulai">07.00</td><td data-label="Kuota">30 orang</td></tr><tr><td data-label="Kelas">Memanen padi</td><td data-label="Hari">Mei sampai Juni</td><td data-label="Mulai">07.00</td><td data-label="Kuota">30 orang</td></tr></tbody></table></div>
+</div>
+</section>
+<section id="pengajar" class="alt">
+<div class="wadah">
+<h2>Yang akan mengajari Anda</h2>
+
+<div class="x-f"><figure><img loading="lazy" width="960" height="600" src="img/membatik.jpg" alt="Seorang ibu mengerjakan kain batik"></figure><div><h3>Bu Ayu, Sanggar Kencana</h3><p class="r">Sudah 22 tahun membatik dan mendirikan sanggar bersama sebelas ibu di dusunnya. Murid pertama biasanya diminta menggambar garis lurus dulu dengan canting, karena dari situlah tangan belajar tenang.</p></div></div><div style="height:36px"></div><div class="x-f balik"><figure><img loading="lazy" width="960" height="720" src="img/anyaman.jpg" alt="Tumpukan kalo dan tampah bambu"></figure><div><h3>Pak Wayan, perajin bambu</h3><p class="r">Belajar menganyam dari ayahnya sejak kelas tiga SD. Kini ia memasok kalo dan tampah untuk warung dan upacara di empat desa, dan mengajar setiap Selasa dan Kamis.</p></div></div>
+</div>
+</section>
+<section id="banding">
+<div class="wadah">
+<h2>Isi tiap paket</h2>
+<p class="x-lead">Bandingkan isi setiap paket sebelum memilih.</p>
+<div class="x-tw"><table class="x-t"><thead><tr><th scope="col">Yang didapat</th><th scope="col">Santai</th><th scope="col">Setengah hari</th><th scope="col">Sehari</th><th scope="col">Dua hari</th></tr></thead><tbody><tr><td data-label="Yang didapat">Tiket masuk dan pemandu</td><td data-label="Santai">Termasuk</td><td data-label="Setengah hari">Termasuk</td><td data-label="Sehari">Termasuk</td><td data-label="Dua hari">Termasuk</td></tr><tr><td data-label="Yang didapat">Teh dan camilan</td><td data-label="Santai">Termasuk</td><td data-label="Setengah hari">Termasuk</td><td data-label="Sehari">Termasuk</td><td data-label="Dua hari">Termasuk</td></tr><tr><td data-label="Yang didapat">Turun ke sawah</td><td data-label="Santai">Tidak</td><td data-label="Setengah hari">Termasuk</td><td data-label="Sehari">Termasuk</td><td data-label="Dua hari">Termasuk</td></tr><tr><td data-label="Yang didapat">Makan siang</td><td data-label="Santai">Tidak</td><td data-label="Setengah hari">Termasuk</td><td data-label="Sehari">Termasuk</td><td data-label="Dua hari">2 kali</td></tr><tr><td data-label="Yang didapat">Kelas pilihan</td><td data-label="Santai">Tidak</td><td data-label="Setengah hari">Tidak</td><td data-label="Sehari">1 kelas</td><td data-label="Dua hari">2 kelas</td></tr><tr><td data-label="Yang didapat">Menginap dan sarapan</td><td data-label="Santai">Tidak</td><td data-label="Setengah hari">Tidak</td><td data-label="Sehari">Tidak</td><td data-label="Dua hari">Termasuk</td></tr></tbody></table></div>
+</div>
+</section>
+<section id="tambahan" class="alt">
+<div class="wadah">
+<h2>Kegiatan tambahan</h2>
+<p class="x-lead">Bisa ditambahkan ke paket apa pun saat memesan di atas.</p>
+<div class="x-k tiga"><div><h3>Bersepeda keliling subak</h3><p>Rute 9 km melewati saluran air tua. Sepeda dan helm disediakan.</p><p class="x-info"><span data-harga="sepeda">Rp 65.000</span> per orang</p></div><div><h3>Melihat matahari terbit</h3><p>Berjalan ke bukit timur pukul 05.15, lalu sarapan di atas.</p><p class="x-info"><span data-harga="sunrise">Rp 45.000</span> per orang</p></div><div><h3>Belajar menari</h3><p>Satu jam bersama guru sanggar, cocok untuk anak dan orang dewasa.</p><p class="x-info"><span data-harga="menari">Rp 50.000</span> per orang</p></div></div>
+</div>
+</section>
+<section id="atur">
+<div class="wadah">
+<h2>Aturan saat berkegiatan</h2>
+
+<div class="tanya"><details><summary>Anak umur berapa boleh ikut kelas?</summary><p>Membatik dan menganyam mulai 10 tahun karena memakai malam panas dan bilah bambu. Memasak boleh mulai 6 tahun dengan pendamping.</p></details><details><summary>Apa yang harus dipakai saat ke sawah?</summary><p>Baju yang boleh kotor dan topi. Sepatu ditinggal di balai, karena petani turun tanpa alas kaki.</p></details><details><summary>Bolehkah kegiatan diganti saat itu juga?</summary><p>Boleh jika kuota masih ada. Kalau hujan, kegiatan sawah diganti kelas tanpa tambahan biaya.</p></details></div>
+</div>
+</section>
+<section class="x-cs"><div class="wadah"><div class="x-c"><div><h2>Sudah menemukan yang cocok?</h2><p>Cek isi keranjang, lalu isi data pemesan untuk mendapat kode booking.</p></div><a class="x-n" href="kunjungan.html#keranjang">Buka keranjang</a></div></div></section>
+</main>
+
+<footer>
+  <div class="wadah">
+    <p>Situs contoh. Nama desa, orang, harga, jadwal, alamat, dan kontak adalah data acak, dan foto hanya ilustrasi dari tempat lain. Data pemesanan tersimpan di peramban Anda saja. <a href="cek.html">Cek booking</a> atau <a href="admin.html">buka admin demo</a>.</p>
+    <details>
+      <summary>Sumber foto</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields,_Rice_terraces_in_East_Bali,_Indonesia.jpg">Terasering</a> dan <a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields_and_forest,_East_Bali,_Indonesia.jpg">sawah dan hutan</a>, Vyacheslav Argenberg, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gianyar-Regency_Bali_Indonesia_A-rice-farmer-working-in-his-paddy-01.jpg">Petani</a>, CEphoto, Uwe Aranas, CC BY-SA 3.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Learn_to_Dance.jpg">Latihan tari</a>, Hendri Suhandi, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_souvenir_shops.jpg">Lorong</a>, <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath.jpg">jalan desa</a>, dan <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath_3.jpg">jalan desa 2</a>, Dare2Leap, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Tegallalang_Rice_Terraces_Bali.jpg">Terasering dekat</a>, Philip Nalangan, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_temple.png">Pura</a>, Kiara Juliane, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Proses_Membatik_di_Desa_Batik_Girilayu.jpg">Membatik</a>, Ardyansa Nugraha, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Anyaman_bambu-Kalo.jpg">Anyaman bambu</a>, Desa.gedangdowo, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Aneka_jajan_pasar_tradisional_jawa.jpg">Serabi</a>, Hersy ardianty a, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Desa_wisata,_Minangkabau.jpg">Rumah kayu</a>, Andipsp11, CC BY-SA 4.0</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

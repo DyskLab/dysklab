@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Invoice &amp; Stok | Contoh aplikasi untuk UMKM</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<section class="login" id="login" aria-label="Masuk">
+ <div class="lbox">
+  <div class="lg" aria-hidden="true"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 12h7M9 16h5"/></svg></div>
+  <h1>Invoice &amp; Stok</h1><p>Contoh aplikasi untuk UMKM. Masukkan PIN.</p>
+  <div class="dots" id="dots" aria-live="polite"><i></i><i></i><i></i><i></i></div>
+  <div class="pad" id="pad"><button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button><button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="6">6</button><button type="button" data-k="7">7</button><button type="button" data-k="8">8</button><button type="button" data-k="9">9</button><button type="button" data-k="c" aria-label="Kosongkan">C</button><button type="button" data-k="0">0</button><button type="button" data-k="b" aria-label="Hapus satu angka">&#9003;</button></div>
+  <p class="hint" id="lhint">PIN demo: <b>1234</b></p>
+  <p class="cr"><a href="credits.json" target="_blank" rel="noopener">Foto: Wikimedia Commons, lihat kredit</a></p>
+ </div>
+</section>
+<div class="app" id="app" hidden>
+ <aside class="side" id="side" aria-label="Menu utama">
+  <div class="brand"><span class="bm" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/></svg></span><span><b id="bname">Usaha</b><small>Invoice &amp; Stok</small></span></div>
+  <nav id="nav"></nav>
+  <p class="cr" style="margin:0"><a href="credits.json" target="_blank" rel="noopener">Foto: Wikimedia Commons, lihat kredit</a></p>
+  <button type="button" class="out" id="logout">Keluar</button>
+ </aside>
+ <div class="scrim" id="scrim"></div>
+ <header class="top"><button type="button" class="ib" id="burger" aria-label="Buka menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><b id="ttl">Beranda</b><a class="btn sm pri" href="#/invoice/new">+ Invoice</a></header>
+ <main class="main" id="main" tabindex="-1"></main>
+ <nav class="bnav" id="bnav" aria-label="Pintasan"></nav>
+</div>
+<div class="shw" id="shw" hidden><div class="shs" id="shs"></div>
+ <form class="sh" id="shf" novalidate role="dialog" aria-modal="true" aria-labelledby="sht"><div class="shh"><h3 id="sht"></h3><button type="button" class="ib" data-act="shclose" aria-label="Tutup"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="shb" id="shb"></div><div class="err" id="sherr" role="alert"></div><div class="shf" id="shfoot"></div></form></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body></html>

@@ -1,0 +1,126 @@
+/* Admin Desa Wanasari: netral dengan hijau desa sebagai warna utama. Tanpa CDN. */
+:root{--bg:#fff;--fg:#09090b;--muted:#f4f4f5;--mfg:#5f5f69;--border:#e4e4e7;--input:#a1a1aa;--des:#b42318;--side:#fafafa;--p:#0e4d3a;--pfg:#fff;--ring:#0e4d3a;--r:.5rem;--font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 .9375rem/1.5 var(--font);-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,dl,dd{margin:0}
+h1{font-size:1.375rem;font-weight:650;letter-spacing:-.02em;line-height:1.25}
+h2{font-size:1.0625rem;font-weight:600;letter-spacing:-.01em}
+a{color:inherit}
+button,select,label{cursor:pointer}
+input,select,textarea,button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px;border-radius:4px}
+.m{color:var(--mfg)}.xs{font-size:.8125rem}.b{font-weight:600}
+svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Login */
+.login{min-height:100dvh;display:grid;place-items:center;padding:16px;background:var(--side)}
+.login-k{width:min(400px,100%);background:#fff;border:1px solid var(--border);border-radius:14px;padding:28px 22px;box-shadow:0 8px 30px rgb(0 0 0 / .06)}
+.logo{width:40px;height:40px;display:grid;place-content:center;background:var(--p);color:var(--pfg);border-radius:10px;margin-bottom:16px}
+.login-k p{margin-top:6px}
+.pin-info{margin-top:16px;padding:10px 12px;background:var(--muted);border-radius:var(--r);font-size:.875rem}
+.pin-info b{font-variant-numeric:tabular-nums;letter-spacing:.08em}
+
+/* Kerangka */
+.app{min-height:100dvh}
+.sb{position:fixed;inset:0 auto 0 0;z-index:50;width:260px;display:flex;flex-direction:column;background:var(--side);border-right:1px solid var(--border);transform:translateX(-100%);visibility:hidden;transition:transform .2s,visibility .2s}
+.sb.buka{transform:none;visibility:visible}
+.ov{position:fixed;inset:0;z-index:45;background:rgb(0 0 0 / .55)}
+.sb-h{display:flex;align-items:center;gap:10px;padding:14px 14px 8px}
+.sb-h .logo{margin:0;width:34px;height:34px}
+.sb-n{flex:1;overflow-y:auto;padding:8px}
+.sb-n button{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:0 10px;background:none;border:0;border-radius:var(--r);text-align:left}
+.sb-n button:hover{background:var(--muted)}
+.sb-n button[aria-current=page]{background:var(--muted);font-weight:600}
+.sb-c{margin-left:auto;min-width:22px;padding:0 7px;background:var(--p);color:var(--pfg);border-radius:99px;font-size:.75rem;font-weight:600;text-align:center}
+.sb-f{padding:8px;border-top:1px solid var(--border);display:grid;gap:4px}
+.sb-f a,.sb-f button{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border:0;background:none;border-radius:var(--r);text-decoration:none;text-align:left;width:100%}
+.sb-f a:hover,.sb-f button:hover{background:var(--muted)}
+.isi{min-width:0}
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;min-height:56px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.ib{display:grid;place-content:center;width:44px;height:44px;background:none;border:1px solid var(--border);border-radius:var(--r)}
+.ib:hover{background:var(--muted)}
+.konten{padding:20px 16px 48px;max-width:1100px}
+.konten>*+*{margin-top:20px}
+
+/* Komponen */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;background:var(--p);color:var(--pfg);border:1px solid var(--p);border-radius:var(--r);font-weight:600;text-decoration:none;white-space:nowrap}
+.btn:hover{opacity:.9}
+.btn.sek{background:#fff;color:var(--fg);border-color:var(--input)}
+.btn.sek:hover{background:var(--muted);opacity:1}
+.btn.bahaya{background:#fff;color:var(--des);border-color:#e0a7a1}
+.btn.bahaya[data-arm]{background:var(--des);color:#fff;border-color:var(--des)}
+.btn.kecil{min-height:40px;padding:0 12px;font-size:.875rem}
+.card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;min-width:0}
+.stat b{display:block;font-size:1.75rem;line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{color:var(--mfg);font-size:.8125rem}
+.stat a{text-decoration:none;display:block}
+.bar-r{display:grid;grid-template-columns:110px 1fr 28px;gap:10px;align-items:center;margin-top:8px;font-size:.875rem}
+.bar-r i{display:block;height:10px;border-radius:99px;background:var(--p)}
+.bar-r div{background:var(--muted);border-radius:99px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.bar .fg{flex:1 1 180px}
+.fg{display:grid;gap:5px;min-width:0}
+.fg>label{font-weight:600;font-size:.875rem}
+.fg input[type=text],.fg input[type=tel],.fg input[type=number],.fg input[type=date],.fg input[type=search],.fg input[type=password],.fg select,.fg textarea{width:100%;min-height:44px;padding:8px 12px;background:#fff;border:1px solid var(--input);border-radius:var(--r)}
+.fg textarea{min-height:140px;resize:vertical}
+.fg [aria-invalid=true]{border-color:var(--des);background:#fff8f7}
+.fg .pesan{color:var(--des);font-size:.8125rem;font-weight:600}
+.fg .bantu{color:var(--mfg);font-size:.8125rem}
+.fg .req{color:var(--des)}
+.form{display:grid;gap:14px;max-width:720px}
+.dua-kolom{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.aksi{display:flex;flex-wrap:wrap;gap:10px}
+.tw{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 12px;text-align:left;font-size:.8125rem;font-weight:600;color:var(--mfg);background:var(--side);border-bottom:1px solid var(--border)}
+td{padding:10px 12px;border-top:1px solid var(--border);vertical-align:middle}
+thead+tbody tr:first-child td{border-top:0}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.st{display:inline-flex;padding:1px 9px;border-radius:99px;font-size:.75rem;font-weight:700;white-space:nowrap;background:#e7ecf4;color:#1d3a6e}
+.st.diverifikasi,.st.ditindaklanjuti{background:#fdf1d6;color:#6b4a00}
+.st.diproses{background:#ffe6d3;color:#7a3300}
+.st.selesai,.st.terbit{background:#d6f0e2;color:#0a4a30}
+.st.ditolak,.st.habis{background:#fbe0dd;color:#8a1c12}
+.st.draf{background:#eceeed;color:#3b4742}
+.hal{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap}
+.kosong{padding:28px 16px;text-align:center;color:var(--mfg)}
+.rinci{display:grid;gap:0}
+.rinci div{display:grid;grid-template-columns:minmax(0,1fr);padding:9px 0;border-top:1px solid var(--border)}
+.rinci div:first-child{border-top:0}
+.rinci dt{color:var(--mfg);font-size:.8125rem}
+.rinci dd{margin:0;font-weight:500;overflow-wrap:anywhere}
+.x-w{list-style:none;margin:14px 0 0;padding:0}
+.x-w li{position:relative;padding:0 0 18px 20px;border-left:2px solid var(--border);margin-left:5px}
+.x-w li::before{content:"";position:absolute;left:-7px;top:5px;width:12px;height:12px;border-radius:99px;background:var(--p)}
+.x-w b{display:block}
+.x-w small{color:var(--mfg)}
+.x-w p{margin-top:4px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:80;max-width:min(92vw,420px);padding:12px 18px;background:#09090b;color:#fff;border-radius:10px;font-weight:600;font-size:.875rem;box-shadow:0 10px 30px rgb(0 0 0 / .3)}
+.tautan-b{color:var(--p);font-weight:600}
+.daftar-dl{display:grid;gap:12px}
+.daftar-dl .card{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+
+/* Tabel jadi kartu di layar sempit */
+@media (max-width:719px){
+  .tw{border:0;background:none}
+  table.resp thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  table.resp,table.resp tbody,table.resp tr,table.resp td{display:block;width:100%}
+  table.resp tr{background:#fff;border:1px solid var(--border);border-radius:12px;padding:8px 12px;margin-bottom:10px}
+  table.resp td{display:flex;justify-content:space-between;gap:12px;border:0;padding:4px 0;text-align:right;overflow-wrap:anywhere}
+  table.resp td::before{content:attr(data-label);flex:none;max-width:40%;color:var(--mfg);font-size:.8125rem;text-align:left}
+  table.resp td.aks{justify-content:flex-start;flex-wrap:wrap;gap:8px;padding-top:8px}
+  table.resp td.aks::before{content:none}
+  .bar-r{grid-template-columns:90px 1fr 24px}
+}
+@media (min-width:720px){.dua-kolom{grid-template-columns:repeat(2,minmax(0,1fr))}.rinci div{grid-template-columns:200px minmax(0,1fr)}.grid{grid-template-columns:repeat(4,minmax(0,1fr))}td.aks{white-space:nowrap;text-align:right}}
+@media (min-width:1024px){
+  .sb{transform:none;visibility:visible}
+  .ov{display:none!important}
+  .isi{margin-left:260px}
+  #bMenu{display:none}
+  .konten{padding:28px 32px 64px}
+}
+@media print{.sb,.top,.aksi,.bar,.hal{display:none!important}.isi{margin:0}}

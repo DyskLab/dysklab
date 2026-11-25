@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Desa Tirta Asri: sehari pelan di tengah sawah</title>
+<meta name="description" content="Rencanakan sehari di Desa Tirta Asri: menanam padi, berjalan di lorong desa, dan menonton latihan tari.">
+<meta name="theme-color" content="#0f2a22">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-halaman="index">
+<a class="lewati" href="#utama">Langsung ke isi</a>
+
+<header class="atas">
+  <div class="dalam">
+    <a class="merek" href="index.html">Tirta Asri</a>
+    <button id="tMenu" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu" aria-label="Menu utama"><a href="index.html#sehari" class="aktif" aria-current="page">Sehari</a><a href="aktivitas.html">Aktivitas</a><a href="menginap.html">Menginap</a><a href="galeri.html">Galeri</a><a href="info.html">Info</a><a href="cek.html">Cek booking</a><a href="kunjungan.html#keranjang">Rencanakan<span class="kbadge" data-kbadge hidden>0</span></a></nav>
+  </div>
+</header>
+
+<main id="utama">
+<div class="pembuka">
+    <img src="img/teras-timur.jpg" width="1920" height="1280" fetchpriority="high" alt="Terasering sawah hijau berundak di lembah, dengan pondok kecil di antara pepohonan">
+    <div class="wadah">
+      <h1>Sehari pelan di tengah sawah</h1>
+      <p>Di Desa Tirta Asri, pagi dipakai menanam padi, siang menyusuri lorong desa, dan sore menonton anak-anak berlatih tari.</p>
+      <div class="baris-tombol"><a class="tombol" href="aktivitas.html#paket">Pesan paket wisata</a><a class="tombol sek" href="menginap.html">Cari penginapan</a></div>
+    </div>
+  </div>
+<section id="sehari">
+    <div class="wadah">
+      <h2>Mau mulai dari mana?</h2>
+      <div class="jalur" role="tablist" aria-label="Waktu kunjungan">
+        <button role="tab" type="button" id="t0" aria-controls="p0" aria-selected="true">Pagi</button>
+        <button role="tab" type="button" id="t1" aria-controls="p1" aria-selected="false" tabindex="-1">Siang</button>
+        <button role="tab" type="button" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1">Sore</button>
+      </div>
+
+      <div class="panel" role="tabpanel" id="p0" aria-labelledby="t0" tabindex="0">
+        <figure>
+          <img width="960" height="768" loading="lazy" src="img/petani.jpg" alt="Petani berikat kepala putih menanam bibit padi di petak sawah">
+        </figure>
+        <div>
+          <h3>Turun ke sawah</h3>
+          <p>Petani mengajak Anda menanam bibit padi saat matahari belum tinggi. Kaki pasti kena lumpur, dan memang di situ serunya.</p>
+          <ul><li>Mulai pukul 07.00, sekitar 2 jam</li><li>Bawa baju ganti dan sandal</li></ul>
+        </div>
+      </div>
+      <div class="panel" role="tabpanel" id="p1" aria-labelledby="t1" tabindex="0" hidden>
+        <figure>
+          <img width="960" height="768" loading="lazy" src="img/lorong-kios.jpg" alt="Lorong sempit berdinding tua menuju deretan kios cendera mata dan atap rumah adat">
+        </figure>
+        <div>
+          <h3>Menyusuri lorong desa</h3>
+          <p>Berjalan kaki di antara pekarangan rumah, makan siang di warung warga, lalu mampir ke kios kerajinan.</p>
+          <ul><li>Makan siang di Warung Bu Sari</li><li>Sediakan uang tunai</li></ul>
+        </div>
+      </div>
+      <div class="panel" role="tabpanel" id="p2" aria-labelledby="t2" tabindex="0" hidden>
+        <figure>
+          <img width="960" height="768" loading="lazy" src="img/tari.jpg" alt="Anak-anak berkostum tari berlatih di bawah pepohonan yang ditembus cahaya matahari">
+        </figure>
+        <div>
+          <h3>Menonton latihan tari</h3>
+          <p>Anak-anak desa berlatih bersama guru mereka. Duduk di pinggir, tonton sampai selesai, dan minta izin dulu sebelum memotret dari dekat.</p>
+          <ul><li>Setiap Sabtu dan Minggu, pukul 16.00</li><li>Bebas biaya, boleh memberi sumbangan sanggar</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+<section id="jelajah" style="padding-top:0">
+    <div class="wadah">
+      <h2>Lihat lebih jauh</h2>
+      <div class="pintasan">
+        <a href="aktivitas.html"><img loading="lazy" width="960" height="600" src="img/membatik.jpg" alt=""><div><b>Aktivitas dan paket</b><span>Membatik, menganyam, memasak, dan harga paket.</span></div></a>
+        <a href="menginap.html"><img loading="lazy" width="960" height="640" src="img/rumah-kayu.jpg" alt=""><div><b>Menginap dan makan</b><span>Rumah warga dan menu warung desa.</span></div></a>
+        <a href="galeri.html"><img loading="lazy" width="960" height="1280" src="img/jalan-utama.jpg" alt=""><div><b>Galeri</b><span>Sudut-sudut desa dalam foto.</span></div></a>
+      </div>
+    </div>
+  </section>
+<section id="ajak" style="padding-top:0">
+    <div class="wadah ajak">
+      <h2>Sudah punya tanggal?</h2>
+      <p>Pilih paket atau penginapan, lihat tanggal yang masih kosong, lalu pesan langsung di sini. Kode booking muncul seketika.</p>
+      <div class="baris-tombol"><a class="tombol" href="kunjungan.html#keranjang">Buka keranjang</a><a class="tombol sek" href="cek.html">Cek booking</a></div>
+    </div>
+  </section>
+<section id="alasan" class="alt">
+<div class="wadah">
+<h2>Yang membuat tamu kembali</h2>
+<p class="x-lead">Tirta Asri bukan taman wisata. Warganya tetap bekerja seperti biasa, dan Anda diajak ikut.</p>
+<div class="x-f"><figure><img loading="lazy" width="960" height="1280" src="img/teras-dekat.jpg" alt="Petak-petak terasering sawah di lereng"></figure><div><p class="r">Sekitar 180 keluarga tinggal di desa ini. Sebagian besar mengolah sawah berundak yang airnya diatur bersama sejak lama lewat sistem subak.</p><ul><li>Dipandu warga sendiri, bukan agen perjalanan</li><li>Uang tiket masuk ke kas desa dan perawatan irigasi</li><li>Rombongan dibatasi 60 orang per hari agar desa tetap tenang</li></ul></div></div>
+</div>
+</section>
+<section id="sehariPenuh">
+<div class="wadah">
+<h2>Contoh satu hari di sini</h2>
+
+<ol class="x-w"><li><b>07.00</b><h3>Tiba dan minum kopi</h3><p>Pemandu menyambut di balai wisata, lalu menjelaskan rute hari itu.</p></li><li><b>07.30</b><h3>Turun ke sawah</h3><p>Menanam bibit atau memanen, tergantung musim. Baju ganti disimpan di balai.</p></li><li><b>10.30</b><h3>Kelas pilihan</h3><p>Membatik, menganyam, atau memasak serabi bersama warga.</p></li><li><b>12.30</b><h3>Makan siang di Warung Bu Sari</h3><p>Nasi sayur urap dan lauk dari kebun desa.</p></li><li><b>14.00</b><h3>Menyusuri lorong desa</h3><p>Jalan kaki lewat rumah adat, pura, dan kios kerajinan.</p></li><li><b>16.00</b><h3>Menonton latihan tari</h3><p>Pada akhir pekan, anak-anak berlatih di bawah pepohonan.</p></li></ol>
+</div>
+</section>
+<section id="bawa">
+<div class="wadah">
+<h2>Oleh-oleh dari desa</h2>
+<p class="x-lead">Semuanya buatan warga dan dijual di kios sepanjang jalan utama.</p>
+<ul class="x-s"><li><span>Kain batik tulis<small>Sanggar Kencana</small></span><span>Mulai Rp 185.000</span></li><li><span>Tampah dan kalo bambu<small>Perajin Dusun Tengah</small></span><span>Mulai Rp 25.000</span></li><li><span>Kopi tubruk desa<small>Kebun warga, 200 gram</small></span><span>Rp 40.000</span></li><li><span>Beras merah subak<small>Kemasan 2 kilogram</small></span><span>Rp 50.000</span></li></ul>
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="wadah">
+    <p>Situs contoh. Nama desa, orang, harga, jadwal, alamat, dan kontak adalah data acak, dan foto hanya ilustrasi dari tempat lain. Data pemesanan tersimpan di peramban Anda saja. <a href="cek.html">Cek booking</a> atau <a href="admin.html">buka admin demo</a>.</p>
+    <details>
+      <summary>Sumber foto</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields,_Rice_terraces_in_East_Bali,_Indonesia.jpg">Terasering</a> dan <a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields_and_forest,_East_Bali,_Indonesia.jpg">sawah dan hutan</a>, Vyacheslav Argenberg, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gianyar-Regency_Bali_Indonesia_A-rice-farmer-working-in-his-paddy-01.jpg">Petani</a>, CEphoto, Uwe Aranas, CC BY-SA 3.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Learn_to_Dance.jpg">Latihan tari</a>, Hendri Suhandi, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_souvenir_shops.jpg">Lorong</a>, <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath.jpg">jalan desa</a>, dan <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath_3.jpg">jalan desa 2</a>, Dare2Leap, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Tegallalang_Rice_Terraces_Bali.jpg">Terasering dekat</a>, Philip Nalangan, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_temple.png">Pura</a>, Kiara Juliane, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Proses_Membatik_di_Desa_Batik_Girilayu.jpg">Membatik</a>, Ardyansa Nugraha, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Anyaman_bambu-Kalo.jpg">Anyaman bambu</a>, Desa.gedangdowo, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Aneka_jajan_pasar_tradisional_jawa.jpg">Serabi</a>, Hersy ardianty a, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Desa_wisata,_Minangkabau.jpg">Rumah kayu</a>, Andipsp11, CC BY-SA 4.0</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Menginap dan makan: Desa Tirta Asri</title>
+<meta name="description" content="Rumah warga untuk menginap dan menu warung desa.">
+<meta name="theme-color" content="#0f2a22">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-halaman="menginap">
+<a class="lewati" href="#utama">Langsung ke isi</a>
+
+<header class="atas">
+  <div class="dalam">
+    <a class="merek" href="index.html">Tirta Asri</a>
+    <button id="tMenu" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu" aria-label="Menu utama"><a href="index.html#sehari">Sehari</a><a href="aktivitas.html">Aktivitas</a><a href="menginap.html" class="aktif" aria-current="page">Menginap</a><a href="galeri.html">Galeri</a><a href="info.html">Info</a><a href="cek.html">Cek booking</a><a href="kunjungan.html#keranjang">Rencanakan<span class="kbadge" data-kbadge hidden>0</span></a></nav>
+  </div>
+</header>
+
+<main id="utama">
+<section id="menginap">
+    <div class="wadah">
+      <h1>Menginap di rumah warga</h1>
+      <p class="x-lead">Pilih rumah, lalu tanggal masuk dan keluar. Malam yang penuh tidak bisa dipilih. Harga dan total dihitung otomatis.</p>
+      <div class="pesanan" id="inapApp">
+        <div><figure><img loading="lazy" width="960" height="640" src="img/rumah-kayu.jpg" alt="Rumah kayu beratap gonjong di tengah kebun hijau"></figure><div class="pilih-daftar" id="iDaftar" role="radiogroup" aria-label="Pilih penginapan" style="margin-top:18px"></div></div>
+        <div class="panel-pesan" id="iPanel"></div>
+      </div>
+    </div>
+  </section>
+<section id="kuliner">
+    <div class="wadah rumah" style="margin-top:0">
+      <div>
+        <h2>Makan seperti warga</h2>
+        <p style="margin-top:14px;color:var(--redup);max-width:30em">Warung Bu Sari buka pukul 07.00 sampai 17.00, kecuali hari raya. Berasnya dari sawah desa, sayurnya dari kebun di belakang warung.</p>
+      </div>
+      <ul class="menu">
+        <li><span>Nasi sayur urap<small>Dengan tempe goreng dan sambal</small></span><span>Rp 18.000</span></li>
+        <li><span>Ayam kampung bakar<small>Pesan satu jam sebelumnya</small></span><span>Rp 35.000</span></li>
+        <li><span>Pepes ikan sungai<small>Bumbu kunyit dan kemangi</small></span><span>Rp 25.000</span></li>
+        <li><span>Serabi kuah gula merah<small>Isi tiga, dibuat saat dipesan</small></span><span>Rp 12.000</span></li>
+        <li><span>Kopi tubruk desa<small>Dari kebun sendiri</small></span><span>Rp 8.000</span></li>
+      </ul>
+    </div>
+  </section>
+<section id="banding">
+<div class="wadah">
+<h2>Bandingkan penginapan</h2>
+<p class="x-lead">Semua rumah dimiliki dan dirawat langsung oleh warga.</p>
+<div class="x-tw"><table class="x-t"><thead><tr><th scope="col">Rumah</th><th scope="col">Tamu</th><th scope="col">Kamar mandi</th><th scope="col">Sarapan</th><th scope="col">Paling cocok untuk</th></tr></thead><tbody><tr><td data-label="Rumah">Rumah Pak Made</td><td data-label="Tamu">4 orang</td><td data-label="Kamar mandi">Dalam, air hangat</td><td data-label="Sarapan">Rp 25.000</td><td data-label="Paling cocok untuk">Pasangan dan keluarga kecil</td></tr><tr><td data-label="Rumah">Rumah Bu Ketut</td><td data-label="Tamu">6 orang</td><td data-label="Kamar mandi">Dua, di dalam</td><td data-label="Sarapan">Termasuk</td><td data-label="Paling cocok untuk">Keluarga besar</td></tr><tr><td data-label="Rumah">Pondok Tepi Sawah</td><td data-label="Tamu">2 orang</td><td data-label="Kamar mandi">Semi terbuka</td><td data-label="Sarapan">Rp 25.000</td><td data-label="Paling cocok untuk">Berdua, suka suasana tenang</td></tr><tr><td data-label="Rumah">Rumah Rombongan Sanggar</td><td data-label="Tamu">12 orang</td><td data-label="Kamar mandi">Tiga, bersama</td><td data-label="Sarapan">Rp 20.000</td><td data-label="Paling cocok untuk">Sekolah dan komunitas</td></tr></tbody></table></div>
+</div>
+</section>
+<section id="malam" class="alt">
+<div class="wadah">
+<h2>Malam dan pagi di rumah warga</h2>
+
+<div class="x-f balik"><figure><img loading="lazy" width="960" height="1280" src="img/jalan-2.jpg" alt="Jalan desa dengan deretan rumah adat"></figure><div><p class="r">Desa sudah sepi sejak pukul 21.00. Tuan rumah biasanya masih duduk di teras dan senang diajak mengobrol. Pagi-pagi, suara ayam dan orang menyapu halaman akan membangunkan Anda.</p><ul><li>Pukul 05.30, warga mulai berangkat ke sawah</li><li>Pukul 07.00, sarapan disajikan di teras</li><li>Pukul 11.00, batas waktu keluar rumah</li></ul></div></div>
+</div>
+</section>
+<section id="tinggal">
+<div class="wadah">
+<h2>Yang perlu diketahui</h2>
+
+<div class="x-k tiga"><div><h3>Kebersihan</h3><p>Handuk dan sabun tersedia. Sprei diganti tiap dua malam atau saat diminta.</p></div><div><h3>Jam tenang</h3><p>Mohon tidak bersuara keras setelah pukul 22.00, karena warga mulai bekerja sejak subuh.</p></div><div><h3>Pembayaran</h3><p>Bayar uang muka 30 persen lewat pengelola, sisanya saat tiba secara tunai atau QRIS.</p></div><div><h3>Pembatalan</h3><p>Uang muka kembali penuh jika dibatalkan lebih dari tiga hari sebelum datang.</p></div><div><h3>Serangga</h3><p>Bawa losion antinyamuk. Kelambu tersedia di semua kamar.</p></div><div><h3>Listrik dan Wi-Fi</h3><p>Listrik tersedia sepanjang hari. Wi-Fi hanya ada di balai wisata.</p></div></div>
+</div>
+</section>
+<section id="warungwarga" class="alt">
+<div class="wadah">
+<h2>Tempat makan lainnya</h2>
+<p class="x-lead">Selain Warung Bu Sari, ada beberapa dapur warga yang buka untuk tamu.</p>
+<div class="x-f"><figure><img loading="lazy" width="960" height="640" src="img/serabi.jpg" alt="Kue serabi dipanggang di atas tungku"></figure><div><ul class="x-s" style="grid-template-columns:minmax(0,1fr);margin-top:0"><li><span>Dapur Bu Nyoman<small>Lawar dan sate lilit, pesan sehari sebelumnya</small></span><span>Rp 30.000</span></li><li><span>Kedai Kopi Subak<small>Kopi tubruk dan pisang goreng, 15.00 sampai 21.00</small></span><span>Rp 15.000</span></li><li><span>Serabi Pagi Mbok Rai<small>Di depan pura, 06.00 sampai habis</small></span><span>Rp 8.000</span></li></ul></div></div>
+</div>
+</section>
+<section class="x-cs"><div class="wadah"><div class="x-c"><div><h2>Siap memesan?</h2><p>Pesan minimal tiga hari sebelumnya agar tuan rumah bisa bersiap.</p></div><a class="x-n" href="kunjungan.html#keranjang">Buka keranjang</a></div></div></section>
+</main>
+
+<footer>
+  <div class="wadah">
+    <p>Situs contoh. Nama desa, orang, harga, jadwal, alamat, dan kontak adalah data acak, dan foto hanya ilustrasi dari tempat lain. Data pemesanan tersimpan di peramban Anda saja. <a href="cek.html">Cek booking</a> atau <a href="admin.html">buka admin demo</a>.</p>
+    <details>
+      <summary>Sumber foto</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields,_Rice_terraces_in_East_Bali,_Indonesia.jpg">Terasering</a> dan <a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields_and_forest,_East_Bali,_Indonesia.jpg">sawah dan hutan</a>, Vyacheslav Argenberg, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gianyar-Regency_Bali_Indonesia_A-rice-farmer-working-in-his-paddy-01.jpg">Petani</a>, CEphoto, Uwe Aranas, CC BY-SA 3.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Learn_to_Dance.jpg">Latihan tari</a>, Hendri Suhandi, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_souvenir_shops.jpg">Lorong</a>, <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath.jpg">jalan desa</a>, dan <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath_3.jpg">jalan desa 2</a>, Dare2Leap, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Tegallalang_Rice_Terraces_Bali.jpg">Terasering dekat</a>, Philip Nalangan, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_temple.png">Pura</a>, Kiara Juliane, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Proses_Membatik_di_Desa_Batik_Girilayu.jpg">Membatik</a>, Ardyansa Nugraha, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Anyaman_bambu-Kalo.jpg">Anyaman bambu</a>, Desa.gedangdowo, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Aneka_jajan_pasar_tradisional_jawa.jpg">Serabi</a>, Hersy ardianty a, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Desa_wisata,_Minangkabau.jpg">Rumah kayu</a>, Andipsp11, CC BY-SA 4.0</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

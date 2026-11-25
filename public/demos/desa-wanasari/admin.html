@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin Desa Wanasari</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body data-page="admin">
+<div class="login" id="login">
+  <div class="login-k">
+    <div class="logo" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 21V9M12 9c0-3 2-5 6-5 0 4-2 6-6 5zM12 13c0-3-2-5-6-5 0 4 2 6 6 5z"/></svg></div>
+    <h1>Admin Desa Wanasari</h1>
+    <p class="m">Masuk untuk mengelola pengajuan surat, pengaduan, dan isi situs.</p>
+    <form id="fLogin" class="form" style="margin-top:18px" novalidate>
+      <div class="fg"><label for="pin">PIN</label><input type="password" id="pin" inputmode="numeric" autocomplete="off" aria-describedby="pinErr"><p class="pesan" id="pinErr" role="alert"></p></div>
+      <button type="submit" class="btn">Masuk</button>
+    </form>
+    <p class="pin-info">PIN demo: <b>246810</b>. Ini hanya data contoh di peramban Anda.</p>
+    <p style="margin-top:14px"><a class="tautan-b" href="index.html">Kembali ke situs desa</a></p>
+  </div>
+</div>
+<div class="app" id="app" hidden>
+  <aside class="sb" id="sb" aria-label="Menu admin">
+    <div class="sb-h"><div class="logo" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 21V9M12 9c0-3 2-5 6-5 0 4-2 6-6 5zM12 13c0-3-2-5-6-5 0 4 2 6 6 5z"/></svg></div><div><b>Desa Wanasari</b><br><span class="m xs">Admin demo</span></div></div>
+    <nav class="sb-n" id="nav"></nav>
+    <div class="sb-f"><a href="index.html" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Lihat situs</a><button type="button" id="bKeluar"><svg class="i" viewBox="0 0 24 24"><path d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4M16 17l5-5-5-5M21 12H9"/></svg>Keluar</button></div>
+  </aside>
+  <div class="ov" id="ov" hidden></div>
+  <div class="isi">
+    <header class="top"><button type="button" class="ib" id="bMenu" aria-label="Buka menu" aria-expanded="false"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><h1 id="judul"></h1></header>
+    <main class="konten" id="utama" tabindex="-1"></main>
+  </div>
+</div>
+<script src="app.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

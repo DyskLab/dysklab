@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Keranjang dan booking: Desa Tirta Asri</title>
+<meta name="description" content="Pesan paket wisata dan penginapan di Desa Tirta Asri, lalu dapatkan kode booking.">
+<meta name="theme-color" content="#0f2a22">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-halaman="kunjungan">
+<a class="lewati" href="#utama">Langsung ke isi</a>
+
+<header class="atas">
+  <div class="dalam">
+    <a class="merek" href="index.html">Tirta Asri</a>
+    <button id="tMenu" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu" aria-label="Menu utama"><a href="index.html#sehari">Sehari</a><a href="aktivitas.html">Aktivitas</a><a href="menginap.html">Menginap</a><a href="galeri.html">Galeri</a><a href="info.html">Info</a><a href="cek.html">Cek booking</a><a href="kunjungan.html#keranjang" class="aktif" aria-current="page">Rencanakan<span class="kbadge" data-kbadge hidden>0</span></a></nav>
+  </div>
+</header>
+
+<main id="utama">
+<section id="keranjang">
+<div class="wadah">
+<h1>Keranjang dan data pemesan</h1>
+<p class="x-lead">Isi keranjang dengan paket dan penginapan, lalu isi data pemesan. Kode booking muncul setelah Anda menekan Buat booking.</p>
+<div id="kSusun" style="margin-top:26px">
+<div id="kList"></div>
+<div class="total-k" id="kTotal" hidden></div>
+<div id="kForm" hidden style="margin-top:30px">
+<div class="kotak">
+<div><h2 style="font-size:clamp(1.8rem,5vw,3rem)">Data pemesan</h2><p class="pengantar">Nomor telepon dipakai untuk mengecek dan membatalkan booking. Data hanya tersimpan di peramban ini, tidak dikirim ke mana pun.</p></div>
+<div>
+<form class="formulir" id="form" novalidate>
+<div><label for="nama">Nama lengkap</label><input id="nama" name="nama" autocomplete="name" aria-describedby="eNama"><p class="salah" id="eNama" hidden></p></div>
+<div><label for="telp">Nomor telepon</label><input id="telp" name="telp" type="tel" inputmode="tel" autocomplete="tel" placeholder="0812-0000-1234" aria-describedby="eTelp"><p class="salah" id="eTelp" hidden></p></div>
+<div><label for="email">Email (boleh kosong)</label><input id="email" name="email" type="email" autocomplete="email" aria-describedby="eEmail"><p class="salah" id="eEmail" hidden></p></div>
+<div><label for="catatan">Catatan (boleh kosong)</label><textarea id="catatan" name="catatan" maxlength="300" placeholder="Misalnya ada anak kecil atau alergi makanan"></textarea></div>
+<div><label class="cek"><input type="checkbox" id="setuju" name="setuju" aria-describedby="eSetuju"><span>Saya setuju dengan aturan pembatalan: lebih dari 3 hari sebelum datang uang muka kembali penuh, kurang dari itu 50% dipakai untuk biaya persiapan.</span></label><p class="salah" id="eSetuju" hidden></p></div>
+<p class="salah" id="eKeranjang" hidden tabindex="-1" role="alert"></p>
+<button class="tombol" type="submit">Buat booking</button>
+</form>
+</div>
+</div></div>
+</div>
+</div>
+</section>
+<section id="selesai" class="cetak-ini" hidden style="padding-top:clamp(104px,14vw,152px)">
+<div class="wadah"><h1 id="selesaiJudul" tabindex="-1" style="margin-bottom:22px">Booking berhasil dibuat</h1><div id="selesaiIsi"></div></div>
+</section>
+<section id="alur" class="alt">
+<div class="wadah">
+<h2>Setelah booking dibuat</h2>
+<ol class="x-w"><li><b>Seketika</b><h3>Kode booking muncul</h3><p>Simpan kode dan nomor telepon Anda. Status awalnya Menunggu bayar, dan tempat Anda langsung tercatat.</p></li><li><b>Dalam 24 jam</b><h3>Bayar uang muka</h3><p>Transfer 30% atau lunas, lalu kirim bukti lewat tombol WhatsApp di bukti booking.</p></li><li><b>Setelah dicek</b><h3>Status menjadi Lunas</h3><p>Lihat statusnya di halaman Cek booking. Pemandu mengirim titik temu dan daftar bawaan pada H-1.</p></li><li><b>Hari kunjungan</b><h3>Check-in di balai wisata</h3><p>Tunjukkan bukti booking di loket, lalu lunasi sisa biaya bila perlu.</p></li></ol>
+</div>
+</section>
+<section id="contoh">
+<div class="wadah">
+<h2>Contoh rencana</h2>
+<p class="x-lead">Belum tahu mau memilih apa? Mulailah dari salah satu rencana ini.</p>
+<div class="x-k tiga"><div><h3>Keluarga dengan anak kecil</h3><p>Jalan-jalan santai, kelas memasak serabi, dan makan siang di warung. Selesai sebelum anak mengantuk.</p><p class="x-info">Sekitar Rp 130.000 per orang</p></div><div><h3>Berdua, ingin tenang</h3><p>Dua hari satu malam di Pondok Tepi Sawah, bersepeda sore, dan matahari terbit di bukit timur.</p><p class="x-info">Sekitar Rp 635.000 per orang</p></div><div><h3>Rombongan sekolah</h3><p>Setengah hari menanam padi, keliling desa, dan makan siang bersama. Pemandu 1 per 10 siswa.</p><p class="x-info">Rp 135.000 per orang setelah potongan</p></div></div>
+</div>
+</section>
+<section id="ringkasharga" class="alt">
+<div class="wadah">
+<h2>Ringkasan harga</h2>
+<p class="x-lead">Harga per orang.</p>
+<ul class="x-s"><li><span>Jalan-jalan santai<small>Sekitar 2 jam</small></span><span data-harga="santai">Rp 50.000</span></li><li><span>Setengah hari<small>Sekitar 5 jam</small></span><span data-harga="setengah">Rp 150.000</span></li><li><span>Sehari penuh<small>Sekitar 9 jam</small></span><span data-harga="sehari">Rp 275.000</span></li><li><span>Dua hari satu malam<small>Termasuk menginap</small></span><span data-harga="duahari">Rp 525.000</span></li></ul><p class="catat">Lihat isi lengkapnya di <a href="aktivitas.html#banding">halaman aktivitas</a>. Harga dewasa, anak lebih murah.</p>
+</div>
+</section>
+<section id="batal">
+<div class="wadah">
+<h2>Mengubah atau membatalkan</h2>
+
+<div class="tanya"><details><summary>Bisa ganti tanggal?</summary><p>Bisa, gratis, jika diberi tahu paling lambat sehari sebelumnya dan tanggal baru masih tersedia.</p></details><details><summary>Bagaimana kalau batal?</summary><p>Lebih dari tiga hari sebelum datang, uang muka kembali penuh. Kurang dari itu, 50 persen uang muka dipakai untuk biaya yang sudah disiapkan warga.</p></details><details><summary>Kalau cuaca buruk?</summary><p>Kegiatan diganti kelas di sanggar. Jika terjadi banjir atau longsor, pengelola akan menjadwalkan ulang tanpa biaya.</p></details><details><summary>Apakah rombongan punya aturan khusus?</summary><p>Rombongan di atas 15 orang mendapat potongan 10 persen, tetapi perlu memesan minimal seminggu sebelumnya.</p></details></div>
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="wadah">
+    <p>Situs contoh. Nama desa, orang, harga, jadwal, alamat, dan kontak adalah data acak, dan foto hanya ilustrasi dari tempat lain. Data pemesanan tersimpan di peramban Anda saja. <a href="cek.html">Cek booking</a> atau <a href="admin.html">buka admin demo</a>.</p>
+    <details>
+      <summary>Sumber foto</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields,_Rice_terraces_in_East_Bali,_Indonesia.jpg">Terasering</a> dan <a href="https://commons.wikimedia.org/wiki/File:Bali,_Rice_fields_and_forest,_East_Bali,_Indonesia.jpg">sawah dan hutan</a>, Vyacheslav Argenberg, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gianyar-Regency_Bali_Indonesia_A-rice-farmer-working-in-his-paddy-01.jpg">Petani</a>, CEphoto, Uwe Aranas, CC BY-SA 3.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Learn_to_Dance.jpg">Latihan tari</a>, Hendri Suhandi, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_souvenir_shops.jpg">Lorong</a>, <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath.jpg">jalan desa</a>, dan <a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_walkpath_3.jpg">jalan desa 2</a>, Dare2Leap, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Tegallalang_Rice_Terraces_Bali.jpg">Terasering dekat</a>, Philip Nalangan, CC BY 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Penglipuran_Village_temple.png">Pura</a>, Kiara Juliane, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Proses_Membatik_di_Desa_Batik_Girilayu.jpg">Membatik</a>, Ardyansa Nugraha, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Anyaman_bambu-Kalo.jpg">Anyaman bambu</a>, Desa.gedangdowo, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Aneka_jajan_pasar_tradisional_jawa.jpg">Serabi</a>, Hersy ardianty a, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Desa_wisata,_Minangkabau.jpg">Rumah kayu</a>, Andipsp11, CC BY-SA 4.0</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

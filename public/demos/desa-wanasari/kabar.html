@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kabar desa: Desa Wanasari</title>
+<meta name="description" content="Berita terbaru dari warga Desa Wanasari.">
+<meta name="theme-color" content="#f6f7f5">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="kabar">
+<a class="lewati" href="#utama">Langsung ke isi</a>
+
+<header class="atas">
+  <div class="wadah">
+    <a class="merek" href="index.html">Desa Wanasari</a>
+    <nav class="navlebar" aria-label="Menu utama">
+      <a href="layanan.html">Layanan surat</a>
+      <a href="pengumuman.html">Pengumuman</a>
+      <a class="aktif" aria-current="page" href="kabar.html">Kabar</a>
+      <a href="produk.html">Produk warga</a>
+      <a href="anggaran.html">Anggaran</a>
+      <a href="profil.html">Profil</a>
+      <a href="kontak.html">Kontak</a>
+    </nav>
+    <a class="tombol-kecil" href="kontak.html">Hubungi desa</a>
+  </div>
+</header>
+
+<main id="utama">
+<section id="kabar">
+    <div class="wadah" id="viewList">
+      <h1>Kabar dari desa</h1>
+      <div class="cari-baris">
+        <div class="fg"><label for="cari">Cari kabar</label><input type="search" id="cari" autocomplete="off" placeholder="Ketik judul atau isi"></div>
+      </div>
+      <div class="saring" id="saring" role="group" aria-label="Saring kategori"></div>
+      <p class="jumlah" id="jumlah" aria-live="polite"></p>
+      <div class="kabar-grid" id="daftar"></div>
+      <p class="kosong" id="kosong" hidden>Tidak ada kabar yang cocok. Ubah kata kunci atau pilih "Semua".</p>
+      <button type="button" class="btn sek" id="lagi" style="margin-top:22px" hidden>Tampilkan lebih banyak</button>
+    </div>
+    <div class="wadah" id="viewDetail" hidden>
+      <a class="kembali" href="kabar.html">&larr; Semua kabar</a>
+      <article class="detail" id="detailIsi"></article>
+    </div>
+  </section>
+<section id="fotokabar" class="panel-hijau">
+<div class="wadah">
+<h2>Foto kegiatan</h2>
+<p class="x-lead">Foto ilustrasi dari kegiatan warga sepanjang tahun.</p>
+<div class="x-g"><figure><img loading="lazy" width="960" height="569" src="img/gotong.jpg" alt="Warga membersihkan rumput bersama"><figcaption>Kerja bakti rutin</figcaption></figure><figure><img loading="lazy" width="960" height="609" src="img/padi.jpg" alt="Petani memanen padi"><figcaption>Panen di Krajan</figcaption></figure><figure><img loading="lazy" width="960" height="718" src="img/posyandu.jpg" alt="Ibu dan balita di posyandu"><figcaption>Posyandu Melati</figcaption></figure><figure><img loading="lazy" width="960" height="638" src="img/bambu.jpg" alt="Perajin menganyam bambu"><figcaption>Perajin Sidorejo</figcaption></figure></div>
+</div>
+</section>
+<section class="x-cs"><div class="wadah"><div class="x-c"><div><h2>Punya cerita dari dusun Anda?</h2><p>Kirim foto dan ceritanya ke kantor desa. Kabar dari warga akan dimuat setelah diperiksa.</p></div><a class="x-n" href="kontak.html">Kirim kabar</a></div></div></section>
+</main>
+
+<footer>
+  <div class="wadah">
+    <p>Situs contoh. Tiket, pengumuman, dan data lain yang Anda ubah tersimpan di peramban ini saja. Nama desa, orang, angka anggaran, jadwal, harga, dan kontak adalah data acak, dan foto hanya ilustrasi dari tempat lain. Hanya nomor darurat nasional yang asli. <a href="admin.html">Buka admin demo</a>.</p>
+    <details>
+      <summary>Sumber foto</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Desa-Nglanggeran.jpg">Bentang desa</a>, Ainandoo, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gotong_Royong_adalah_warisan_budaya.jpg">Gotong royong</a>, Andesta Saputra, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Farmer_harvesting_rice,_Kampung_Rawa_2014-06-20.jpg">Panen padi</a>, Crisco 1492, CC BY-SA 3.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Gotong_Royong_Pindah_Rumah.jpg">Pindah rumah</a>, Herusutimbul, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kopi_Robusta_Banjarnegara.jpg">Petani kopi</a>, Haridi123, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kegiatan_Posyandu_Desa_Koto_Cerenti.jpg">Posyandu</a>, Refki Assadiky, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:20180707_Sidetapa_anyam_bambu.jpg">Perajin bambu</a>, Dinata Juan, CC BY-SA 4.0</li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Kue_Jajanan_Pasar.jpg">Jajan pasar</a>, Nopian8, CC BY-SA 4.0</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+<nav class="navbawah" aria-label="Menu cepat">
+  <a href="index.html">Beranda</a>
+  <a href="layanan.html">Surat</a>
+  <a href="pengumuman.html">Info</a>
+  <a class="aktif" aria-current="page" href="kabar.html">Kabar</a>
+  <button type="button" id="tLainnya" aria-expanded="false" aria-controls="lainnya">Lainnya</button>
+</nav>
+<div class="lainnya" id="lainnya" hidden>
+  <a href="produk.html">Produk warga</a>
+  <a href="anggaran.html">Anggaran desa</a>
+  <a href="profil.html">Profil desa</a>
+  <a href="kontak.html">Kontak</a>
+  <a href="admin.html">Admin demo</a>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
