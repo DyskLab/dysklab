@@ -3,14 +3,14 @@
   public/demos/<slug>/ (plain HTML, CSS and JS; data lives in the visitor's localStorage),
   with its card image in public/images/demos/<slug>.jpg. Copied from the JasaWeb demos.
 
-  - `kind`: website (public site with an admin panel), system (back office), mobile or
-    landing (a one-page landing site; these come from the one-day-one-code repo).
+  - `kind`: website (a public site, some with an admin panel), system (back office) or mobile.
+    The one-page landing sites at the end come from the one-day-one-code repo.
   - `admin`: where the owner panel lives, relative to the demo ("admin.html" or "#/admin").
   - `logins`: credentials shown in the viewer with a copy button.
 */
 export type Demo = {
   slug: string;
-  kind: "website" | "system" | "mobile" | "landing";
+  kind: "website" | "system" | "mobile";
   title: { id: string; en: string };
   text: { id: string; en: string };
   admin?: string;
@@ -201,7 +201,7 @@ export const demos: Demo[] = [
     logins: [pin("2468")],
   },
   {
-    slug: "coffee-shop", kind: "landing",
+    slug: "coffee-shop", kind: "website",
     title: { id: "Foliage Coffee: kedai kopi", en: "Foliage Coffee: a slow coffee bar" },
     text: {
       id: "Landing page hangat untuk kedai kopi: hero cangkir melayang dengan kartu biji kopi pilihan, cerita, menu, perjalanan biji, dan info kunjungan.",
@@ -210,7 +210,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "digital-agency", kind: "landing",
+    slug: "digital-agency", kind: "website",
     title: { id: "Luminary Studio: agensi digital", en: "Luminary Studio: a digital agency" },
     text: {
       id: "Landing page gelap dan tegas untuk agensi kreatif: hero gradien dengan statistik beranimasi, layanan, portofolio, proses, dan kontak.",
@@ -219,7 +219,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "fashion-brand", kind: "landing",
+    slug: "fashion-brand", kind: "website",
     title: { id: "VELOURA: brand fashion", en: "VELOURA: a fashion brand" },
     text: {
       id: "Landing page fashion bergaya editorial: hero terbelah, bar pengumuman, keranjang, grid produk baru, dan manifesto.",
@@ -228,7 +228,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "fine-dining", kind: "landing",
+    slug: "fine-dining", kind: "website",
     title: { id: "Aurum: restoran fine dining", en: "Aurum: fine dining" },
     text: {
       id: "Landing page restoran mewah hitam-emas: hidangan andalan, menu 7 hidangan, cerita chef, private dining, dan reservasi.",
@@ -237,7 +237,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "fitness-gym", kind: "landing",
+    slug: "fitness-gym", kind: "website",
     title: { id: "IRONFORGE: pusat kebugaran", en: "IRONFORGE: a gym" },
     text: {
       id: "Landing page gym yang energik: tipografi besar, program, pelatih, tiga paket harga, jadwal kelas mingguan, dan testimoni.",
@@ -246,7 +246,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "saas-ai-assistant", kind: "landing",
+    slug: "saas-ai-assistant", kind: "website",
     title: { id: "Axion AI: produk SaaS", en: "Axion AI: a SaaS product" },
     text: {
       id: "Landing page SaaS yang bersih untuk asisten AI: hero mockup dashboard, fitur, cara kerja, testimoni, harga, dan FAQ.",
@@ -255,7 +255,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "dairy-co", kind: "landing",
+    slug: "dairy-co", kind: "website",
     title: { id: "Dairy.co: salad buah dan es teler", en: "Dairy.co: fruit salad and es teler" },
     text: {
       id: "Landing page satu file untuk brand salad buah dan es teler.",
@@ -264,7 +264,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "travel-adventure", kind: "landing",
+    slug: "travel-adventure", kind: "website",
     title: { id: "NusaTrip: agen travel dan umroh", en: "NusaTrip: travel and umrah agency" },
     text: {
       id: "Landing page agen perjalanan dengan paket liburan, itinerary custom, tur umroh dan halal, serta formulir pemesanan.",
@@ -273,7 +273,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "travel-modern", kind: "landing",
+    slug: "travel-modern", kind: "website",
     title: { id: "Wanderlust Indonesia: travel modern", en: "Wanderlust Indonesia: modern travel" },
     text: {
       id: "Landing page travel modern dengan destinasi populer, filter pencarian, testimoni, dan alur pemesanan.",
@@ -282,7 +282,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "umroh-premium", kind: "landing",
+    slug: "umroh-premium", kind: "website",
     title: { id: "Al-Safwa: umroh dan haji premium", en: "Al-Safwa: premium umrah and hajj" },
     text: {
       id: "Landing page hijau-emas untuk paket umroh dan haji mewah: hotel bintang lima, jadwal keberangkatan, dan konsultasi VIP.",
@@ -291,7 +291,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "wedding-elegant", kind: "landing",
+    slug: "wedding-elegant", kind: "website",
     title: { id: "Eternal Vows: wedding organizer", en: "Eternal Vows: a wedding organiser" },
     text: {
       id: "Landing page wedding organizer bernuansa pastel: galeri portofolio dengan filter, paket layanan, dan testimoni.",
@@ -300,7 +300,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "wedding-luxury", kind: "landing",
+    slug: "wedding-luxury", kind: "website",
     title: { id: "Lumière: wedding planner mewah", en: "Lumière: a luxury wedding planner" },
     text: {
       id: "Landing page wedding planner hitam-emas: perencanaan upacara, venue pilihan, koordinasi busana, dan booking konsultasi.",
@@ -309,7 +309,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "wedding-rustic", kind: "landing",
+    slug: "wedding-rustic", kind: "website",
     title: { id: "Sakura Wedding: pernikahan rustic", en: "Sakura Wedding: a rustic wedding" },
     text: {
       id: "Landing page pernikahan rustic bernuansa sage dan blush: ide pernikahan outdoor, kalkulator budget, vendor, dan formulir konsultasi.",
@@ -318,7 +318,7 @@ export const demos: Demo[] = [
     logins: [],
   },
   {
-    slug: "itachi-landing-page", kind: "landing",
+    slug: "itachi-landing-page", kind: "website",
     title: { id: "Uchiha Itachi: landing page sinematik", en: "Uchiha Itachi: a cinematic landing page" },
     text: {
       id: "Fan page sinematik: scroll menggerakkan rangkaian frame (mata terbuka sampai Sharingan) dengan efek petir dan audio.",

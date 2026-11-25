@@ -25,7 +25,6 @@ const kinds = {
   website: s("Website", "Website"),
   system: s("Sistem", "System"),
   mobile: s("Aplikasi HP", "Mobile app"),
-  landing: s("Landing page", "Landing page"),
 } as const;
 const counts = Object.fromEntries(Object.keys(kinds).map((k) => [k, demos.filter((d) => d.kind === k).length]));
 
